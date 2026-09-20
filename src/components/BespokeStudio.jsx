@@ -136,7 +136,7 @@ export default function BespokeStudio() {
               <div className="bg-white rounded-3xl p-5 border border-brand-sand text-[#1F1A17] space-y-4 shadow-subtle">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-brand-sand/40 relative">
                   <img
-                    src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80"
+                    src="https://res.cloudinary.com/dgoe6emli/image/upload/v1789881851/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_66.png"
                     alt="Custom Sofa Live Preview"
                     className="w-full h-full object-cover"
                   />

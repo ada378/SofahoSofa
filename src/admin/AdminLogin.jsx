@@ -30,9 +30,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-[#C86A3B] rounded-2xl flex items-center justify-center text-white font-bold text-2xl mx-auto shadow-lg">
-            S
-          </div>
+          <img src="/logo-2.png" alt="Sofa Hi Sofa" className="w-14 h-14 mx-auto" />
           <h1 className="text-white font-bold text-xl mt-3">Sofa Hi Sofa</h1>
           <p className="text-gray-500 text-xs mt-1">Admin Control Panel</p>
         </div>

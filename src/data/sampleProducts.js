@@ -4,7 +4,7 @@ export const categories = [
     name: "Sofa Sets",
     slug: "sofa-sets",
     tagline: "3-Seater, 2-Seater & Modular Sofas",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80",
+    image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881841/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_61.png",
     itemCount: "42+ Designs",
   },
   {
@@ -12,7 +12,7 @@ export const categories = [
     name: "L-Shape Sofas",
     slug: "l-shape-sofas",
     tagline: "Spacious Sectionals with Chaise",
-    image: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=600&q=80",
+    image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881848/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_65.png",
     itemCount: "28+ Designs",
   },
   {
@@ -20,7 +20,7 @@ export const categories = [
     name: "Recliners",
     slug: "recliners",
     tagline: "Motorised & Manual Comfort Chairs",
-    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80",
+    image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881783/sofa-hi-sofa/sofa/Chair_Lucknow_Furniture_Sofahisofa_73.png",
     itemCount: "16+ Designs",
   },
   {
@@ -28,7 +28,7 @@ export const categories = [
     name: "Solid Wood Beds",
     slug: "beds",
     tagline: "Sheesham & Teak King/Queen Beds",
-    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+    image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789882024/sofa-hi-sofa/bed/luxury_beds_from_lucknow_Sofahisofa_1.png",
     itemCount: "24+ Designs",
   },
   {
@@ -36,7 +36,7 @@ export const categories = [
     name: "Dining Sets",
     slug: "dining",
     tagline: "4 & 6-Seater Hardwood Sets",
-    image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=600&q=80",
+    image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881861/sofa-hi-sofa/dining-table/Dining_set_with_Chair_Lucknow_Sofahisofa_11.png",
     itemCount: "18+ Designs",
   },
   {
@@ -44,7 +44,7 @@ export const categories = [
     name: "Accent Chairs",
     slug: "accent-chairs",
     tagline: "Lounge Chairs, Ottomans & Benches",
-    image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=600&q=80",
+    image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881786/sofa-hi-sofa/sofa/Chair_Lucknow_Furniture_Sofahisofa_74.png",
     itemCount: "30+ Designs",
   },
 ];
@@ -667,7 +667,7 @@ export const verifiedReviews = [
     date: "August 2026",
     comment:
       "We visited their Indiranagar experience center first, then ordered online. The Sheesham wood weight and fabric texture are outstanding! Our Golden Retriever jumps on it daily and the stain-resistant fabric wipes clean in 10 seconds.",
-    homeImage: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80",
+    homeImage: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881841/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_61.png",
   },
   {
     id: "rev-2",
@@ -679,7 +679,7 @@ export const verifiedReviews = [
     date: "July 2026",
     comment:
       "Comparing prices with high-end retail brands, Sofa Hi Sofa gave us the same Italian design and solid wood frame for half the price! The assembly team in Mumbai arrived on time and assembled everything flawlessly.",
-    homeImage: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=600&q=80",
+    homeImage: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881848/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_65.png",
   },
   {
     id: "rev-3",
@@ -691,7 +691,7 @@ export const verifiedReviews = [
     date: "August 2026",
     comment:
       "Bought this for my father who has back pain. The German motor is completely silent and the zero-gravity recline with USB charger is a lifesaver. Best investment for our home theater!",
-    homeImage: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80",
+    homeImage: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881783/sofa-hi-sofa/sofa/Chair_Lucknow_Furniture_Sofahisofa_73.png",
   },
   {
     id: "rev-4",
@@ -703,7 +703,7 @@ export const verifiedReviews = [
     date: "June 2026",
     comment:
       "The honey walnut grain on this bed is breathtaking. Solid, heavy, and zero creaks even after 3 months of use. The free swatch kit really helped us pick the exact color to match our bedroom.",
-    homeImage: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+    homeImage: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789882024/sofa-hi-sofa/bed/luxury_beds_from_lucknow_Sofahisofa_1.png",
   },
 ];
 

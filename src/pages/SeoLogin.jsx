@@ -30,9 +30,7 @@ export default function SeoLogin() {
       <div className="w-full max-w-sm">
         {/* Header Logo */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl mx-auto shadow-xl shadow-teal-900/30">
-            🔍
-          </div>
+          <img src="/logo-2.png" alt="Sofa Hi Sofa" className="w-14 h-14 mx-auto" />
           <h1 className="text-white font-bold text-xl mt-3">SEO Control Panel</h1>
           <p className="text-slate-400 text-xs mt-1">Sofa Hi Sofa — Search Engine Optimization</p>
         </div>
