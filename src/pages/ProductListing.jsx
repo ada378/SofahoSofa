@@ -183,7 +183,7 @@ export default function ProductListing() {
   };
 
   return (
-    <div className="bg-brand-porcelain min-h-screen py-6 sm:py-10">
+    <div className="bg-brand-porcelain min-h-screen py-6 sm:py-10 w-full overflow-x-hidden">
       <SEO
         title={seoTitle}
         description={seoDesc}
@@ -191,7 +191,7 @@ export default function ProductListing() {
         jsonLd={breadcrumbJsonLd}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 w-full">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs text-brand-muted mb-4" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-brand-charcoal transition-colors">Home</Link>
@@ -340,7 +340,7 @@ export default function ProductListing() {
 
             {/* Loading Skeletons */}
             {loading && !error && (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 w-full overflow-hidden">
                 {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
               </div>
             )}
@@ -362,7 +362,7 @@ export default function ProductListing() {
 
             {/* Product Grid */}
             {!loading && !error && products.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 w-full overflow-hidden">
                 {products.map((product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}
@@ -410,7 +410,7 @@ export default function ProductListing() {
                   <h3 className="font-display text-2xl text-brand-charcoal mt-1">Recently Imported</h3>
                   <p className="text-brand-muted text-xs sm:text-sm mt-1">Latest handcrafted furniture added to our collection</p>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 w-full overflow-hidden">
                   {recentProducts.map((product) => (
                     <ProductCard key={product._id} product={product} />
                   ))}

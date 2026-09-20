@@ -104,11 +104,11 @@ function StoreShell() {
   return (
     <CartProvider>
       <WishlistProvider>
-        <div className="min-h-screen flex flex-col bg-brand-porcelain text-brand-charcoal font-body antialiased pb-16 lg:pb-0">
+        <div className="min-h-screen flex flex-col bg-brand-porcelain text-brand-charcoal font-body antialiased pb-16 lg:pb-0 w-full overflow-x-hidden">
           <Header
             onOpenSearch={() => setSearchOpen(true)}
           />
-          <main className="flex-1">
+          <main className="flex-1 w-full overflow-x-hidden">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/collections" element={<ProductListing />} />

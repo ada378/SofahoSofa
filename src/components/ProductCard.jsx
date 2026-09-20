@@ -31,12 +31,12 @@ export default function ProductCard({ product }) {
 
   return (
     <div
-      className="group relative bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between"
+      className="group relative bg-white rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 md:p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Top Image Container */}
-      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-brand-sand/40">
+      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-brand-sand/40 w-full">
         <img
           src={isHovered ? secondaryImage : activeImage}
           alt={product.name}
@@ -95,11 +95,11 @@ export default function ProductCard({ product }) {
       </Link>
 
       {/* Product Information */}
-      <div className="pt-2 sm:pt-3 px-0.5 sm:px-1 flex-1 flex flex-col justify-between">
+      <div className="pt-2 sm:pt-3 px-0.5 sm:px-1 flex-1 flex flex-col justify-between w-full min-w-0">
         <div>
           {/* Subtitle & Material */}
-          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-brand-muted">
-            <span className="uppercase tracking-wider font-semibold truncate max-w-[90px] sm:max-w-none">{product.subCategory}</span>
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-brand-muted w-full">
+            <span className="uppercase tracking-wider font-semibold truncate flex-1 min-w-0 pr-2">{product.subCategory}</span>
             <div className="flex items-center gap-0.5 text-amber-600 font-semibold flex-shrink-0">
               <span>★</span>
               <span>{product.rating}</span>
@@ -107,12 +107,12 @@ export default function ProductCard({ product }) {
           </div>
 
           {/* Product Title */}
-          <Link to={`/product/${product.slug}`} className="block mt-0.5 sm:mt-1">
-            <h3 className="font-semibold text-xs sm:text-base text-brand-charcoal group-hover:text-brand-terracotta transition-colors line-clamp-1">
+          <Link to={`/product/${product.slug}`} className="block mt-0.5 sm:mt-1 w-full">
+            <h3 className="font-semibold text-xs sm:text-base text-brand-charcoal group-hover:text-brand-terracotta transition-colors line-clamp-2 w-full break-words">
               {product.name}
             </h3>
           </Link>
-          <p className="text-[11px] sm:text-xs text-brand-muted line-clamp-1 mt-0.5 hidden sm:block">
+          <p className="text-[11px] sm:text-xs text-brand-muted line-clamp-1 mt-0.5 hidden sm:block w-full">
             {product.material}
           </p>
         </div>
@@ -146,14 +146,14 @@ export default function ProductCard({ product }) {
         )}
 
         {/* Price & Mobile Add to Cart */}
-        <div className="mt-2 sm:mt-3 pt-2 border-t border-brand-sand/60 flex items-center justify-between gap-1">
-          <div className="min-w-0">
+        <div className="mt-2 sm:mt-3 pt-2 border-t border-brand-sand/60 flex items-center justify-between gap-1 w-full">
+          <div className="min-w-0 flex-1">
             <div className="flex items-baseline gap-1 flex-wrap">
-              <span className="font-display font-bold text-xs sm:text-lg text-brand-charcoal">
+              <span className="font-display font-bold text-xs sm:text-base md:text-lg text-brand-charcoal whitespace-nowrap">
                 ₹{product.price.toLocaleString("en-IN")}
               </span>
               {product.marketPrice > product.price && (
-                <span className="text-[10px] sm:text-xs text-brand-muted line-through hidden min-[380px]:inline">
+                <span className="text-[9px] sm:text-[10px] md:text-xs text-brand-muted line-through">
                   ₹{product.marketPrice.toLocaleString("en-IN")}
                 </span>
               )}
