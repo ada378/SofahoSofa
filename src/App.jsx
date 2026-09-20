@@ -18,7 +18,7 @@ import MobileBottomNav from "./components/MobileBottomNav";
 // Store contexts
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
-import { UnifiedAuthProvider, useAdminAuth, useSeoAuth } from "./context/UnifiedAuthContext";
+import { UnifiedAuthProvider, useAdminAuth, useSeoAuth, useAuth } from "./context/UnifiedAuthContext";
 
 // Customer auth pages
 import CustomerLogin from "./pages/CustomerLogin";
@@ -55,6 +55,20 @@ function RequireAdmin({ children }) {
     );
   }
   if (!admin) return <Navigate to="/admin/login" replace />;
+  return children;
+}
+
+// ── Customer auth guard ─────────────────────────────────────────────────────────
+function RequireCustomer({ children }) {
+  const { customer, checking } = useAuth();
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gray-200 border-t-[#C86A3B] rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!customer) return <Navigate to="/login" replace />;
   return children;
 }
 
@@ -100,13 +114,13 @@ function StoreShell() {
               <Route path="/collections" element={<ProductListing />} />
               <Route path="/collections/:slug" element={<ProductListing />} />
               <Route path="/product/:slug" element={<ProductDetail />} />
-              <Route path="/checkout" element={<Checkout />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<RequireCustomer><Checkout /></RequireCustomer>} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/login" element={<CustomerLogin />} />
               <Route path="/register" element={<CustomerRegister />} />
-              <Route path="/account" element={<CustomerAccount />} />
-              <Route path="/my-orders" element={<CustomerAccount />} />
+              <Route path="/account" element={<RequireCustomer><CustomerAccount /></RequireCustomer>} />
+              <Route path="/my-orders" element={<RequireCustomer><CustomerAccount /></RequireCustomer>} />
               <Route path="*" element={<Home />} />
             </Routes>
           </main>

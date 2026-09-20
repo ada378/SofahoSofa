@@ -14,11 +14,12 @@ export function UnifiedAuthProvider({ children }) {
     if (hasChecked.current) return;
     hasChecked.current = true;
 
-    // Check if we have a token in localStorage or cookie
+    // Check if we have a token in localStorage
     const adminToken = localStorage.getItem("adminToken");
+    const customerToken = localStorage.getItem("customerToken");
     
     // Only make API call if there's a token
-    if (!adminToken && !document.cookie.includes("token")) {
+    if (!adminToken && !customerToken && !document.cookie.includes("token")) {
       setChecking(false);
       return;
     }
@@ -48,9 +49,11 @@ export function UnifiedAuthProvider({ children }) {
       throw new Error(`Access denied: Not a ${expectedRole} account`);
     }
 
-    // Store token for admin
+    // Store token based on role
     if (data.token && userRole === "admin") {
       localStorage.setItem("adminToken", data.token);
+    } else if (data.token && userRole === "customer") {
+      localStorage.setItem("customerToken", data.token);
     }
 
     setUser(userObj);
@@ -60,6 +63,10 @@ export function UnifiedAuthProvider({ children }) {
   const register = useCallback(async ({ name, email, phone, password }) => {
     const { data } = await api.post("/auth/register", { name, email, phone, password });
     const userObj = data.user || data;
+    // Store customer token in localStorage for cross-domain auth
+    if (data.token) {
+      localStorage.setItem("customerToken", data.token);
+    }
     setUser(userObj);
     return userObj;
   }, []);
@@ -67,6 +74,7 @@ export function UnifiedAuthProvider({ children }) {
   const logout = useCallback(async () => {
     await api.post("/auth/logout").catch(() => {});
     localStorage.removeItem("adminToken");
+    localStorage.removeItem("customerToken");
     setUser(null);
   }, []);
 
