@@ -39,36 +39,52 @@ export function UnifiedAuthProvider({ children }) {
   }, []);
 
   const login = useCallback(async (email, password, expectedRole = null) => {
-    const { data } = await api.post("/auth/login", { email, password });
-    const userObj = data.user || data;
-    const userRole = userObj.role || data.role;
+    try {
+      const { data } = await api.post("/auth/login", { email, password });
+      const userObj = data.user || data;
+      const userRole = userObj.role || data.role;
 
-    // Validate role if expected role is provided
-    if (expectedRole && expectedRole !== userRole && !(expectedRole === "seo" && userRole === "admin")) {
-      await api.post("/auth/logout").catch(() => {});
-      throw new Error(`Access denied: Not a ${expectedRole} account`);
+      // Validate role if expected role is provided
+      if (expectedRole && expectedRole !== userRole && !(expectedRole === "seo" && userRole === "admin")) {
+        await api.post("/auth/logout").catch(() => {});
+        throw new Error(`Access denied: Not a ${expectedRole} account`);
+      }
+
+      // Store token based on role
+      if (data.token && userRole === "admin") {
+        localStorage.setItem("adminToken", data.token);
+      } else if (data.token && userRole === "customer") {
+        localStorage.setItem("customerToken", data.token);
+      }
+
+      setUser(userObj);
+      return userObj;
+    } catch (error) {
+      // Better error handling
+      const errorMessage = error.response?.data?.message || error.message || "Login failed";
+      console.error("Login error:", errorMessage);
+      throw new Error(errorMessage);
     }
-
-    // Store token based on role
-    if (data.token && userRole === "admin") {
-      localStorage.setItem("adminToken", data.token);
-    } else if (data.token && userRole === "customer") {
-      localStorage.setItem("customerToken", data.token);
-    }
-
-    setUser(userObj);
-    return userObj;
   }, []);
 
   const register = useCallback(async ({ name, email, phone, password }) => {
-    const { data } = await api.post("/auth/register", { name, email, phone, password });
-    const userObj = data.user || data;
-    // Store customer token in localStorage for cross-domain auth
-    if (data.token) {
-      localStorage.setItem("customerToken", data.token);
+    try {
+      const { data } = await api.post("/auth/register", { name, email, phone, password });
+      const userObj = data.user || data;
+      
+      // Store customer token in localStorage for cross-domain auth
+      if (data.token) {
+        localStorage.setItem("customerToken", data.token);
+      }
+      
+      setUser(userObj);
+      return userObj;
+    } catch (error) {
+      // Better error handling
+      const errorMessage = error.response?.data?.message || error.message || "Registration failed";
+      console.error("Register error:", errorMessage);
+      throw new Error(errorMessage);
     }
-    setUser(userObj);
-    return userObj;
   }, []);
 
   const logout = useCallback(async () => {

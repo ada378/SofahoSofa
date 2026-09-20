@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCustomerAuth } from "../context/CustomerAuthContext";
+import { useAuth } from "../context/UnifiedAuthContext";
 import SEO from "../components/SEO";
 
 export default function CustomerRegister() {
-  const { register } = useCustomerAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -32,7 +32,10 @@ export default function CustomerRegister() {
       await register({ name, email, phone, password });
       navigate("/account", { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Registration failed");
+      // Better error display
+      const errorMsg = err.message || err.response?.data?.message || "Registration failed";
+      setError(errorMsg);
+      console.error("Registration error:", errorMsg);
     } finally {
       setLoading(false);
     }
