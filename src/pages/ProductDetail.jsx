@@ -1,324 +1,322 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
-import { sampleProducts } from "../data/sampleProducts";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import ProductCard from "../components/ProductCard";
+import api from "../api/axios";
 
-export default function ProductDetail({ onOpenSwatchModal }) {
+// Skeleton loader for the product detail page
+function ProductDetailSkeleton() {
+  return (
+    <div className="bg-brand-porcelain min-h-screen py-6 sm:py-10 animate-pulse">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="h-3 w-48 bg-brand-sand rounded mb-6" />
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+          <div className="lg:col-span-7 space-y-4">
+            <div className="aspect-[4/3] bg-brand-sand rounded-3xl" />
+            <div className="flex gap-3">
+              {[1, 2, 3].map((i) => <div key={i} className="w-20 h-20 bg-brand-sand rounded-2xl flex-shrink-0" />)}
+            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="bg-white rounded-3xl p-6 border border-brand-sand space-y-4">
+              <div className="h-3 w-24 bg-brand-sand rounded" />
+              <div className="h-7 w-3/4 bg-brand-sand rounded" />
+              <div className="h-3 w-full bg-brand-sand rounded" />
+              <div className="h-3 w-2/3 bg-brand-sand rounded" />
+              <div className="h-16 bg-brand-sand rounded-2xl" />
+              <div className="h-12 bg-brand-sand rounded-2xl" />
+              <div className="h-12 bg-brand-sand rounded-2xl" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ProductDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
-  const product = useMemo(() => {
-    return sampleProducts.find((p) => p.slug === slug) || sampleProducts[0];
-  }, [slug]);
+  // ── API State ────────────────────────────────────────────────────────────────
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Gallery state
+  // ── UI State ─────────────────────────────────────────────────────────────────
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-
-  // Customization choices
-  const [selectedFabric, setSelectedFabric] = useState(
-    product.fabricOptions?.[0] || { name: "Standard", hex: "#D9A441" }
-  );
-  const [selectedSize, setSelectedSize] = useState(product.seatingCapacity || "Standard");
+  const [selectedFabric, setSelectedFabric] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
-
-  // Pincode checker
   const [pincode, setPincode] = useState("");
   const [pincodeStatus, setPincodeStatus] = useState(null);
-
-  // Active Spec Tab
   const [activeTab, setActiveTab] = useState("specs");
-
-  // Reviews submission state
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewAuthor, setReviewAuthor] = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const [customReviews, setCustomReviews] = useState([]);
 
-  // --- Instant Book Now Modal Flow States ---
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-  const [bookingStep, setBookingStep] = useState(1); // 1 = Summary, 2 = Address, 3 = Payment, 4 = Confirmed
-  const [bookingForm, setBookingForm] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "Bengaluru",
-    state: "Karnataka",
-    pincode: "560038",
-    paymentMethod: "cod",
-  });
-  const [confirmedOrderId, setConfirmedOrderId] = useState("");
+  // ── Fetch Product ─────────────────────────────────────────────────────────────
+  const fetchProduct = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    setActiveImageIndex(0);
+    try {
+      const { data } = await api.get(`/products/${slug}`);
+      setProduct(data);
+      // Set initial fabric/size from fetched data
+      setSelectedFabric(
+        Array.isArray(data.fabricOptions) && data.fabricOptions.length > 0
+          ? (typeof data.fabricOptions[0] === "object" ? data.fabricOptions[0] : { name: data.fabricOptions[0], hex: "#D9A441" })
+          : { name: "Standard", hex: "#D9A441" }
+      );
+      setSelectedSize(data.subCategory || data.seatingCapacity || "Standard");
 
-  const discount = Math.round(((product.marketPrice - product.price) / product.marketPrice) * 100);
-  const inWish = isInWishlist(product._id);
-  const images = product.images || [{ url: product.image, alt: product.name }];
+      // Fetch related products
+      if (data.category?.slug || data.category) {
+        const catSlug = data.category?.slug || data.category;
+        api.get("/products", { params: { category: data.category?._id || data.category, limit: 4 } })
+          .then(({ data: rel }) => {
+            setRelatedProducts((rel.products || []).filter((p) => p._id !== data._id).slice(0, 4));
+          })
+          .catch(() => {});
+      }
+    } catch {
+      setError("Product not found. It may have been removed or the URL is incorrect.");
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
 
+  useEffect(() => { fetchProduct(); }, [fetchProduct]);
+
+  // ── Handlers ──────────────────────────────────────────────────────────────────
   const handleCheckPincode = (e) => {
     e.preventDefault();
     if (pincode.length >= 6) {
-      setPincodeStatus({
-        valid: true,
-        message: "✓ Free White-Glove Delivery available in 4-6 Days. Cash on Delivery supported.",
-      });
+      setPincodeStatus({ valid: true, message: "✓ Free White-Glove Delivery available in 4-6 Days. Cash on Delivery supported." });
     } else {
       setPincodeStatus({ valid: false, message: "Please enter a valid 6-digit Indian pincode." });
     }
   };
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedFabric.name, selectedSize);
+    if (!product) return;
+    addToCart(product, quantity, selectedFabric?.name || "Standard", selectedSize || "Standard");
   };
 
-  // Open Direct Instant Booking Flow Modal
   const handleOpenBookingModal = () => {
-    setBookingStep(1);
-    setIsBookingModalOpen(true);
-  };
-
-  const handleBookingSubmit = (e) => {
-    e.preventDefault();
-    if (bookingStep === 1) {
-      setBookingStep(2);
-    } else if (bookingStep === 2) {
-      if (!bookingForm.fullName || !bookingForm.phone || !bookingForm.address || !bookingForm.pincode) {
-        alert("Please fill in all required delivery fields.");
-        return;
-      }
-      setBookingStep(3);
-    } else if (bookingStep === 3) {
-      const orderId = `SHS-${Date.now().toString().slice(-6)}`;
-      setConfirmedOrderId(orderId);
-      setBookingStep(4);
-    }
+    // Redirect to checkout page with product details
+    navigate("/checkout", {
+      state: {
+        product,
+        quantity,
+        selectedFabric,
+        selectedSize,
+      },
+    });
   };
 
   const handleAddReview = (e) => {
     e.preventDefault();
     if (!reviewAuthor || !reviewComment) return;
-    const newRev = {
-      author: reviewAuthor,
-      comment: reviewComment,
-      rating: reviewRating,
-      date: "Just now",
-      verified: true,
-    };
-    setCustomReviews([newRev, ...customReviews]);
-    setReviewAuthor("");
-    setReviewComment("");
-    setShowReviewForm(false);
+    setCustomReviews([{ author: reviewAuthor, comment: reviewComment, rating: reviewRating, date: "Just now", verified: true }, ...customReviews]);
+    setReviewAuthor(""); setReviewComment(""); setShowReviewForm(false);
   };
 
-  // Related products
-  const relatedProducts = sampleProducts
-    .filter((p) => p.category === product.category && p._id !== product._id)
-    .slice(0, 4);
+  // ── Loading / Error states ────────────────────────────────────────────────────
+  if (loading) return <ProductDetailSkeleton />;
 
-  const jsonLd = {
+  if (error) {
+    return (
+      <div className="bg-brand-porcelain min-h-screen flex items-center justify-center px-4">
+        <div className="text-center space-y-4 max-w-md">
+          <div className="w-16 h-16 bg-brand-sand rounded-full flex items-center justify-center mx-auto text-3xl">🔍</div>
+          <h2 className="font-display text-2xl text-brand-charcoal">Product Not Found</h2>
+          <p className="text-brand-muted text-sm">{error}</p>
+          <button onClick={() => navigate("/collections/all")}
+            className="bg-brand-charcoal text-white px-6 py-2.5 rounded-full text-xs font-semibold hover:bg-brand-terracotta transition-colors">
+            Browse All Collections
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Derived values ────────────────────────────────────────────────────────────
+  const discount = product.marketPrice > product.price
+    ? Math.round(((product.marketPrice - product.price) / product.marketPrice) * 100) : 0;
+  const inWish = isInWishlist(product._id);
+  const images = product.images?.length > 0
+    ? product.images
+    : [{ url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80", alt: product.name }];
+
+  // Normalise fabricOptions — backend stores strings, some seeds store objects
+  const fabricOptions = (product.fabricOptions || []).map((f) =>
+    typeof f === "object" ? f : { name: f, hex: "#D9A441" }
+  );
+
+  // ── SEO — use product's own metaTitle/metaDescription if set, else auto-generate ──
+  const seoTitle = product.metaTitle || `${product.name} | Buy Online India | Sofa Hi Sofa`;
+  const seoDesc = product.metaDescription || product.shortDescription
+    || `Buy ${product.name} online in India. Solid wood frame, ${product.warranty || "3-Year Warranty"}, free pan-India delivery & 200+ fabric choices.`;
+
+  const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    image: images[0]?.url,
-    description: product.description,
-    brand: {
-      "@type": "Brand",
-      name: "Sofa Hi Sofa",
-    },
+    image: images.map((img) => img.url),
+    description: product.description || product.shortDescription,
+    sku: product.sku,
+    brand: { "@type": "Brand", name: "Sofa Hi Sofa" },
     offers: {
       "@type": "Offer",
       priceCurrency: "INR",
       price: product.price,
-      availability: "https://schema.org/InStock",
-      seller: {
-        "@type": "Organization",
-        name: "Sofa Hi Sofa.Com",
+      availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      url: `https://www.sofahisofa.com/product/${product.slug}`,
+      seller: { "@type": "Organization", name: "Sofa Hi Sofa.Com" },
+      priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    },
+    ...(product.numReviews > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: product.rating?.toFixed(1) || "4.5",
+        reviewCount: product.numReviews,
+        bestRating: "5",
+        worstRating: "1",
       },
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: product.rating,
-      reviewCount: product.numReviews,
-    },
+    }),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sofahisofa.com/" },
+      { "@type": "ListItem", position: 2, name: product.category?.name || "Collections", item: `https://www.sofahisofa.com/collections/${product.category?.slug || "all"}` },
+      { "@type": "ListItem", position: 3, name: product.name, item: `https://www.sofahisofa.com/product/${product.slug}` },
+    ],
   };
 
   return (
     <div className="bg-brand-porcelain min-h-screen py-6 sm:py-10">
       <SEO
-        title={`${product.name} | Sofa Hi Sofa`}
-        description={product.shortDescription}
+        title={seoTitle}
+        description={seoDesc}
         canonical={`https://www.sofahisofa.com/product/${product.slug}`}
-        jsonLd={jsonLd}
+        image={images[0]?.url}
+        jsonLd={[productJsonLd, breadcrumbJsonLd]}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-xs text-brand-muted mb-6">
+        <nav className="flex items-center gap-2 text-xs text-brand-muted mb-6" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-brand-charcoal transition-colors">Home</Link>
           <span>/</span>
-          <Link to={`/collections/${product.category}`} className="hover:text-brand-charcoal transition-colors capitalize">
-            {product.category?.replace(/-/g, " ")}
+          <Link to={`/collections/${product.category?.slug || "all"}`}
+            className="hover:text-brand-charcoal transition-colors capitalize">
+            {product.category?.name || "Collections"}
           </Link>
           <span>/</span>
           <span className="text-brand-charcoal font-semibold truncate">{product.name}</span>
         </nav>
 
-        {/* Product Showcase (2 Columns) */}
+        {/* Main Grid */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Left Column: Image Gallery */}
+          {/* Left: Image Gallery */}
           <div className="lg:col-span-7 space-y-4">
-            {/* Main Stage Image */}
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle group">
               <img
-                src={images[activeImageIndex]?.url || images[0]?.url}
+                src={images[activeImageIndex]?.url}
                 alt={images[activeImageIndex]?.alt || product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
-
-              {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col gap-2">
                 {discount > 0 && (
                   <span className="bg-brand-charcoal text-white text-xs font-bold px-3 py-1 rounded-full shadow-subtle">
                     {discount}% OFF
                   </span>
                 )}
-                <span className="bg-brand-amber text-brand-charcoal text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-subtle uppercase tracking-wider">
-                  ★ {product.rating} ({product.numReviews} reviews)
-                </span>
+                {product.numReviews > 0 && (
+                  <span className="bg-brand-amber text-brand-charcoal text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-subtle uppercase tracking-wider">
+                    ★ {product.rating?.toFixed(1)} ({product.numReviews} reviews)
+                  </span>
+                )}
               </div>
-
-              {/* Wishlist Heart */}
-              <button
-                onClick={() => toggleWishlist(product)}
-                className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md transition-all ${
-                  inWish
-                    ? "bg-white text-red-500 shadow-card"
-                    : "bg-white/90 text-brand-charcoal hover:bg-white hover:text-red-500 shadow-subtle"
-                }`}
-                aria-label="Wishlist"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill={inWish ? "currentColor" : "none"}
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+              <button onClick={() => toggleWishlist(product)}
+                className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md transition-all ${inWish ? "bg-white text-red-500 shadow-card" : "bg-white/90 text-brand-charcoal hover:bg-white hover:text-red-500 shadow-subtle"}`}
+                aria-label={inWish ? "Remove from wishlist" : "Add to wishlist"}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill={inWish ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
 
-            {/* Thumbnail Strip */}
             {images.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-2">
                 {images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setActiveImageIndex(idx)}
-                    className={`w-20 h-20 rounded-2xl overflow-hidden border-2 flex-shrink-0 transition-all ${
-                      activeImageIndex === idx
-                        ? "border-brand-terracotta ring-2 ring-brand-terracotta/20 scale-105"
-                        : "border-brand-sand hover:border-brand-sandDark opacity-75 hover:opacity-100"
-                    }`}
-                  >
+                  <button key={idx} type="button" onClick={() => setActiveImageIndex(idx)}
+                    className={`w-20 h-20 rounded-2xl overflow-hidden border-2 flex-shrink-0 transition-all ${activeImageIndex === idx ? "border-brand-terracotta ring-2 ring-brand-terracotta/20 scale-105" : "border-brand-sand hover:border-brand-sandDark opacity-75 hover:opacity-100"}`}>
                     <img src={img.url} alt={img.alt} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             )}
-
-            {/* Free Swatch Box Banner */}
-            <div className="p-4 bg-brand-forestLight rounded-2xl border border-brand-forest/20 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🎨</span>
-                <div>
-                  <p className="font-bold text-xs text-brand-forest">Not sure about the color under home lighting?</p>
-                  <p className="text-[11px] text-brand-forest/90">Order a free physical swatch kit delivered in 48 hours.</p>
-                </div>
-              </div>
-              <button
-                onClick={onOpenSwatchModal}
-                className="bg-brand-forest text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-brand-charcoal transition-colors whitespace-nowrap shadow-subtle"
-              >
-                Order Swatch Box (₹0)
-              </button>
-            </div>
           </div>
 
-          {/* Right Column: Product Configurator & Purchasing */}
+          {/* Right: Product Configurator */}
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-brand-sand shadow-subtle space-y-6">
-              {/* Title & Subtitle */}
               <div>
-                <span className="text-brand-terracotta text-xs font-bold uppercase tracking-widest">
-                  {product.subCategory}
-                </span>
-                <h1 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mt-1">
-                  {product.name}
-                </h1>
-                <p className="text-brand-muted text-xs sm:text-sm mt-2 leading-relaxed">
-                  {product.shortDescription}
-                </p>
+                <span className="text-brand-terracotta text-xs font-bold uppercase tracking-widest">{product.subCategory}</span>
+                <h1 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mt-1">{product.name}</h1>
+                <p className="text-brand-muted text-xs sm:text-sm mt-2 leading-relaxed">{product.shortDescription}</p>
               </div>
 
-              {/* Price & Savings Box */}
               <div className="p-4 bg-brand-porcelain rounded-2xl border border-brand-sand">
                 <div className="flex items-baseline gap-3">
                   <span className="font-display text-3xl font-bold text-brand-charcoal">
                     ₹{product.price.toLocaleString("en-IN")}
                   </span>
-                  <span className="text-base text-brand-muted line-through">
-                    ₹{product.marketPrice.toLocaleString("en-IN")}
-                  </span>
-                  <span className="bg-brand-terracotta text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-                    Save ₹{(product.marketPrice - product.price).toLocaleString("en-IN")} ({discount}%)
-                  </span>
+                  {product.marketPrice > product.price && (
+                    <>
+                      <span className="text-base text-brand-muted line-through">
+                        ₹{product.marketPrice.toLocaleString("en-IN")}
+                      </span>
+                      <span className="bg-brand-terracotta text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
+                        Save ₹{(product.marketPrice - product.price).toLocaleString("en-IN")} ({discount}%)
+                      </span>
+                    </>
+                  )}
                 </div>
                 <p className="text-[11px] text-brand-forest font-semibold mt-1">
                   ✓ Free White-Glove Pan-India Installation · GST Included
                 </p>
               </div>
 
-              {/* Fabric / Color Swatch Picker */}
-              {product.fabricOptions && product.fabricOptions.length > 0 && (
+              {/* Fabric Swatches */}
+              {fabricOptions.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-bold text-brand-charcoal uppercase tracking-wider">
-                      Upholstery Color: <span className="text-brand-terracotta font-semibold">{selectedFabric.name}</span>
+                      Upholstery Color: <span className="text-brand-terracotta font-semibold">{selectedFabric?.name}</span>
                     </label>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {product.fabricOptions.map((opt, idx) => {
-                      const isSelected = selectedFabric.name === opt.name;
+                    {fabricOptions.map((opt, idx) => {
+                      const isSelected = selectedFabric?.name === opt.name;
                       return (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => {
-                            setSelectedFabric(opt);
-                            setActiveImageIndex(idx % images.length);
-                          }}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all ${
-                            isSelected
-                              ? "border-brand-terracotta bg-brand-cream text-brand-charcoal font-bold ring-2 ring-brand-terracotta/20"
-                              : "border-brand-sand bg-white text-brand-charcoal/80 hover:border-brand-sandDark"
-                          }`}
-                        >
-                          <span
-                            className="w-4 h-4 rounded-full border border-black/15 shadow-inner"
-                            style={{ backgroundColor: opt.hex }}
-                          />
+                        <button key={idx} type="button"
+                          onClick={() => { setSelectedFabric(opt); setActiveImageIndex(idx % images.length); }}
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all ${isSelected ? "border-brand-terracotta bg-brand-cream text-brand-charcoal font-bold ring-2 ring-brand-terracotta/20" : "border-brand-sand bg-white text-brand-charcoal/80 hover:border-brand-sandDark"}`}>
+                          <span className="w-4 h-4 rounded-full border border-black/15 shadow-inner" style={{ backgroundColor: opt.hex }} />
                           <span>{opt.name}</span>
                         </button>
                       );
@@ -327,654 +325,97 @@ export default function ProductDetail({ onOpenSwatchModal }) {
                 </div>
               )}
 
-              {/* Seating / Size Selector */}
-              <div>
-                <label className="block text-xs font-bold text-brand-charcoal uppercase tracking-wider mb-2">
-                  Configuration / Seating:
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    product.seatingCapacity || "Standard Size",
-                    "3 + 2 Seater Set (+₹18,000)",
-                    "Modular Left Chaise",
-                    "Modular Right Chaise",
-                  ].map((cfg, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setSelectedSize(cfg)}
-                      className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
-                        selectedSize === cfg
-                          ? "bg-brand-charcoal text-white border-brand-charcoal shadow-subtle"
-                          : "bg-white border-brand-sand text-brand-charcoal/80 hover:bg-brand-porcelain"
-                      }`}
-                    >
-                      {cfg}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quantity & Action Buttons */}
+              {/* Quantity & Actions */}
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-3">
-                  {/* Quantity */}
                   <div className="flex items-center border border-brand-sand rounded-2xl bg-brand-porcelain p-1">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-8 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold"
-                    >
-                      −
-                    </button>
-                    <span className="w-10 text-center font-bold text-sm text-brand-charcoal">
-                      {quantity}
-                    </span>
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold"
-                    >
-                      +
-                    </button>
+                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-8 h-8 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold">−</button>
+                    <span className="w-10 text-center font-bold text-sm text-brand-charcoal">{quantity}</span>
+                    <button onClick={() => setQuantity(quantity + 1)}
+                      className="w-8 h-8 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold">+</button>
                   </div>
-
-                  {/* Add to Cart */}
-                  <button
-                    onClick={handleAddToCart}
-                    className="flex-1 bg-brand-porcelain hover:bg-brand-sand/50 text-brand-charcoal border border-brand-sand hover:border-brand-charcoal py-3.5 rounded-2xl font-bold text-xs sm:text-sm transition-colors shadow-subtle flex items-center justify-center gap-2"
-                  >
-                    <span>+ Add to Cart</span>
+                  <button onClick={handleAddToCart}
+                    className="flex-1 bg-brand-porcelain hover:bg-brand-sand/50 text-brand-charcoal border border-brand-sand hover:border-brand-charcoal py-3.5 rounded-2xl font-bold text-xs sm:text-sm transition-colors shadow-subtle flex items-center justify-center gap-2">
+                    + Add to Cart
                   </button>
                 </div>
-
-                {/* Primary Book Now / Instant Order Button */}
-                <button
-                  onClick={handleOpenBookingModal}
-                  className="w-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white py-4 rounded-2xl font-bold text-sm transition-all shadow-floating flex items-center justify-center gap-2"
-                >
+                <button onClick={handleOpenBookingModal}
+                  className="w-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white py-4 rounded-2xl font-bold text-sm transition-all shadow-floating flex items-center justify-center gap-2">
                   <span>⚡ Book Now — ₹{(product.price * quantity).toLocaleString("en-IN")}</span>
                   <span className="text-white/70">|</span>
-                  <span className="text-xs font-normal">Choose Address &amp; Payment →</span>
+                  <span className="text-xs font-normal">Choose Address & Payment →</span>
                 </button>
+                {/* Book on WhatsApp */}
+                <a
+                  href={`https://wa.me/919810926762?text=${encodeURIComponent(`Hi! I'm interested in ordering: ${product.name}\nPrice: ₹${product.price.toLocaleString("en-IN")}\nLink: ${window.location.href}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white py-2.5 rounded-2xl font-bold text-xs transition-colors"
+                >
+                  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current flex-shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  Book on WhatsApp
+                </a>
               </div>
 
-              {/* Pincode Estimator */}
+              {/* Pincode */}
               <div className="pt-4 border-t border-brand-sand">
                 <form onSubmit={handleCheckPincode} className="flex gap-2">
-                  <input
-                    type="text"
-                    maxLength={6}
-                    placeholder="Enter 6-Digit Delivery Pincode"
-                    value={pincode}
-                    onChange={(e) => setPincode(e.target.value)}
-                    className="flex-1 bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta focus:outline-none font-semibold"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-brand-charcoal text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-brand-terracotta transition-colors"
-                  >
+                  <input type="text" maxLength={6} placeholder="Enter 6-Digit Delivery Pincode"
+                    value={pincode} onChange={(e) => setPincode(e.target.value)}
+                    className="flex-1 bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta focus:outline-none font-semibold" />
+                  <button type="submit"
+                    className="bg-brand-charcoal text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-brand-terracotta transition-colors">
                     Check
                   </button>
                 </form>
                 {pincodeStatus && (
-                  <p
-                    className={`text-xs mt-2 font-semibold ${
-                      pincodeStatus.valid ? "text-brand-forest" : "text-red-500"
-                    }`}
-                  >
+                  <p className={`text-xs mt-2 font-semibold ${pincodeStatus.valid ? "text-brand-forest" : "text-red-500"}`}>
                     {pincodeStatus.message}
                   </p>
                 )}
               </div>
 
-              {/* Trust Guarantees */}
+              {/* Trust Grid */}
               <div className="pt-4 border-t border-brand-sand grid grid-cols-2 gap-3 text-xs text-brand-charcoal/80 font-medium">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🛡️</span>
-                  <span>10-Year Frame Warranty</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🪵</span>
-                  <span>100% Solid Sheesham Wood</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🚚</span>
-                  <span>Free In-Room Placement</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🔄</span>
-                  <span>7-Day In-Home Trial</span>
-                </div>
+                <div className="flex items-center gap-2"><span className="text-lg">🛡️</span><span>10-Year Frame Warranty</span></div>
+                <div className="flex items-center gap-2"><span className="text-lg">🪵</span><span>100% Solid Sheesham Wood</span></div>
+                <div className="flex items-center gap-2"><span className="text-lg">🚚</span><span>Free In-Room Placement</span></div>
+                <div className="flex items-center gap-2"><span className="text-lg">🔄</span><span>7-Day In-Home Trial</span></div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* --- Instant Book Now Step-by-Step Checkout Modal --- */}
-        {isBookingModalOpen && (
-          <div className="fixed inset-0 z-50 overflow-y-auto">
-            {/* Backdrop */}
-            <div
-              className="fixed inset-0 bg-brand-charcoal/70 backdrop-blur-sm transition-opacity"
-              onClick={() => setIsBookingModalOpen(false)}
-            />
 
-            <div className="flex min-h-full items-center justify-center p-4">
-              <div className="relative w-full max-w-xl bg-white rounded-3xl p-6 sm:p-8 shadow-card overflow-hidden border border-brand-sand">
-                {/* Close button */}
-                <button
-                  onClick={() => setIsBookingModalOpen(false)}
-                  className="absolute top-5 right-5 p-2 text-brand-muted hover:text-brand-charcoal hover:bg-brand-porcelain rounded-full transition-colors"
-                  aria-label="Close modal"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
 
-                {/* Step Indicators */}
-                <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 text-xs font-bold border-b border-brand-sand pb-4">
-                  <span className={`px-2.5 py-1 rounded-full ${bookingStep >= 1 ? "bg-brand-terracotta text-white" : "bg-brand-sand text-brand-charcoal"}`}>
-                    1. Summary
-                  </span>
-                  <span className="text-brand-sand">→</span>
-                  <span className={`px-2.5 py-1 rounded-full ${bookingStep >= 2 ? "bg-brand-terracotta text-white" : "bg-brand-sand text-brand-charcoal"}`}>
-                    2. Address
-                  </span>
-                  <span className="text-brand-sand">→</span>
-                  <span className={`px-2.5 py-1 rounded-full ${bookingStep >= 3 ? "bg-brand-terracotta text-white" : "bg-brand-sand text-brand-charcoal"}`}>
-                    3. Payment
-                  </span>
-                </div>
-
-                {/* Step 1: Order Summary */}
-                {bookingStep === 1 && (
-                  <div className="space-y-5 animate-fade-in">
-                    <div>
-                      <h3 className="font-display text-2xl text-brand-charcoal font-bold">Review Your Booking</h3>
-                      <p className="text-xs text-brand-muted mt-0.5">Check selected color, configuration and savings</p>
-                    </div>
-
-                    <div className="flex gap-4 p-4 rounded-2xl bg-brand-porcelain border border-brand-sand items-center">
-                      <img
-                        src={images[0]?.url}
-                        alt={product.name}
-                        className="w-20 h-20 rounded-xl object-cover bg-brand-sand flex-shrink-0"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-sm text-brand-charcoal truncate">{product.name}</h4>
-                        <div className="flex flex-wrap gap-1.5 mt-1 text-[11px] text-brand-charcoal">
-                          <span className="bg-white px-2 py-0.5 rounded border border-brand-sand font-semibold">
-                            Color: {selectedFabric.name}
-                          </span>
-                          <span className="bg-white px-2 py-0.5 rounded border border-brand-sand font-semibold">
-                            Size: {selectedSize}
-                          </span>
-                          <span className="bg-white px-2 py-0.5 rounded border border-brand-sand font-semibold">
-                            Qty: {quantity}
-                          </span>
-                        </div>
-                        <div className="font-display font-bold text-base text-brand-charcoal mt-2">
-                          ₹{(product.price * quantity).toLocaleString("en-IN")}
-                          <span className="text-xs text-brand-muted line-through font-normal ml-2">
-                            ₹{(product.marketPrice * quantity).toLocaleString("en-IN")}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 text-xs text-brand-charcoal/80 bg-brand-cream/60 p-4 rounded-2xl border border-brand-sand">
-                      <div className="flex justify-between">
-                        <span>White-Glove Pan-India Delivery</span>
-                        <span className="font-bold text-brand-forest">FREE</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Professional Room Installation</span>
-                        <span className="font-bold text-brand-forest">FREE</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>10-Year Solid Hardwood Warranty</span>
-                        <span className="font-bold text-brand-forest">Included</span>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => setBookingStep(2)}
-                      className="w-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white py-3.5 rounded-full font-bold text-xs sm:text-sm transition-colors shadow-subtle flex items-center justify-center gap-2"
-                    >
-                      <span>Proceed to Delivery Address →</span>
-                    </button>
-                  </div>
-                )}
-
-                {/* Step 2: Delivery Address Form */}
-                {bookingStep === 2 && (
-                  <form onSubmit={handleBookingSubmit} className="space-y-4 animate-fade-in">
-                    <div>
-                      <h3 className="font-display text-2xl text-brand-charcoal font-bold">Delivery Destination</h3>
-                      <p className="text-xs text-brand-muted mt-0.5">Where should our installation team deliver your sofa?</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] font-bold text-brand-charcoal mb-1">Full Name *</label>
-                        <input
-                          required
-                          type="text"
-                          placeholder="e.g. Pooja Krishnamurthy"
-                          value={bookingForm.fullName}
-                          onChange={(e) => setBookingForm({ ...bookingForm, fullName: e.target.value })}
-                          className="w-full bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta font-medium"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] font-bold text-brand-charcoal mb-1">Mobile Number (for Tracking) *</label>
-                        <input
-                          required
-                          type="tel"
-                          placeholder="e.g. 9876543210"
-                          value={bookingForm.phone}
-                          onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                          className="w-full bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta font-medium"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-brand-charcoal mb-1">Email Address</label>
-                      <input
-                        type="email"
-                        placeholder="e.g. pooja@gmail.com"
-                        value={bookingForm.email}
-                        onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })}
-                        className="w-full bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-brand-charcoal mb-1">Street Address / House No. *</label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="Flat 402, Oakwood Residences, 12th Main"
-                        value={bookingForm.address}
-                        onChange={(e) => setBookingForm({ ...bookingForm, address: e.target.value })}
-                        className="w-full bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta font-medium"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      <div>
-                        <label className="block text-[11px] font-bold text-brand-charcoal mb-1">City *</label>
-                        <input
-                          required
-                          type="text"
-                          value={bookingForm.city}
-                          onChange={(e) => setBookingForm({ ...bookingForm, city: e.target.value })}
-                          className="w-full bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta font-medium"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] font-bold text-brand-charcoal mb-1">State *</label>
-                        <input
-                          required
-                          type="text"
-                          value={bookingForm.state}
-                          onChange={(e) => setBookingForm({ ...bookingForm, state: e.target.value })}
-                          className="w-full bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta font-medium"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] font-bold text-brand-charcoal mb-1">Pincode *</label>
-                        <input
-                          required
-                          type="text"
-                          maxLength={6}
-                          value={bookingForm.pincode}
-                          onChange={(e) => setBookingForm({ ...bookingForm, pincode: e.target.value })}
-                          className="w-full bg-brand-porcelain border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal focus:border-brand-terracotta font-medium"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2 pt-3">
-                      <button
-                        type="button"
-                        onClick={() => setBookingStep(1)}
-                        className="py-3 px-5 border border-brand-sand rounded-full text-xs font-bold text-brand-charcoal hover:bg-brand-porcelain"
-                      >
-                        ← Back
-                      </button>
-                      <button
-                        type="submit"
-                        className="flex-1 bg-brand-terracotta hover:bg-brand-terracottaDark text-white py-3 rounded-full font-bold text-xs sm:text-sm transition-colors shadow-subtle"
-                      >
-                        Proceed to Payment Method →
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {/* Step 3: Payment Method Selection */}
-                {bookingStep === 3 && (
-                  <form onSubmit={handleBookingSubmit} className="space-y-4 animate-fade-in">
-                    <div>
-                      <h3 className="font-display text-2xl text-brand-charcoal font-bold">Select Payment Option</h3>
-                      <p className="text-xs text-brand-muted mt-0.5">Pay after in-home unboxing or choose digital payment</p>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      {[
-                        {
-                          id: "cod",
-                          title: "Cash / Card on Delivery (Recommended)",
-                          desc: "Pay only after unboxing, inspection, and room setup",
-                          badge: "Most Popular",
-                        },
-                        {
-                          id: "upi",
-                          title: "UPI / QR Code",
-                          desc: "Instant payment via Google Pay, PhonePe, or Paytm",
-                          badge: "Instant 5% Cashback",
-                        },
-                        {
-                          id: "card",
-                          title: "Credit / Debit Cards",
-                          desc: "Visa, Mastercard, Rupay with 256-Bit SSL protection",
-                        },
-                        {
-                          id: "emi",
-                          title: "0% No-Cost EMI",
-                          desc: `Starting at ₹${Math.round((product.price * quantity) / 12).toLocaleString("en-IN")}/month`,
-                        },
-                      ].map((pm) => (
-                        <label
-                          key={pm.id}
-                          className={`p-3.5 rounded-2xl border cursor-pointer flex items-center justify-between gap-3 transition-all ${
-                            bookingForm.paymentMethod === pm.id
-                              ? "border-brand-terracotta bg-brand-cream ring-2 ring-brand-terracotta/20"
-                              : "border-brand-sand bg-white hover:bg-brand-porcelain"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <input
-                              type="radio"
-                              name="bookingPayment"
-                              checked={bookingForm.paymentMethod === pm.id}
-                              onChange={() => setBookingForm({ ...bookingForm, paymentMethod: pm.id })}
-                              className="accent-brand-terracotta"
-                            />
-                            <div>
-                              <p className="font-bold text-xs text-brand-charcoal">{pm.title}</p>
-                              <p className="text-[11px] text-brand-muted">{pm.desc}</p>
-                            </div>
-                          </div>
-                          {pm.badge && (
-                            <span className="bg-brand-amberLight text-brand-amber text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
-                              {pm.badge}
-                            </span>
-                          )}
-                        </label>
-                      ))}
-                    </div>
-
-                    <div className="p-4 bg-brand-porcelain rounded-2xl border border-brand-sand flex justify-between items-center text-xs font-bold text-brand-charcoal">
-                      <span>Total Amount Payable:</span>
-                      <span className="font-display text-lg font-bold text-brand-terracotta">
-                        ₹{(product.price * quantity).toLocaleString("en-IN")}
-                      </span>
-                    </div>
-
-                    <div className="flex gap-2 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => setBookingStep(2)}
-                        className="py-3 px-5 border border-brand-sand rounded-full text-xs font-bold text-brand-charcoal hover:bg-brand-porcelain"
-                      >
-                        ← Back
-                      </button>
-                      <button
-                        type="submit"
-                        className="flex-1 bg-brand-forest hover:bg-brand-charcoal text-white py-3.5 rounded-full font-bold text-xs sm:text-sm transition-colors shadow-floating"
-                      >
-                        Confirm Booking &amp; Place Order (₹{(product.price * quantity).toLocaleString("en-IN")})
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {/* Step 4: Order Confirmed Screen */}
-                {bookingStep === 4 && (
-                  <div className="text-center py-4 space-y-4 animate-fade-in">
-                    <div className="w-16 h-16 bg-brand-forestLight text-brand-forest rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
-                      ✓
-                    </div>
-
-                    <div>
-                      <span className="bg-brand-forestLight text-brand-forest text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                        Booking Confirmed
-                      </span>
-                      <h3 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mt-2">
-                        Your Furniture is Booked!
-                      </h3>
-                      <p className="text-brand-muted text-xs sm:text-sm mt-1">
-                        Order ID: <strong className="text-brand-charcoal font-mono">{confirmedOrderId}</strong>
-                      </p>
-                    </div>
-
-                    <div className="bg-brand-porcelain p-4 rounded-2xl border border-brand-sand text-left text-xs space-y-2 max-w-md mx-auto">
-                      <p><strong>Item:</strong> {product.name} (Qty: {quantity})</p>
-                      <p><strong>Custom Fabric:</strong> {selectedFabric.name}</p>
-                      <p><strong>Customer:</strong> {bookingForm.fullName} ({bookingForm.phone})</p>
-                      <p><strong>Destination:</strong> {bookingForm.address}, {bookingForm.city} - {bookingForm.pincode}</p>
-                      <p><strong>Payment:</strong> {bookingForm.paymentMethod === "cod" ? "Pay on Delivery (COD)" : bookingForm.paymentMethod.toUpperCase()}</p>
-                      <p><strong>Delivery:</strong> Dispatches within 48 Hours with Free Installation</p>
-                    </div>
-
-                    <div className="pt-2">
-                      <button
-                        onClick={() => {
-                          setIsBookingModalOpen(false);
-                          navigate("/wishlist");
-                        }}
-                        className="bg-brand-charcoal text-white px-8 py-3 rounded-full text-xs sm:text-sm font-bold hover:bg-brand-terracotta transition-colors shadow-subtle"
-                      >
-                        Done &amp; View Saved Items
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Detailed Tabs Section */}
-        <div className="mt-12 sm:mt-16 bg-white rounded-3xl border border-brand-sand shadow-subtle p-6 sm:p-10">
-          {/* Tab Navigation */}
-          <div className="flex border-b border-brand-sand gap-6 overflow-x-auto no-scrollbar">
-            {[
-              { id: "specs", label: "Dimensions & Specifications" },
-              { id: "features", label: "Key Features & Materials" },
-              { id: "warranty", label: "10-Year Warranty & Care" },
-              { id: "reviews", label: `Customer Reviews (${product.numReviews + customReviews.length})` },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`pb-4 text-xs sm:text-sm font-bold whitespace-nowrap transition-all border-b-2 ${
-                  activeTab === tab.id
-                    ? "border-brand-terracotta text-brand-terracotta"
-                    : "border-transparent text-brand-muted hover:text-brand-charcoal"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Tab 1: Dimensions & Specs */}
-          {activeTab === "specs" && (
-            <div className="py-6 space-y-6 animate-fade-in text-xs sm:text-sm">
-              <p className="text-brand-charcoal leading-relaxed max-w-3xl font-medium">
-                {product.description}
-              </p>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-brand-sand">
-                <div className="bg-brand-porcelain p-4 rounded-2xl border border-brand-sand">
-                  <span className="text-brand-muted text-[11px] block font-semibold">Width</span>
-                  <span className="font-bold text-brand-charcoal text-base">
-                    {product.dimensions?.width} {product.dimensions?.unit}
-                  </span>
-                </div>
-                <div className="bg-brand-porcelain p-4 rounded-2xl border border-brand-sand">
-                  <span className="text-brand-muted text-[11px] block font-semibold">Depth</span>
-                  <span className="font-bold text-brand-charcoal text-base">
-                    {product.dimensions?.depth} {product.dimensions?.unit}
-                  </span>
-                </div>
-                <div className="bg-brand-porcelain p-4 rounded-2xl border border-brand-sand">
-                  <span className="text-brand-muted text-[11px] block font-semibold">Height</span>
-                  <span className="font-bold text-brand-charcoal text-base">
-                    {product.dimensions?.height} {product.dimensions?.unit}
-                  </span>
-                </div>
-                <div className="bg-brand-porcelain p-4 rounded-2xl border border-brand-sand">
-                  <span className="text-brand-muted text-[11px] block font-semibold">Seating Height</span>
-                  <span className="font-bold text-brand-charcoal text-base">
-                    {product.dimensions?.seatingHeight || "45 cm"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Tab 2: Key Features */}
-          {activeTab === "features" && (
-            <div className="py-6 space-y-4 animate-fade-in text-xs sm:text-sm">
-              <ul className="grid sm:grid-cols-2 gap-3">
-                {product.features?.map((feat, idx) => (
-                  <li
-                    key={idx}
-                    className="p-3.5 bg-brand-porcelain rounded-2xl border border-brand-sand flex items-start gap-2.5"
-                  >
-                    <span className="text-brand-forest font-bold">✓</span>
-                    <span className="text-brand-charcoal leading-relaxed font-medium">{feat}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Tab 3: Warranty & Care */}
-          {activeTab === "warranty" && (
-            <div className="py-6 space-y-4 animate-fade-in text-xs sm:text-sm text-brand-charcoal/90 leading-relaxed max-w-3xl">
-              <div className="p-4 bg-brand-forestLight rounded-2xl border border-brand-forest/20 text-brand-forest font-bold">
-                🛡️ {product.warranty}
-              </div>
-              <p>
-                <strong>What's Covered:</strong> Internal kiln-dried solid hardwood frame integrity, anti-sag spring suspension, joint bondings, and lifetime anti-termite wood treatment.
-              </p>
-              <p>
-                <strong>Fabric Care Guide:</strong> Wipe minor spills immediately with a clean, dry micro-fiber cloth. For deep cleaning, spot clean with mild upholstery shampoo.
-              </p>
-            </div>
-          )}
-
-          {/* Tab 4: Reviews */}
-          {activeTab === "reviews" && (
-            <div className="py-6 space-y-6 animate-fade-in">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-display text-lg text-brand-charcoal font-bold">Customer Reviews</h3>
-                  <p className="text-xs text-brand-muted">Overall rating: ★ {product.rating} / 5.0</p>
-                </div>
-                <button
-                  onClick={() => setShowReviewForm(!showReviewForm)}
-                  className="bg-brand-charcoal text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-brand-terracotta transition-colors"
-                >
-                  Write a Review
-                </button>
-              </div>
-
-              {showReviewForm && (
-                <form onSubmit={handleAddReview} className="p-5 bg-brand-porcelain rounded-2xl border border-brand-sand space-y-3">
-                  <h4 className="font-bold text-xs text-brand-charcoal">Submit Verified Review</h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      required
-                      type="text"
-                      placeholder="Your Name"
-                      value={reviewAuthor}
-                      onChange={(e) => setReviewAuthor(e.target.value)}
-                      className="bg-white border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal"
-                    />
-                    <select
-                      value={reviewRating}
-                      onChange={(e) => setReviewRating(Number(e.target.value))}
-                      className="bg-white border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal font-semibold"
-                    >
-                      <option value={5}>★★★★★ (5 Stars)</option>
-                      <option value={4}>★★★★☆ (4 Stars)</option>
-                      <option value={3}>★★★☆☆ (3 Stars)</option>
-                    </select>
-                  </div>
-                  <textarea
-                    required
-                    rows={3}
-                    placeholder="Share your experience with the comfort, fabric, and delivery..."
-                    value={reviewComment}
-                    onChange={(e) => setReviewComment(e.target.value)}
-                    className="w-full bg-white border border-brand-sand rounded-xl px-3 py-2 text-xs text-brand-charcoal"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-brand-forest text-white px-5 py-2 rounded-xl text-xs font-bold"
-                  >
-                    Post Review
-                  </button>
-                </form>
-              )}
-
-              {/* Review list */}
-              <div className="space-y-3">
-                {customReviews.map((rev, idx) => (
-                  <div key={idx} className="p-4 bg-brand-porcelain rounded-2xl border border-brand-sand space-y-1 text-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-brand-charcoal">{rev.author}</span>
-                      <span className="text-amber-500 font-bold">{"★".repeat(rev.rating)}</span>
-                    </div>
-                    <p className="text-brand-charcoal font-medium">{rev.comment}</p>
-                    <span className="text-[10px] text-brand-muted">{rev.date}</span>
-                  </div>
-                ))}
-                <div className="p-4 bg-brand-porcelain rounded-2xl border border-brand-sand space-y-1 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-brand-charcoal">Rohan Verma (Bengaluru)</span>
-                    <span className="text-amber-500 font-bold">★★★★★</span>
-                  </div>
-                  <p className="text-brand-charcoal font-medium">
-                    The solid Sheesham frame is incredibly sturdy and heavy. The fabric looks even richer than the photos!
-                  </p>
-                  <span className="text-[10px] text-brand-muted">2 weeks ago · Verified Purchase</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Related Products Carousel */}
+        {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-14 sm:mt-20">
-            <h2 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mb-6">
-              You May Also Like
-            </h2>
+            <h2 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mb-6">You May Also Like</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {relatedProducts.map((p) => (
-                <ProductCard key={p._id} product={p} />
-              ))}
+              {relatedProducts.map((p) => <ProductCard key={p._id} product={p} />)}
             </div>
           </div>
         )}
+      </div>
+
+      {/* Mobile Sticky Bar */}
+      <div className="lg:hidden fixed bottom-[52px] inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-brand-sand p-2.5 px-4 shadow-floating flex items-center justify-between gap-3">
+        <div>
+          <span className="text-[10px] text-brand-muted block font-semibold leading-none">Special Price</span>
+          <span className="font-display font-bold text-base text-brand-charcoal">₹{(product.price * quantity).toLocaleString("en-IN")}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={handleAddToCart}
+            className="bg-brand-porcelain text-brand-charcoal border border-brand-sand px-3 py-2 rounded-xl text-xs font-bold active:bg-brand-sand transition-colors">
+            + Cart
+          </button>
+          <button onClick={handleOpenBookingModal}
+            className="bg-brand-terracotta text-white px-4 py-2 rounded-xl text-xs font-bold shadow-subtle active:bg-brand-terracottaDark transition-colors flex items-center gap-1">
+            ⚡ Book Now
+          </button>
+        </div>
       </div>
     </div>
   );

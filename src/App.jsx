@@ -1,104 +1,166 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+
+// Store pages & components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import ProductListing from "./pages/ProductListing";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import Wishlist from "./pages/Wishlist";
-
+import SeoPanel from "./pages/SeoPanel";
 import CartDrawer from "./components/CartDrawer";
 import SearchModal from "./components/SearchModal";
-import SwatchModal from "./components/SwatchModal";
-import StoreVisitModal from "./components/StoreVisitModal";
+import MobileBottomNav from "./components/MobileBottomNav";
 
+// Store contexts
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
+import { UnifiedAuthProvider, useAdminAuth, useSeoAuth } from "./context/UnifiedAuthContext";
 
-// Scroll to top on route change
+// Customer auth pages
+import CustomerLogin from "./pages/CustomerLogin";
+import CustomerRegister from "./pages/CustomerRegister";
+import CustomerAccount from "./pages/CustomerAccount";
+
+// Admin pages
+import AdminLogin from "./admin/AdminLogin";
+import AdminLayout from "./admin/AdminLayout";
+import AdminDashboard from "./admin/AdminDashboard";
+import ProductManager from "./admin/ProductManager";
+import CategoryManager from "./admin/CategoryManager";
+import OrderManager from "./admin/OrderManager";
+import UserManager from "./admin/UserManager";
+
+// SEO auth & pages
+import SeoLogin from "./pages/SeoLogin";
+
+// ── Scroll to top on route change ──────────────────────────────────────────────
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   return null;
 }
 
-export default function App() {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [swatchOpen, setSwatchOpen] = useState(false);
-  const [storeOpen, setStoreOpen] = useState(false);
+// ── Admin auth guard ────────────────────────────────────────────────────────────
+function RequireAdmin({ children }) {
+  const { admin, checking } = useAdminAuth();
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gray-700 border-t-[#C86A3B] rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!admin) return <Navigate to="/admin/login" replace />;
+  return children;
+}
 
-  // Keyboard shortcut ⌘K or Ctrl+K to open search
+// ── SEO auth guard ──────────────────────────────────────────────────────────────
+function RequireSeoAuth({ children }) {
+  const { seoUser, checking } = useSeoAuth();
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-slate-700 border-t-teal-500 rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!seoUser) return <Navigate to="/seo/login" replace />;
+  return children;
+}
+
+// ── Store Shell ─────────────────────────────────────────────────────────────────
+function StoreShell() {
+  const [searchOpen, setSearchOpen] = useState(false);
+
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handler = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        setSearchOpen((prev) => !prev);
+        setSearchOpen((v) => !v);
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
   }, []);
 
   return (
     <CartProvider>
       <WishlistProvider>
-        <ScrollToTop />
-        <div className="min-h-screen flex flex-col bg-brand-porcelain text-brand-charcoal font-body antialiased">
-          {/* Main Navigation Header */}
+        <div className="min-h-screen flex flex-col bg-brand-porcelain text-brand-charcoal font-body antialiased pb-16 lg:pb-0">
           <Header
             onOpenSearch={() => setSearchOpen(true)}
-            onOpenSwatchModal={() => setSwatchOpen(true)}
-            onOpenStoreModal={() => setStoreOpen(true)}
           />
-
-          {/* Page Routing */}
           <main className="flex-1">
             <Routes>
-              <Route
-                path="/"
-                element={
-                  <Home
-                    onOpenSwatchModal={() => setSwatchOpen(true)}
-                    onOpenStoreModal={() => setStoreOpen(true)}
-                  />
-                }
-              />
+              <Route path="/" element={<Home />} />
               <Route path="/collections" element={<ProductListing />} />
               <Route path="/collections/:slug" element={<ProductListing />} />
-              <Route
-                path="/product/:slug"
-                element={<ProductDetail onOpenSwatchModal={() => setSwatchOpen(true)} />}
-              />
+              <Route path="/product/:slug" element={<ProductDetail />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
-              <Route
-                path="*"
-                element={
-                  <Home
-                    onOpenSwatchModal={() => setSwatchOpen(true)}
-                    onOpenStoreModal={() => setStoreOpen(true)}
-                  />
-                }
-              />
+              <Route path="/login" element={<CustomerLogin />} />
+              <Route path="/register" element={<CustomerRegister />} />
+              <Route path="/account" element={<CustomerAccount />} />
+              <Route path="/my-orders" element={<CustomerAccount />} />
+              <Route path="*" element={<Home />} />
             </Routes>
           </main>
-
-          {/* Global Slide-overs & Modals */}
           <CartDrawer />
           <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-          <SwatchModal isOpen={swatchOpen} onClose={() => setSwatchOpen(false)} />
-          <StoreVisitModal isOpen={storeOpen} onClose={() => setStoreOpen(false)} />
-
-          {/* Rich Footer */}
-          <Footer
-            onOpenSwatchModal={() => setSwatchOpen(true)}
-            onOpenStoreModal={() => setStoreOpen(true)}
-          />
+          <MobileBottomNav onOpenSearch={() => setSearchOpen(true)} />
+          <Footer />
         </div>
       </WishlistProvider>
     </CartProvider>
+  );
+}
+
+// ── Root App ────────────────────────────────────────────────────────────────────
+export default function App() {
+  return (
+    <UnifiedAuthProvider>
+      <ScrollToTop />
+      <Routes>
+        {/* SEO Panel standalone login & protected panel */}
+        <Route path="/seo/login" element={<SeoLogin />} />
+        <Route
+          path="/seo"
+          element={
+            <RequireSeoAuth>
+              <SeoPanel />
+            </RequireSeoAuth>
+          }
+        />
+
+        {/* ── Admin routes (dark standalone layout, no store header/footer) ── */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin"
+          element={
+            <RequireAdmin>
+              <AdminLayout />
+            </RequireAdmin>
+          }
+        >
+          {/* Default /admin → dashboard */}
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="products" element={<ProductManager />} />
+          <Route path="categories" element={<CategoryManager />} />
+          <Route path="orders" element={<OrderManager />} />
+          <Route path="users" element={<UserManager />} />
+          {/* SEO panel is embedded inside admin layout for Admin user */}
+          <Route path="seo" element={<SeoPanel embedded />} />
+        </Route>
+
+        {/* ── Store routes ── */}
+        <Route path="*" element={<StoreShell />} />
+      </Routes>
+    </UnifiedAuthProvider>
   );
 }

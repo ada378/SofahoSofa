@@ -31,12 +31,12 @@ export default function ProductCard({ product }) {
 
   return (
     <div
-      className="group relative bg-white rounded-3xl p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between"
+      className="group relative bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Top Image Container */}
-      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] rounded-2xl overflow-hidden bg-brand-sand/40">
+      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-brand-sand/40">
         <img
           src={isHovered ? secondaryImage : activeImage}
           alt={product.name}
@@ -46,14 +46,14 @@ export default function ProductCard({ product }) {
 
         {/* Discount Badge */}
         {discount > 0 && (
-          <span className="absolute top-2.5 left-2.5 bg-brand-charcoal text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-subtle">
+          <span className="absolute top-2 left-2 bg-brand-charcoal text-white text-[9px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-subtle">
             {discount}% OFF
           </span>
         )}
 
         {/* Bestseller Badge */}
         {product.isBestSeller && (
-          <span className="absolute bottom-2.5 left-2.5 bg-brand-amber text-brand-charcoal text-[10px] font-bold px-2 py-0.5 rounded-md shadow-subtle uppercase tracking-wider">
+          <span className="absolute bottom-2 left-2 bg-brand-amber text-brand-charcoal text-[8px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-subtle uppercase tracking-wider">
             ★ Bestseller
           </span>
         )}
@@ -61,7 +61,7 @@ export default function ProductCard({ product }) {
         {/* Wishlist Button */}
         <button
           onClick={handleWishlistClick}
-          className={`absolute top-2.5 right-2.5 p-2 rounded-full backdrop-blur-md transition-all ${
+          className={`absolute top-2 right-2 p-1.5 sm:p-2 rounded-full backdrop-blur-md transition-all ${
             inWish
               ? "bg-white text-red-500 shadow-card"
               : "bg-white/80 text-brand-charcoal hover:bg-white hover:text-red-500 shadow-subtle"
@@ -69,8 +69,7 @@ export default function ProductCard({ product }) {
           aria-label={inWish ? "Remove from wishlist" : "Add to wishlist"}
         >
           <svg
-            width="16"
-            height="16"
+            className="w-3.5 h-3.5 sm:w-4 sm:h-4"
             viewBox="0 0 24 24"
             fill={inWish ? "currentColor" : "none"}
             stroke="currentColor"
@@ -96,40 +95,39 @@ export default function ProductCard({ product }) {
       </Link>
 
       {/* Product Information */}
-      <div className="pt-3 px-1 flex-1 flex flex-col justify-between">
+      <div className="pt-2 sm:pt-3 px-0.5 sm:px-1 flex-1 flex flex-col justify-between">
         <div>
           {/* Subtitle & Material */}
-          <div className="flex items-center justify-between text-[11px] text-brand-muted">
-            <span className="uppercase tracking-wider font-semibold">{product.subCategory}</span>
-            <div className="flex items-center gap-1 text-amber-600 font-semibold">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-brand-muted">
+            <span className="uppercase tracking-wider font-semibold truncate max-w-[90px] sm:max-w-none">{product.subCategory}</span>
+            <div className="flex items-center gap-0.5 text-amber-600 font-semibold flex-shrink-0">
               <span>★</span>
               <span>{product.rating}</span>
-              <span className="text-brand-muted font-normal">({product.numReviews})</span>
             </div>
           </div>
 
           {/* Product Title */}
-          <Link to={`/product/${product.slug}`} className="block mt-1">
-            <h3 className="font-semibold text-sm sm:text-base text-brand-charcoal group-hover:text-brand-terracotta transition-colors line-clamp-1">
+          <Link to={`/product/${product.slug}`} className="block mt-0.5 sm:mt-1">
+            <h3 className="font-semibold text-xs sm:text-base text-brand-charcoal group-hover:text-brand-terracotta transition-colors line-clamp-1">
               {product.name}
             </h3>
           </Link>
-          <p className="text-xs text-brand-muted line-clamp-1 mt-0.5">
+          <p className="text-[11px] sm:text-xs text-brand-muted line-clamp-1 mt-0.5 hidden sm:block">
             {product.material}
           </p>
         </div>
 
         {/* Color Swatches */}
         {product.fabricOptions && product.fabricOptions.length > 0 && (
-          <div className="flex items-center gap-1.5 mt-2.5">
-            {product.fabricOptions.slice(0, 5).map((opt, index) => (
+          <div className="flex items-center gap-1 sm:gap-1.5 mt-2">
+            {product.fabricOptions.slice(0, 4).map((opt, index) => (
               <button
                 key={index}
                 onClick={(e) => {
                   e.preventDefault();
                   setSelectedFabricIndex(index);
                 }}
-                className={`w-4 h-4 rounded-full border transition-all ${
+                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full border transition-all ${
                   selectedFabricIndex === index
                     ? "scale-125 border-brand-charcoal shadow-sm"
                     : "border-black/15 hover:scale-110"
@@ -139,37 +137,37 @@ export default function ProductCard({ product }) {
                 aria-label={`Select ${opt.name}`}
               />
             ))}
-            {product.fabricOptions.length > 5 && (
-              <span className="text-[10px] text-brand-muted font-medium ml-0.5">
-                +{product.fabricOptions.length - 5}
+            {product.fabricOptions.length > 4 && (
+              <span className="text-[9px] sm:text-[10px] text-brand-muted font-medium ml-0.5">
+                +{product.fabricOptions.length - 4}
               </span>
             )}
           </div>
         )}
 
         {/* Price & Mobile Add to Cart */}
-        <div className="mt-3 pt-2.5 border-t border-brand-sand/60 flex items-center justify-between">
-          <div>
-            <div className="flex items-baseline gap-1.5">
-              <span className="font-display font-semibold text-base sm:text-lg text-brand-charcoal">
+        <div className="mt-2 sm:mt-3 pt-2 border-t border-brand-sand/60 flex items-center justify-between gap-1">
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-1 flex-wrap">
+              <span className="font-display font-bold text-xs sm:text-lg text-brand-charcoal">
                 ₹{product.price.toLocaleString("en-IN")}
               </span>
               {product.marketPrice > product.price && (
-                <span className="text-xs text-brand-muted line-through">
+                <span className="text-[10px] sm:text-xs text-brand-muted line-through hidden min-[380px]:inline">
                   ₹{product.marketPrice.toLocaleString("en-IN")}
                 </span>
               )}
             </div>
-            <p className="text-[10px] text-brand-forest font-semibold">Free Delivery &amp; Setup</p>
+            <p className="text-[9px] sm:text-[10px] text-brand-forest font-semibold leading-tight truncate">Free Delivery</p>
           </div>
 
           {/* Mobile Quick Add Button */}
           <button
             onClick={handleQuickAdd}
-            className="sm:hidden p-2 bg-brand-charcoal text-white rounded-xl active:bg-brand-terracotta"
+            className="sm:hidden p-1.5 bg-brand-charcoal text-white rounded-lg active:bg-brand-terracotta flex-shrink-0"
             aria-label="Add to cart"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M12 5v14M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>

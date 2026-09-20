@@ -7,7 +7,7 @@ const slides = [
     badge: "✨ 100% Solid Wood · Direct Factory Pricing",
     title: "Handcrafted Comfort for Modern Living",
     subtitle:
-      "Kiln-dried solid Sheesham hardwood, 200+ bespoke fabric swatches, and a 10-Year Comprehensive Warranty. Made in our 1 Lakh sq.ft factory, delivered straight to your living room.",
+      "Kiln-dried solid Sheesham hardwood and a 10-Year Comprehensive Warranty. Made in our 1 Lakh sq.ft factory, delivered straight to your living room.",
     primaryCta: { text: "Shop Sofas & Sectionals", link: "/collections/sofa-sets" },
     secondaryCta: { text: "Explore Recliners", link: "/collections/recliners" },
     featuredProduct: {
@@ -58,7 +58,7 @@ const slides = [
   },
 ];
 
-export default function Hero({ onOpenSwatchModal }) {
+export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -106,27 +106,27 @@ export default function Hero({ onOpenSwatchModal }) {
                 </svg>
               </Link>
 
-              <button
-                onClick={onOpenSwatchModal}
+              <Link
+                to={slide.secondaryCta.link}
                 className="bg-white border border-brand-sand hover:border-brand-terracotta text-brand-charcoal hover:text-brand-terracotta px-6 py-3.5 rounded-full text-sm font-bold transition-all shadow-subtle flex items-center gap-2"
               >
-                <span>🎨 Free Swatch Kit (₹0)</span>
-              </button>
+                <span>{slide.secondaryCta.text}</span>
+              </Link>
             </div>
 
             {/* Trust Metrics Bar */}
-            <div className="pt-6 border-t border-brand-sand/80 grid grid-cols-3 gap-4">
+            <div className="pt-6 border-t border-brand-sand/80 grid grid-cols-3 gap-2 sm:gap-4 text-center sm:text-left">
               <div>
-                <p className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold">25,000+</p>
-                <p className="text-xs text-brand-charcoal font-semibold mt-0.5">Homes Furnished</p>
+                <p className="font-display text-xl sm:text-3xl text-brand-charcoal font-bold">25,000+</p>
+                <p className="text-[10px] sm:text-xs text-brand-charcoal font-semibold mt-0.5 leading-tight">Homes Furnished</p>
               </div>
               <div>
-                <p className="font-display text-2xl sm:text-3xl text-brand-forest font-bold">10-Year</p>
-                <p className="text-xs text-brand-charcoal font-semibold mt-0.5">Wood Warranty</p>
+                <p className="font-display text-xl sm:text-3xl text-brand-forest font-bold">10-Year</p>
+                <p className="text-[10px] sm:text-xs text-brand-charcoal font-semibold mt-0.5 leading-tight">Wood Warranty</p>
               </div>
               <div>
-                <p className="font-display text-2xl sm:text-3xl text-brand-amber font-bold">4.9 ★</p>
-                <p className="text-xs text-brand-charcoal font-semibold mt-0.5">Verified Rating</p>
+                <p className="font-display text-xl sm:text-3xl text-brand-amber font-bold">4.9 ★</p>
+                <p className="text-[10px] sm:text-xs text-brand-charcoal font-semibold mt-0.5 leading-tight">Verified Rating</p>
               </div>
             </div>
           </div>

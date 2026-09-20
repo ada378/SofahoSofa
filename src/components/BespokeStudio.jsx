@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function BespokeStudio({ onOpenSwatchModal }) {
+export default function BespokeStudio() {
   const [selectedFrame, setSelectedFrame] = useState("3-Seater Classic");
   const [selectedFabric, setSelectedFabric] = useState("Warm Mustard Bouclé");
   const [selectedFirmness, setSelectedFirmness] = useState("Medium Plush (Cloud Sink)");
@@ -23,7 +23,7 @@ export default function BespokeStudio({ onOpenSwatchModal }) {
               </h2>
 
               <p className="text-[#3B302A] text-xs sm:text-sm leading-relaxed max-w-lg font-medium">
-                Why settle for standard showroom sizes? Pick your frame silhouette, select from 200+ stain-repellent fabrics, and customize cushion softness. Delivered direct from our factory in 7-10 days.
+                Why settle for standard showroom sizes? Pick your frame silhouette, select your fabric, and customize cushion softness. Delivered direct from our factory in 7-10 days.
               </p>
 
               {/* 4 Interactive Configurator Steps */}
@@ -116,17 +116,17 @@ export default function BespokeStudio({ onOpenSwatchModal }) {
 
               {/* Action Buttons */}
               <div className="pt-4 flex flex-wrap items-center gap-3">
-                <button
-                  onClick={onOpenSwatchModal}
-                  className="bg-brand-terracotta hover:bg-brand-terracottaDark text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle flex items-center gap-2"
-                >
-                  <span>📦 Order Free Fabric Swatches (₹0)</span>
-                </button>
                 <Link
                   to="/collections/sofa-sets"
+                  className="bg-brand-terracotta hover:bg-brand-terracottaDark text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle flex items-center gap-2"
+                >
+                  <span>Shop Sofas</span>
+                </Link>
+                <Link
+                  to="/collections/all"
                   className="bg-white hover:bg-brand-porcelain text-[#1F1A17] border border-brand-sand px-6 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle"
                 >
-                  Browse Ready Models
+                  Browse All Collections
                 </Link>
               </div>
             </div>
@@ -151,7 +151,7 @@ export default function BespokeStudio({ onOpenSwatchModal }) {
                     <span className="font-bold text-[#1F1A17]">{selectedFrame}</span>
                   </div>
                   <div className="flex justify-between py-1.5 border-b border-brand-sand">
-                    <span className="text-brand-muted font-semibold">Fabric Swatch</span>
+                    <span className="text-brand-muted font-semibold">Fabric Option</span>
                     <span className="font-bold text-[#1F1A17]">{selectedFabric}</span>
                   </div>
                   <div className="flex justify-between py-1.5 border-b border-brand-sand">

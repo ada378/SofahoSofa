@@ -65,7 +65,7 @@ export default function FAQSection() {
             </p>
           </div>
           <a
-            href="https://wa.me/919876543210"
+            href="https://wa.me/919810926762"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-brand-forest text-white text-xs font-semibold px-6 py-3 rounded-full hover:bg-brand-charcoal transition-colors shadow-subtle flex items-center gap-2 whitespace-nowrap"

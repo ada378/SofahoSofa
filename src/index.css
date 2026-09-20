@@ -6,12 +6,15 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
 
   body {
     background-color: #FAF7F2;
     color: #1F1A17;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    overflow-x: hidden;
+    touch-action: manipulation;
   }
 
   /* Accessible focus indicators */
@@ -22,6 +25,10 @@
   textarea:focus-visible {
     outline: 2px solid #C86A3B;
     outline-offset: 2px;
+  }
+
+  button, a {
+    touch-action: manipulation;
   }
 }
 

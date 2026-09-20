@@ -1,64 +1,12 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { categories, experienceStudios } from "../data/sampleProducts";
+import { categories } from "../data/sampleProducts";
+import { FiMapPin, FiPhoneCall, FiMail, FiShield, FiTruck, FiCreditCard, FiRotateCcw, FiAward } from "react-icons/fi";
 
-export default function Footer({ onOpenSwatchModal, onOpenStoreModal }) {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubscribed(true);
-    setEmail("");
-  };
-
+export default function Footer() {
   return (
     <footer className="bg-brand-cream text-brand-charcoal border-t border-brand-sand">
-      {/* 1. VIP Privilege Newsletter Card */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-8">
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-brand-sand shadow-subtle grid lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7">
-            <span className="bg-brand-amberLight text-brand-amber text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-              Exclusive Privilege
-            </span>
-            <h3 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mt-2.5 leading-tight">
-              Get ₹2,000 Off Your First Sofa + Free Fabric Swatch Box
-            </h3>
-            <p className="text-brand-muted text-xs sm:text-sm mt-1.5 leading-relaxed max-w-xl">
-              Join 50,000+ decor lovers. Receive architectural living room lookbooks, direct factory discount alerts, and early access to new designer collections.
-            </p>
-          </div>
-
-          <div className="lg:col-span-5">
-            {subscribed ? (
-              <div className="bg-brand-forestLight text-brand-forest p-4 rounded-2xl text-xs font-bold text-center border border-brand-forest/20">
-                🎉 Welcome! Use code <span className="underline font-mono text-sm">WELCOME10</span> at checkout for your special privilege.
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2">
-                <input
-                  required
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 bg-brand-porcelain border border-brand-sand rounded-full px-4 py-3 text-xs sm:text-sm text-brand-charcoal placeholder:text-brand-muted focus:outline-none focus:border-brand-terracotta"
-                />
-                <button
-                  type="submit"
-                  className="bg-brand-charcoal hover:bg-brand-terracotta text-white px-6 py-3 rounded-full text-xs sm:text-sm font-semibold transition-colors shadow-subtle whitespace-nowrap"
-                >
-                  Claim ₹2,000 Off
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Main Footer Directory Links */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 sm:gap-10 border-t border-brand-sand/80">
+      {/* Main Footer Directory Links */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 sm:gap-10 border-b border-brand-sand/80">
         {/* Col 1 & 2: Brand Profile & Helpline */}
         <div className="col-span-2 space-y-4">
           <Link to="/" className="inline-flex items-center gap-2.5">
@@ -74,22 +22,43 @@ export default function Footer({ onOpenSwatchModal, onOpenStoreModal }) {
             India's direct-from-factory bespoke furniture brand. Crafting 100% solid Sheesham &amp; Sal hardwood sofas, sectionals, motorized recliners, beds, and dining sets in our 1,00,000 sq.ft facility.
           </p>
 
-          <div className="pt-2 text-xs space-y-2 text-brand-charcoal">
-            <p className="flex items-center gap-2">
-              <span className="font-bold">📍 Head Office:</span>
-              <span className="text-brand-charcoal/80">Plot 42, 100 Ft Rd, Indiranagar, Bengaluru - 560038</span>
+          <div className="pt-2 text-xs space-y-2.5 text-brand-charcoal">
+            <p className="flex items-start gap-2">
+              <FiMapPin className="text-brand-terracotta mt-0.5 text-sm flex-shrink-0" />
+              <span className="font-bold flex-shrink-0">Head Office:</span>
+              <span className="text-brand-charcoal/80">
+                Khasra Number 491 - 492 Kisan path Vill : Churahya, Lucknow, Uttar Pradesh 226501
+              </span>
             </p>
-            <p className="flex items-center gap-2">
-              <span className="font-bold">📞 Customer Helpline:</span>
-              <a href="tel:+919876543210" className="text-brand-terracotta font-semibold hover:underline">
-                +91 98765 43210 (10 AM - 8 PM IST)
-              </a>
+            <p className="flex items-start gap-2">
+              <FiPhoneCall className="text-brand-terracotta mt-0.5 text-sm flex-shrink-0" />
+              <span className="font-bold flex-shrink-0">Helpline:</span>
+              <span className="flex flex-wrap gap-x-2 gap-y-1">
+                <a href="tel:+919810926762" className="text-brand-terracotta font-semibold hover:underline">
+                  +91 9810926762
+                </a>
+                <span className="text-brand-muted">•</span>
+                <a href="tel:+917800001200" className="text-brand-terracotta font-semibold hover:underline">
+                  +91 7800001200
+                </a>
+                <span className="text-brand-muted">•</span>
+                <a href="tel:+919984776490" className="text-brand-terracotta font-semibold hover:underline">
+                  +91 9984776490
+                </a>
+              </span>
             </p>
-            <p className="flex items-center gap-2">
-              <span className="font-bold">✉️ Support Email:</span>
-              <a href="mailto:care@sofahisofa.com" className="text-brand-terracotta font-semibold hover:underline">
-                care@sofahisofa.com
-              </a>
+            <p className="flex items-start gap-2">
+              <FiMail className="text-brand-terracotta mt-0.5 text-sm flex-shrink-0" />
+              <span className="font-bold flex-shrink-0">Support Email:</span>
+              <span className="flex flex-wrap gap-x-2 gap-y-1">
+                <a href="mailto:info@sofahisofa.com" className="text-brand-terracotta font-semibold hover:underline">
+                  info@sofahisofa.com
+                </a>
+                <span className="text-brand-muted">•</span>
+                <a href="mailto:gautam76@mail.ru" className="text-brand-terracotta font-semibold hover:underline">
+                  gautam76@mail.ru
+                </a>
+              </span>
             </p>
           </div>
         </div>
@@ -118,41 +87,27 @@ export default function Footer({ onOpenSwatchModal, onOpenStoreModal }) {
         {/* Col 4: Bespoke Services */}
         <div className="space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-widest text-brand-charcoal border-b border-brand-sand pb-1.5">
-            Bespoke Services
+            Collections
           </h4>
           <ul className="space-y-2 text-xs text-brand-charcoal/80 font-medium">
             <li>
-              <button
-                onClick={onOpenSwatchModal}
-                className="hover:text-brand-terracotta transition-colors text-left flex items-center gap-1.5 font-semibold text-brand-forest"
-              >
-                <span>🎨 Free Fabric Swatches</span>
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={onOpenStoreModal}
-                className="hover:text-brand-terracotta transition-colors text-left flex items-center gap-1.5"
-              >
-                <span>🏬 Book Store Appointment</span>
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={onOpenStoreModal}
-                className="hover:text-brand-terracotta transition-colors text-left flex items-center gap-1.5"
-              >
-                <span>📹 1-on-1 Video Consultation</span>
-              </button>
-            </li>
-            <li>
               <Link to="/collections/l-shape-sofas" className="hover:text-brand-terracotta transition-colors">
-                Custom L-Shape Sectionals
+                L-Shape Sectionals
               </Link>
             </li>
             <li>
               <Link to="/collections/recliners" className="hover:text-brand-terracotta transition-colors">
                 Motorised Recliners
+              </Link>
+            </li>
+            <li>
+              <Link to="/collections/beds" className="hover:text-brand-terracotta transition-colors">
+                Solid Wood Beds
+              </Link>
+            </li>
+            <li>
+              <Link to="/collections/dining-sets" className="hover:text-brand-terracotta transition-colors">
+                Dining Sets
               </Link>
             </li>
           </ul>
@@ -165,61 +120,40 @@ export default function Footer({ onOpenSwatchModal, onOpenStoreModal }) {
           </h4>
           <ul className="space-y-2.5 text-xs text-brand-charcoal/90 font-medium">
             <li className="flex items-center gap-2">
-              <span className="text-base">🛡️</span>
+              <FiShield className="text-brand-terracotta text-sm" />
               <span>10-Year Frame Warranty</span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-base">🪵</span>
+              <FiAward className="text-brand-terracotta text-sm" />
               <span>100% Solid Sheesham Wood</span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-base">🚚</span>
+              <FiTruck className="text-brand-terracotta text-sm" />
               <span>Free Pan-India Installation</span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-base">💳</span>
+              <FiCreditCard className="text-brand-terracotta text-sm" />
               <span>0% No-Cost EMI Available</span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-base">🔄</span>
+              <FiRotateCcw className="text-brand-terracotta text-sm" />
               <span>7-Day In-Home Trial</span>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* 3. Flagship Experience Centers Mini Strip */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 border-t border-brand-sand flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-        <div className="flex items-center gap-2 text-brand-charcoal font-semibold">
-          <span>🏬 Flagship Studios:</span>
-          <div className="flex flex-wrap gap-2 text-brand-muted font-normal">
-            {experienceStudios.map((s) => (
-              <span key={s.city} className="bg-white px-2 py-0.5 rounded-md border border-brand-sand text-brand-charcoal">
-                {s.city} ({s.neighborhood})
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <button
-          onClick={onOpenStoreModal}
-          className="text-brand-forest hover:text-brand-charcoal font-bold underline whitespace-nowrap"
-        >
-          Book Studio Visit / Get Directions →
-        </button>
-      </div>
-
-      {/* 4. Bottom Legal & Secure Payment Bar */}
+      {/* Bottom Legal & Secure Payment Bar */}
       <div className="border-t border-brand-sand/80 bg-brand-sand/50 py-5 text-brand-charcoal/70 text-[11px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© 2026 Sofa Hi Sofa.Com. All Rights Reserved. Handcrafted with pride in India.</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+          <p>© 2026 Sofa Hi Sofa.Com. All Rights Reserved | Web Tech Illusion</p>
 
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-brand-charcoal">🔒 100% Safe Checkout:</span>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
+            <span className="font-semibold text-brand-charcoal text-[11px] w-full sm:w-auto">🔒 100% Safe Checkout:</span>
             <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">UPI</span>
-            <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">Credit / Debit Cards</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">Cards</span>
             <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">NetBanking</span>
-            <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">Cash on Delivery (COD)</span>
+            <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">COD</span>
           </div>
         </div>
       </div>
