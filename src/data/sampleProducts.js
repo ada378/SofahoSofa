@@ -625,8 +625,8 @@ export const sampleProducts = [
 
 export const trustPillars = [
   {
-    title: "100% Solid Wood Guarantee",
-    desc: "Grade-A kiln-dried Sheesham & Sal hardwood. Zero hollow particle boards or weak MDF.",
+    title: "100% Solid Hardwood Guarantee",
+    desc: "Grade-A kiln-dried Oak, Ash, Pine & tropical hardwoods. Zero hollow particle boards or weak MDF.",
     icon: "wood",
   },
   {
@@ -650,8 +650,8 @@ export const trustPillars = [
     icon: "truck",
   },
   {
-    title: "7-Day In-Home Trial & 0% EMI",
-    desc: "Experience real comfort at home. No-questions-asked returns and easy monthly EMI options.",
+    title: "0% No-Cost EMI & Easy Returns",
+    desc: "Easy monthly EMI options with leading banks. Hassle-free return assistance within policy.",
     icon: "refresh",
   },
 ];
@@ -739,7 +739,7 @@ export const experienceStudios = [
     city: "Lucknow",
     neighborhood: "Kisan Path Flagship Studio",
     address: "Khasra Number 491 - 492 Kisan path Vill : Churahya, Lucknow, Uttar Pradesh 226501",
-    phone: "+91 9810926762 / +91 7800001200",
+    phone: "+91 9810926762 / +91 7800001198",
     hours: "Open Daily: 10:30 AM - 9:00 PM",
     image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80",
   },
@@ -763,7 +763,7 @@ export const experienceStudios = [
     city: "Delhi-NCR",
     neighborhood: "Gurgaon Golf Course Ext.",
     address: "Galleria Commercial Center, Golf Course Extension Road, Sector 56, Gurgaon - 122011",
-    phone: "+91 9984776490",
+    phone: "+91 7800001198",
     hours: "Open Daily: 10:30 AM - 9:00 PM",
     image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
   },

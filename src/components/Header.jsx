@@ -34,26 +34,26 @@ export default function Header({ onOpenSearch }) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-brand-sand shadow-subtle transition-all font-nav">
       {/* 1. Top Information Bar - Custom Content */}
-      <div className="bg-[#FEF3C7] text-[#1F1A17] text-[11px] sm:text-xs py-1.5 sm:py-2 px-2.5 sm:px-6 border-b border-[#F59E0B]/30 font-medium tracking-wide">
-        <div className="max-w-7xl mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-3">
+      <div className="bg-[#FEF3C7] text-[#1F1A17] text-[10px] sm:text-xs py-1.5 sm:py-2 px-2.5 sm:px-6 border-b border-[#F59E0B]/30 font-medium tracking-wide">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           {/* Left Info Message */}
-          <div className="flex items-center gap-1.5 sm:gap-2 mx-auto sm:mx-0">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1 truncate">
             <span className="bg-brand-forest text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full uppercase tracking-wider flex-shrink-0 shadow-sm">
               ✓ Verified
             </span>
-            <div className="text-[#1F1A17] font-bold text-[10px] sm:text-xs">
-              <span className="hidden sm:inline">100% Solid Wood • </span>
-              <span>10-Year Warranty • Free Installation Across India</span>
+            <div className="text-[#1F1A17] font-bold text-[10px] sm:text-xs truncate">
+              <span className="hidden md:inline">100% Solid Wood • </span>
+              <span>10-Yr Warranty • Free Delivery</span>
             </div>
           </div>
 
           {/* Helpline */}
-          <div className="flex items-center justify-center flex-shrink-0 text-[10px] sm:text-xs mx-auto sm:mx-0">
+          <div className="flex items-center justify-end flex-shrink-0 text-[10px] sm:text-xs">
             <a
-              href="tel:+919810926762"
+              href="tel:+917800001198"
               className="text-[#1F1A17] hover:text-brand-terracotta font-bold flex items-center gap-1 transition-colors text-[10px] sm:text-xs whitespace-nowrap"
             >
-              <span>📞 +91 9810926762</span>
+              <span>📞 +91 7800001198</span>
             </a>
           </div>
         </div>
@@ -327,10 +327,10 @@ export default function Header({ onOpenSearch }) {
 
           <div className="border-t border-brand-sand pt-4 space-y-2.5">
             <a
-              href="tel:+919810926762"
+              href="tel:+917800001198"
               className="w-full p-2.5 text-center text-xs font-bold text-brand-charcoal flex items-center justify-center gap-2 bg-brand-sand/40 rounded-xl"
             >
-              <span>📞 Helpline: +91 9810926762</span>
+              <span>📞 Helpline: +91 7800001198</span>
             </a>
           </div>
         </div>

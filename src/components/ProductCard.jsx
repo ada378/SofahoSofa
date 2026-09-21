@@ -9,8 +9,6 @@ export default function ProductCard({ product }) {
 
   const [selectedFabricIndex, setSelectedFabricIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-
-  const discount = Math.round(((product.marketPrice - product.price) / product.marketPrice) * 100);
   const inWish = isInWishlist(product._id);
   const activeImage = product.images?.[selectedFabricIndex % (product.images?.length || 1)]?.url || product.images?.[0]?.url || product.image;
   const secondaryImage = product.images?.[1]?.url || activeImage;
@@ -44,12 +42,7 @@ export default function ProductCard({ product }) {
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
         />
 
-        {/* Discount Badge */}
-        {discount > 0 && (
-          <span className="absolute top-2 left-2 bg-brand-charcoal text-white text-[9px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-subtle">
-            {discount}% OFF
-          </span>
-        )}
+
 
         {/* Bestseller Badge */}
         {product.isBestSeller && (
@@ -99,11 +92,7 @@ export default function ProductCard({ product }) {
         <div>
           {/* Subtitle & Material */}
           <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-brand-muted w-full">
-            <span className="uppercase tracking-wider font-semibold truncate flex-1 min-w-0 pr-2">{product.subCategory}</span>
-            <div className="flex items-center gap-0.5 text-amber-600 font-semibold flex-shrink-0">
-              <span>★</span>
-              <span>{product.rating}</span>
-            </div>
+            <span className="uppercase tracking-wider font-semibold truncate flex-1 min-w-0">{product.subCategory}</span>
           </div>
 
           {/* Product Title */}
@@ -152,11 +141,6 @@ export default function ProductCard({ product }) {
               <span className="font-display font-bold text-xs sm:text-base md:text-lg text-brand-charcoal whitespace-nowrap">
                 ₹{product.price.toLocaleString("en-IN")}
               </span>
-              {product.marketPrice > product.price && (
-                <span className="text-[9px] sm:text-[10px] md:text-xs text-brand-muted line-through">
-                  ₹{product.marketPrice.toLocaleString("en-IN")}
-                </span>
-              )}
             </div>
             <p className="text-[9px] sm:text-[10px] text-brand-forest font-semibold leading-tight truncate">Free Delivery</p>
           </div>

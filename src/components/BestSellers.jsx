@@ -75,7 +75,7 @@ export default function BestSellers() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
           {loading
             ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
             : products.length > 0

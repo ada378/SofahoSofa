@@ -35,9 +35,14 @@ export default function SearchModal({ isOpen, onClose }) {
     return allProducts.filter(
       (p) =>
         p.name?.toLowerCase().includes(q) ||
-        p.category?.toLowerCase().includes(q) ||
+        // category can be an object {name, slug} or a plain string
+        (typeof p.category === "object"
+          ? p.category?.name?.toLowerCase().includes(q)
+          : p.category?.toLowerCase().includes(q)) ||
+        p.subCategory?.toLowerCase().includes(q) ||
         p.material?.toLowerCase().includes(q) ||
-        p.description?.toLowerCase().includes(q)
+        p.description?.toLowerCase().includes(q) ||
+        p.shortDescription?.toLowerCase().includes(q)
     );
   }, [searchTerm, allProducts]);
 
@@ -60,8 +65,8 @@ export default function SearchModal({ isOpen, onClose }) {
         onClick={onClose}
       />
 
-      <div className="flex min-h-full items-start justify-center p-4 pt-16 sm:pt-24">
-        <div className="relative w-full max-w-2xl bg-brand-porcelain rounded-3xl p-6 shadow-card overflow-hidden border border-brand-sand">
+      <div className="flex min-h-full items-start justify-center p-2 sm:p-4 pt-4 sm:pt-20">
+        <div className="relative w-full max-w-2xl bg-brand-porcelain rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-card overflow-hidden border border-brand-sand">
           {/* Search Input Bar */}
           <div className="relative flex items-center border-b border-brand-sand pb-4">
             <svg
@@ -185,16 +190,6 @@ export default function SearchModal({ isOpen, onClose }) {
                           <span className="font-semibold text-xs text-brand-charcoal">
                             ₹{Number(price).toLocaleString("en-IN")}
                           </span>
-                          {mrp > price && (
-                            <span className="text-[10px] text-brand-muted line-through">
-                              ₹{Number(mrp).toLocaleString("en-IN")}
-                            </span>
-                          )}
-                          {product.rating && (
-                            <span className="text-[10px] text-brand-forest font-medium">
-                              ★ {product.rating}
-                            </span>
-                          )}
                         </div>
                       </div>
                       <span className="text-brand-terracotta text-xs font-semibold flex-shrink-0 pr-2">

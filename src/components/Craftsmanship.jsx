@@ -46,7 +46,7 @@ export default function Craftsmanship() {
           <div className="lg:col-span-6">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-card border border-brand-sand">
               <img
-                src="https://res.cloudinary.com/dgoe6emli/image/upload/v1789882027/sofa-hi-sofa/bed/luxury_beds_from_lucknow_Sofahisofa_2.png"
+                src="https://res.cloudinary.com/dgoe6emli/image/upload/v1789882024/sofa-hi-sofa/bed/luxury_beds_from_lucknow_Sofahisofa_1.png"
                 alt="Sofa Hi Sofa Craftsmanship & Frame Architecture"
                 className="w-full h-full object-cover"
               />

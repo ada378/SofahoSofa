@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { categories } from "../data/sampleProducts";
-import { FiMapPin, FiPhoneCall, FiMail, FiShield, FiTruck, FiCreditCard, FiRotateCcw, FiAward } from "react-icons/fi";
+import { FiMapPin, FiPhoneCall, FiMail, FiShield, FiTruck, FiCreditCard, FiAward } from "react-icons/fi";
 
 export default function Footer() {
   return (
@@ -9,17 +9,16 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 sm:gap-10 border-b border-brand-sand/80">
         {/* Col 1 & 2: Brand Profile & Helpline */}
         <div className="col-span-2 space-y-4">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-brand-charcoal text-white rounded-xl flex items-center justify-center font-display font-bold text-lg">
-              S
-            </div>
-            <span className="font-display text-2xl tracking-tight text-brand-charcoal font-bold">
-              Sofa Hi Sofa
-            </span>
+          <Link to="/" className="inline-flex items-center">
+            <img
+              src="/logo-2.png"
+              alt="Sofa Hi Sofa"
+              className="h-14 w-auto max-w-[200px] object-contain"
+            />
           </Link>
 
           <p className="text-xs sm:text-sm text-brand-charcoal/80 leading-relaxed max-w-sm font-normal">
-            India's direct-from-factory bespoke furniture brand. Crafting 100% solid Sheesham &amp; Sal hardwood sofas, sectionals, motorized recliners, beds, and dining sets in our 1,00,000 sq.ft facility.
+            India's direct-from-factory bespoke furniture brand. Crafting 100% solid hardwood sofas, sectionals, motorized recliners, beds, and dining sets using Oak, Ash, Pine &amp; tropical hardwoods in our 1,00,000 sq.ft facility.
           </p>
 
           <div className="pt-2 text-xs space-y-2.5 text-brand-charcoal">
@@ -42,8 +41,8 @@ export default function Footer() {
                   +91 7800001200
                 </a>
                 <span className="text-brand-muted">•</span>
-                <a href="tel:+919984776490" className="text-brand-terracotta font-semibold hover:underline">
-                  +91 9984776490
+                <a href="tel:+917800001198" className="text-brand-terracotta font-semibold hover:underline">
+                  +91 7800001198
                 </a>
               </span>
             </p>
@@ -125,7 +124,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <FiAward className="text-brand-terracotta text-sm" />
-              <span>100% Solid Sheesham Wood</span>
+              <span>Oak, Ash, Pine &amp; Tropical Hardwoods</span>
             </li>
             <li className="flex items-center gap-2">
               <FiTruck className="text-brand-terracotta text-sm" />
@@ -134,10 +133,6 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <FiCreditCard className="text-brand-terracotta text-sm" />
               <span>0% No-Cost EMI Available</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <FiRotateCcw className="text-brand-terracotta text-sm" />
-              <span>7-Day In-Home Trial</span>
             </li>
           </ul>
         </div>

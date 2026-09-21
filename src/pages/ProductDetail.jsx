@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
 import { useCart } from "../context/CartContext";
@@ -32,6 +32,141 @@ function ProductDetailSkeleton() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ─── Image Carousel Component ─────────────────────────────────────────────────
+function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, onToggleWishlist }) {
+  const touchStartX = useRef(null);
+  const total = images.length;
+
+  const prev = () => onIndexChange((activeIndex - 1 + total) % total);
+  const next = () => onIndexChange((activeIndex + 1) % total);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [activeIndex, total]);
+
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+    touchStartX.current = null;
+  };
+
+  return (
+    <div className="space-y-3">
+      {/* Main image with arrows */}
+      <div
+        className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle select-none"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Animated image */}
+        <img
+          key={activeIndex}
+          src={images[activeIndex]?.url}
+          alt={images[activeIndex]?.alt || product.name}
+          className="w-full h-full object-cover transition-opacity duration-400 animate-fadeIn"
+          style={{ animation: "carouselFadeIn 0.35s ease" }}
+        />
+
+        {/* Overlay badges */}
+        <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+          {product.numReviews > 0 && (
+            <span className="bg-brand-amber text-brand-charcoal text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-subtle uppercase tracking-wider">
+              ★ {product.rating?.toFixed(1)} ({product.numReviews} reviews)
+            </span>
+          )}
+        </div>
+
+        {/* Wishlist button */}
+        <button
+          onClick={onToggleWishlist}
+          className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md transition-all z-10 ${inWish ? "bg-white text-red-500 shadow-card" : "bg-white/90 text-brand-charcoal hover:bg-white hover:text-red-500 shadow-subtle"}`}
+          aria-label={inWish ? "Remove from wishlist" : "Add to wishlist"}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill={inWish ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+
+        {/* Prev / Next arrows — only if multiple images */}
+        {total > 1 && (
+          <>
+            <button
+              onClick={prev}
+              aria-label="Previous image"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-card text-brand-charcoal hover:bg-white hover:scale-110 transition-all flex items-center justify-center"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
+            </button>
+            <button
+              onClick={next}
+              aria-label="Next image"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-card text-brand-charcoal hover:bg-white hover:scale-110 transition-all flex items-center justify-center"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </button>
+
+            {/* Dot indicators */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+              {images.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => onIndexChange(idx)}
+                  aria-label={`Go to image ${idx + 1}`}
+                  className={`rounded-full transition-all duration-300 ${
+                    idx === activeIndex
+                      ? "w-5 h-2 bg-brand-terracotta"
+                      : "w-2 h-2 bg-white/70 hover:bg-white"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Counter badge */}
+            <span className="absolute bottom-3 right-4 z-10 bg-black/50 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm">
+              {activeIndex + 1} / {total}
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* Thumbnail strip */}
+      {total > 1 && (
+        <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x">
+          {images.map((img, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => onIndexChange(idx)}
+              className={`snap-start flex-shrink-0 w-[72px] h-[72px] rounded-2xl overflow-hidden border-2 transition-all duration-200 ${
+                activeIndex === idx
+                  ? "border-brand-terracotta ring-2 ring-brand-terracotta/25 scale-105 shadow-card"
+                  : "border-brand-sand opacity-65 hover:opacity-100 hover:border-brand-sandDark"
+              }`}
+            >
+              <img src={img.url} alt={img.alt || `Photo ${idx + 1}`} className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+
+      <style>{`
+        @keyframes carouselFadeIn {
+          from { opacity: 0; transform: scale(1.03); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -150,17 +285,10 @@ export default function ProductDetail() {
   }
 
   // ── Derived values ────────────────────────────────────────────────────────────
-  const discount = product.marketPrice > product.price
-    ? Math.round(((product.marketPrice - product.price) / product.marketPrice) * 100) : 0;
   const inWish = isInWishlist(product._id);
   const images = product.images?.length > 0
     ? product.images
     : [{ url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80", alt: product.name }];
-
-  // Normalise fabricOptions — backend stores strings, some seeds store objects
-  const fabricOptions = (product.fabricOptions || []).map((f) =>
-    typeof f === "object" ? f : { name: f, hex: "#D9A441" }
-  );
 
   // ── SEO — use product's own metaTitle/metaDescription if set, else auto-generate ──
   const seoTitle = product.metaTitle || `${product.name} | Buy Online India | Sofa Hi Sofa`;
@@ -206,7 +334,7 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="bg-brand-porcelain min-h-screen py-6 sm:py-10">
+    <div className="bg-brand-porcelain min-h-screen py-4 sm:py-10 pb-32 lg:pb-10 w-full overflow-x-hidden">
       <SEO
         title={seoTitle}
         description={seoDesc}
@@ -230,45 +358,16 @@ export default function ProductDetail() {
 
         {/* Main Grid */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Left: Image Gallery */}
+          {/* Left: Image Carousel */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle group">
-              <img
-                src={images[activeImageIndex]?.url}
-                alt={images[activeImageIndex]?.alt || product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {discount > 0 && (
-                  <span className="bg-brand-charcoal text-white text-xs font-bold px-3 py-1 rounded-full shadow-subtle">
-                    {discount}% OFF
-                  </span>
-                )}
-                {product.numReviews > 0 && (
-                  <span className="bg-brand-amber text-brand-charcoal text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-subtle uppercase tracking-wider">
-                    ★ {product.rating?.toFixed(1)} ({product.numReviews} reviews)
-                  </span>
-                )}
-              </div>
-              <button onClick={() => toggleWishlist(product)}
-                className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md transition-all ${inWish ? "bg-white text-red-500 shadow-card" : "bg-white/90 text-brand-charcoal hover:bg-white hover:text-red-500 shadow-subtle"}`}
-                aria-label={inWish ? "Remove from wishlist" : "Add to wishlist"}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill={inWish ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-
-            {images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2">
-                {images.map((img, idx) => (
-                  <button key={idx} type="button" onClick={() => setActiveImageIndex(idx)}
-                    className={`w-20 h-20 rounded-2xl overflow-hidden border-2 flex-shrink-0 transition-all ${activeImageIndex === idx ? "border-brand-terracotta ring-2 ring-brand-terracotta/20 scale-105" : "border-brand-sand hover:border-brand-sandDark opacity-75 hover:opacity-100"}`}>
-                    <img src={img.url} alt={img.alt} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
+            <ImageCarousel
+              images={images}
+              activeIndex={activeImageIndex}
+              onIndexChange={setActiveImageIndex}
+              product={product}
+              inWish={inWish}
+              onToggleWishlist={() => toggleWishlist(product)}
+            />
           </div>
 
           {/* Right: Product Configurator */}
@@ -285,45 +384,11 @@ export default function ProductDetail() {
                   <span className="font-display text-3xl font-bold text-brand-charcoal">
                     ₹{product.price.toLocaleString("en-IN")}
                   </span>
-                  {product.marketPrice > product.price && (
-                    <>
-                      <span className="text-base text-brand-muted line-through">
-                        ₹{product.marketPrice.toLocaleString("en-IN")}
-                      </span>
-                      <span className="bg-brand-terracotta text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-                        Save ₹{(product.marketPrice - product.price).toLocaleString("en-IN")} ({discount}%)
-                      </span>
-                    </>
-                  )}
                 </div>
                 <p className="text-[11px] text-brand-forest font-semibold mt-1">
                   ✓ Free White-Glove Pan-India Installation · GST Included
                 </p>
               </div>
-
-              {/* Fabric Swatches */}
-              {fabricOptions.length > 0 && (
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-bold text-brand-charcoal uppercase tracking-wider">
-                      Upholstery Color: <span className="text-brand-terracotta font-semibold">{selectedFabric?.name}</span>
-                    </label>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {fabricOptions.map((opt, idx) => {
-                      const isSelected = selectedFabric?.name === opt.name;
-                      return (
-                        <button key={idx} type="button"
-                          onClick={() => { setSelectedFabric(opt); setActiveImageIndex(idx % images.length); }}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all ${isSelected ? "border-brand-terracotta bg-brand-cream text-brand-charcoal font-bold ring-2 ring-brand-terracotta/20" : "border-brand-sand bg-white text-brand-charcoal/80 hover:border-brand-sandDark"}`}>
-                          <span className="w-4 h-4 rounded-full border border-black/15 shadow-inner" style={{ backgroundColor: opt.hex }} />
-                          <span>{opt.name}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
 
               {/* Quantity & Actions */}
               <div className="space-y-3 pt-2">
@@ -379,9 +444,9 @@ export default function ProductDetail() {
               {/* Trust Grid */}
               <div className="pt-4 border-t border-brand-sand grid grid-cols-2 gap-3 text-xs text-brand-charcoal/80 font-medium">
                 <div className="flex items-center gap-2"><span className="text-lg">🛡️</span><span>10-Year Frame Warranty</span></div>
-                <div className="flex items-center gap-2"><span className="text-lg">🪵</span><span>100% Solid Sheesham Wood</span></div>
+                <div className="flex items-center gap-2"><span className="text-lg">🪵</span><span>Oak, Ash, Pine &amp; Tropical Woods</span></div>
                 <div className="flex items-center gap-2"><span className="text-lg">🚚</span><span>Free In-Room Placement</span></div>
-                <div className="flex items-center gap-2"><span className="text-lg">🔄</span><span>7-Day In-Home Trial</span></div>
+                <div className="flex items-center gap-2"><span className="text-lg">💳</span><span>0% No-Cost EMI Available</span></div>
               </div>
             </div>
           </div>
@@ -393,7 +458,7 @@ export default function ProductDetail() {
         {relatedProducts.length > 0 && (
           <div className="mt-14 sm:mt-20">
             <h2 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mb-6">You May Also Like</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
               {relatedProducts.map((p) => <ProductCard key={p._id} product={p} />)}
             </div>
           </div>
@@ -401,7 +466,7 @@ export default function ProductDetail() {
       </div>
 
       {/* Mobile Sticky Bar */}
-      <div className="lg:hidden fixed bottom-[52px] inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-brand-sand p-2.5 px-4 shadow-floating flex items-center justify-between gap-3">
+      <div className="lg:hidden fixed bottom-[calc(3.75rem+env(safe-area-inset-bottom,0px))] inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-brand-sand p-2.5 px-4 shadow-floating flex items-center justify-between gap-3">
         <div>
           <span className="text-[10px] text-brand-muted block font-semibold leading-none">Special Price</span>
           <span className="font-display font-bold text-base text-brand-charcoal">₹{(product.price * quantity).toLocaleString("en-IN")}</span>

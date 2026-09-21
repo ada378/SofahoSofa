@@ -27,7 +27,6 @@ const PRICE_RANGES = [
   { id: "above-60k", label: "Above ₹60,000", min: 60001, max: undefined },
 ];
 
-const MATERIALS = ["Sheesham", "Teak", "Sal", "Bouclé", "Velvet", "Leatherette", "Linen"];
 
 const SORT_OPTIONS = [
   { value: "featured", label: "Featured & Bestselling" },
@@ -55,11 +54,10 @@ export default function ProductListing() {
 
   // Filters (read initial values from URL query params if present)
   const [selectedPriceRange, setSelectedPriceRange] = useState(searchParams.get("price") || "all");
-  const [selectedMaterial, setSelectedMaterial] = useState(searchParams.get("material") || "all");
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "featured");
   const [showMobileFilter, setShowMobileFilter] = useState(false);
 
-  const hasActiveFilters = selectedPriceRange !== "all" || selectedMaterial !== "all";
+  const hasActiveFilters = selectedPriceRange !== "all";
 
   // ── Fetch category SEO data ───────────────────────────────────────────────────
   useEffect(() => {
@@ -128,7 +126,6 @@ export default function ProductListing() {
         ...(sortBy !== "featured" && { sort: sortBy }),
         // Only add category filter if a specific category is selected (not "all")
         ...(!isAll && slug && { category: slug }),
-        ...(selectedMaterial !== "all" && { material: selectedMaterial }),
         ...(range?.min !== undefined && { minPrice: range.min }),
         ...(range?.max !== undefined && { maxPrice: range.max }),
       };
@@ -142,7 +139,6 @@ export default function ProductListing() {
       // Sync filters to URL
       const qp = {};
       if (selectedPriceRange !== "all") qp.price = selectedPriceRange;
-      if (selectedMaterial !== "all") qp.material = selectedMaterial;
       if (sortBy !== "featured") qp.sort = sortBy;
       setSearchParams(qp, { replace: true });
     } catch {
@@ -150,7 +146,7 @@ export default function ProductListing() {
     } finally {
       setLoading(false);
     }
-  }, [slug, isAll, selectedPriceRange, selectedMaterial, sortBy, setSearchParams]);
+  }, [slug, isAll, selectedPriceRange, sortBy, setSearchParams]);
 
   // Re-fetch whenever filters or slug change (reset to page 1)
   useEffect(() => {
@@ -159,7 +155,6 @@ export default function ProductListing() {
 
   const clearFilters = () => {
     setSelectedPriceRange("all");
-    setSelectedMaterial("all");
     setSortBy("featured");
   };
 
@@ -255,22 +250,7 @@ export default function ProductListing() {
                 </div>
               </div>
 
-              {/* Material */}
-              <div>
-                <h4 className="text-xs font-bold text-brand-charcoal uppercase tracking-wider mb-2.5">Material & Wood</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  <button onClick={() => setSelectedMaterial("all")}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors ${selectedMaterial === "all" ? "bg-brand-charcoal text-white" : "bg-brand-porcelain text-brand-muted hover:text-brand-charcoal border border-brand-sand"}`}>
-                    All
-                  </button>
-                  {MATERIALS.map((mat) => (
-                    <button key={mat} onClick={() => setSelectedMaterial(mat)}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors ${selectedMaterial === mat ? "bg-brand-terracotta text-white font-semibold" : "bg-brand-porcelain text-brand-muted hover:text-brand-charcoal border border-brand-sand"}`}>
-                      {mat}
-                    </button>
-                  ))}
-                </div>
-              </div>
+
             </div>
           </aside>
 

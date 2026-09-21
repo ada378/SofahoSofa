@@ -33,24 +33,33 @@ const inputCls = "w-full bg-gray-800 border border-gray-700 focus:border-[#C86A3
 const textareaCls = `${inputCls} resize-none`;
 
 // ─── Image Uploader ────────────────────────────────────────────────────────────
+const MAX_IMAGES = 8;
+const RECOMMENDED_IMAGES = 4;
+
 function ImageUploader({ images, onChange }) {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const inputRef = useRef();
 
+  const remaining = MAX_IMAGES - images.length;
+
   const uploadFiles = async (files) => {
     if (!files.length) return;
+    if (images.length >= MAX_IMAGES) {
+      setUploadError(`Maximum ${MAX_IMAGES} images allowed.`);
+      return;
+    }
     setUploading(true);
     try {
       const formData = new FormData();
-      Array.from(files).forEach((f) => formData.append("images", f));
+      // Limit upload to remaining slots
+      Array.from(files).slice(0, remaining).forEach((f) => formData.append("images", f));
       const { data } = await api.post("/upload/product-images", formData);
       onChange([...images, ...data.images]);
     } catch (err) {
       const msg = err.response?.data?.message || err.message || "Upload failed";
       console.error("Image upload error:", err.response?.data || err.message);
-      // Show inline error via a temporary state instead of alert
       setUploadError(msg);
       setTimeout(() => setUploadError(""), 5000);
     } finally {
@@ -66,7 +75,6 @@ function ImageUploader({ images, onChange }) {
 
   const removeImage = async (idx) => {
     const img = images[idx];
-    // Try to delete from Cloudinary (non-blocking)
     if (img.publicId) {
       api.delete(`/upload/${encodeURIComponent(img.publicId)}`).catch(() => {});
     }
@@ -85,39 +93,127 @@ function ImageUploader({ images, onChange }) {
     onChange(arr);
   };
 
+  // Progress color
+  const progressPct = Math.round((images.length / RECOMMENDED_IMAGES) * 100);
+  const progressColor = images.length === 0 ? "bg-gray-600" : images.length < RECOMMENDED_IMAGES ? "bg-amber-500" : "bg-green-500";
+
   return (
-    <div className="space-y-3">
-      {/* Upload zone */}
-      <div
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
-        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-colors ${
-          dragOver ? "border-[#C86A3B] bg-[#C86A3B]/10" : "border-gray-700 hover:border-gray-500 bg-gray-800/50"
-        } ${uploading ? "opacity-60 pointer-events-none" : ""}`}
-      >
-        <input
-          ref={inputRef}
-          type="file"
-          multiple
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={(e) => uploadFiles(e.target.files)}
-        />
-        {uploading ? (
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-6 h-6 border-2 border-gray-600 border-t-[#C86A3B] rounded-full animate-spin" />
-            <p className="text-gray-400 text-xs font-medium">Uploading to Cloudinary…</p>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-3xl">☁️</span>
-            <p className="text-gray-300 text-sm font-medium">Drop images here or click to browse</p>
-            <p className="text-gray-600 text-xs">JPG, PNG, WebP · Max 8MB each · Up to 8 images</p>
-          </div>
-        )}
+    <div className="space-y-4">
+
+      {/* Photo count progress */}
+      <div className="bg-gray-800/80 border border-gray-700 rounded-2xl p-4">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-semibold text-gray-300">
+            📸 Product Photos
+          </span>
+          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+            images.length === 0 ? "bg-gray-700 text-gray-400"
+            : images.length < RECOMMENDED_IMAGES ? "bg-amber-900/50 text-amber-400"
+            : "bg-green-900/50 text-green-400"
+          }`}>
+            {images.length} / {RECOMMENDED_IMAGES} recommended
+          </span>
+        </div>
+        {/* Progress bar */}
+        <div className="w-full bg-gray-700 rounded-full h-1.5">
+          <div
+            className={`h-1.5 rounded-full transition-all duration-500 ${progressColor}`}
+            style={{ width: `${Math.min(progressPct, 100)}%` }}
+          />
+        </div>
+        <p className="text-[10px] text-gray-500 mt-1.5">
+          {images.length === 0 && "3-4 photos upload karein — front, side, detail aur room-setting"}
+          {images.length > 0 && images.length < RECOMMENDED_IMAGES && `${RECOMMENDED_IMAGES - images.length} aur photos add karein for best results`}
+          {images.length >= RECOMMENDED_IMAGES && "✓ Great! Product mein enough photos hain"}
+        </p>
       </div>
+
+      {/* Slot preview grid — shows empty slots as placeholders */}
+      <div className="grid grid-cols-4 gap-2">
+        {Array.from({ length: Math.max(RECOMMENDED_IMAGES, images.length) }).map((_, idx) => {
+          const img = images[idx];
+          return img ? (
+            // Filled slot
+            <div key={idx} className="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 aspect-square">
+              {idx === 0 && (
+                <span className="absolute top-1 left-1 z-10 bg-[#C86A3B] text-white text-[8px] font-bold px-1.5 py-0.5 rounded-md">MAIN</span>
+              )}
+              <img src={img.url} alt={img.alt} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-1.5">
+                <div className="flex justify-end gap-1">
+                  {idx > 0 && (
+                    <button onClick={() => moveImage(idx, idx - 1)}
+                      className="bg-gray-700/80 text-white rounded-md p-1 text-[9px] font-bold hover:bg-gray-600">←</button>
+                  )}
+                  {idx < images.length - 1 && (
+                    <button onClick={() => moveImage(idx, idx + 1)}
+                      className="bg-gray-700/80 text-white rounded-md p-1 text-[9px] font-bold hover:bg-gray-600">→</button>
+                  )}
+                  <button onClick={() => removeImage(idx)}
+                    className="bg-red-600/80 text-white rounded-md p-1 text-[9px] font-bold hover:bg-red-600">✕</button>
+                </div>
+                <input
+                  value={img.alt}
+                  onChange={(e) => updateAlt(idx, e.target.value)}
+                  placeholder="Alt text…"
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-black/60 text-white text-[9px] rounded-md px-1.5 py-1 w-full focus:outline-none placeholder-gray-400 border border-gray-600"
+                />
+              </div>
+            </div>
+          ) : (
+            // Empty slot placeholder
+            <button
+              key={idx}
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="aspect-square rounded-xl border-2 border-dashed border-gray-700 bg-gray-800/30 hover:border-[#C86A3B] hover:bg-[#C86A3B]/5 transition-colors flex flex-col items-center justify-center gap-1 group"
+            >
+              <span className="text-gray-600 group-hover:text-[#C86A3B] text-xl transition-colors">+</span>
+              <span className="text-gray-600 group-hover:text-[#C86A3B] text-[9px] font-semibold transition-colors">
+                {idx === 0 ? "Main Photo" : idx === 1 ? "Side View" : idx === 2 ? "Detail" : "Room View"}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Upload zone */}
+      {remaining > 0 && (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={handleDrop}
+          onClick={() => inputRef.current?.click()}
+          className={`border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer transition-colors ${
+            dragOver ? "border-[#C86A3B] bg-[#C86A3B]/10" : "border-gray-700 hover:border-[#C86A3B]/60 bg-gray-800/40 hover:bg-gray-800/70"
+          } ${uploading ? "opacity-60 pointer-events-none" : ""}`}
+        >
+          <input
+            ref={inputRef}
+            type="file"
+            multiple
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(e) => uploadFiles(e.target.files)}
+          />
+          {uploading ? (
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-6 h-6 border-2 border-gray-600 border-t-[#C86A3B] rounded-full animate-spin" />
+              <p className="text-gray-400 text-xs font-medium">Cloudinary pe upload ho raha hai…</p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-1.5">
+              <span className="text-2xl">☁️</span>
+              <p className="text-gray-300 text-sm font-semibold">3-4 Photos Upload Karein</p>
+              <p className="text-gray-500 text-xs">Drag & drop ya click karein · JPG, PNG, WebP · Max 8MB</p>
+              <p className="text-gray-600 text-[10px] mt-1">
+                💡 Tip: Front view, Side view, Close-up detail, Room setting
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Error message */}
       {uploadError && (
@@ -126,45 +222,9 @@ function ImageUploader({ images, onChange }) {
         </div>
       )}
 
-      {/* Image grid */}
-      {images.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {images.map((img, idx) => (
-            <div key={idx} className="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
-              {idx === 0 && (
-                <span className="absolute top-1.5 left-1.5 z-10 bg-[#C86A3B] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">
-                  MAIN
-                </span>
-              )}
-              <img src={img.url} alt={img.alt} className="w-full aspect-square object-cover" />
-
-              {/* Actions overlay */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
-                <div className="flex justify-end gap-1">
-                  {idx > 0 && (
-                    <button onClick={() => moveImage(idx, idx - 1)}
-                      className="bg-gray-700/80 text-white rounded-lg px-1.5 py-1 text-[10px] font-bold hover:bg-gray-600">←</button>
-                  )}
-                  {idx < images.length - 1 && (
-                    <button onClick={() => moveImage(idx, idx + 1)}
-                      className="bg-gray-700/80 text-white rounded-lg px-1.5 py-1 text-[10px] font-bold hover:bg-gray-600">→</button>
-                  )}
-                  <button onClick={() => removeImage(idx)}
-                    className="bg-red-600/80 text-white rounded-lg px-1.5 py-1 text-[10px] font-bold hover:bg-red-600">✕</button>
-                </div>
-                <input
-                  value={img.alt}
-                  onChange={(e) => updateAlt(idx, e.target.value)}
-                  placeholder="Alt text (for SEO)…"
-                  onClick={(e) => e.stopPropagation()}
-                  className="bg-black/60 text-white text-[10px] rounded-lg px-2 py-1 w-full focus:outline-none placeholder-gray-400 border border-gray-600"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      <p className="text-[10px] text-gray-600">First image = main product image. Hover to reorder or remove. Alt text improves SEO.</p>
+      <p className="text-[10px] text-gray-600">
+        Pehli photo = main product image (carousel mein sabse pehle dikhti hai). Hover karke reorder ya remove karein.
+      </p>
     </div>
   );
 }
@@ -202,7 +262,6 @@ function ProductFormModal({ product, categories, onClose, onSaved }) {
     if (!form.sku.trim()) return setError("SKU is required");
     if (!form.category) return setError("Category is required");
     if (!form.price || isNaN(Number(form.price))) return setError("Valid price is required");
-    if (!form.marketPrice || isNaN(Number(form.marketPrice))) return setError("Valid MRP is required");
     if (!form.stock && form.stock !== 0) return setError("Stock is required");
 
     setSaving(true);
@@ -210,12 +269,14 @@ function ProductFormModal({ product, categories, onClose, onSaved }) {
       const payload = {
         ...form,
         price: Number(form.price),
-        marketPrice: Number(form.marketPrice),
+        marketPrice: Number(form.marketPrice || form.price),
         stock: Number(form.stock),
-        fabricOptions: form.fabricOptions
-          .split(",").map((s) => s.trim()).filter(Boolean),
-        metaKeywords: form.metaKeywords
-          .split(",").map((s) => s.trim()).filter(Boolean),
+        fabricOptions: typeof form.fabricOptions === "string" && form.fabricOptions
+          ? form.fabricOptions.split(",").map((s) => s.trim()).filter(Boolean)
+          : [],
+        metaKeywords: typeof form.metaKeywords === "string" && form.metaKeywords
+          ? form.metaKeywords.split(",").map((s) => s.trim()).filter(Boolean)
+          : [],
       };
 
       if (isEdit) {
@@ -280,7 +341,7 @@ function ProductFormModal({ product, categories, onClose, onSaved }) {
                     <input name="sku" value={form.sku} onChange={handleChange} placeholder="SHS-001" className={inputCls} />
                   </Field>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-3 gap-4">
                   <Field label="Category" required>
                     <select name="category" value={form.category} onChange={handleChange} className={inputCls}>
                       <option value="">— Select Category —</option>
@@ -290,23 +351,15 @@ function ProductFormModal({ product, categories, onClose, onSaved }) {
                   <Field label="Sub Category / Type">
                     <input name="subCategory" value={form.subCategory} onChange={handleChange} placeholder="e.g. 3 Seater Sofa, L-Shape" className={inputCls} />
                   </Field>
+                  <Field label="Warranty">
+                    <input name="warranty" value={form.warranty} onChange={handleChange} placeholder="e.g. 3 Year Warranty" className={inputCls} />
+                  </Field>
                 </div>
                 <Field label="Short Description" hint="Max 200 characters — shown on product cards">
                   <textarea name="shortDescription" value={form.shortDescription} onChange={handleChange} rows={2} maxLength={200} className={textareaCls} placeholder="Concise product summary…" />
                 </Field>
                 <Field label="Full Description" required>
-                  <textarea name="description" value={form.description} onChange={handleChange} rows={4} className={textareaCls} placeholder="Detailed product description with materials, features, care instructions…" />
-                </Field>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <Field label="Material">
-                    <input name="material" value={form.material} onChange={handleChange} placeholder="e.g. Sheesham Wood + Velvet" className={inputCls} />
-                  </Field>
-                  <Field label="Warranty">
-                    <input name="warranty" value={form.warranty} onChange={handleChange} placeholder="e.g. 3 Year Warranty" className={inputCls} />
-                  </Field>
-                </div>
-                <Field label="Fabric / Color Options" hint="Comma-separated names e.g. Beige, Charcoal, Olive Green">
-                  <input name="fabricOptions" value={form.fabricOptions} onChange={handleChange} placeholder="Beige, Charcoal, Olive, Rust" className={inputCls} />
+                  <textarea name="description" value={form.description} onChange={handleChange} rows={4} className={textareaCls} placeholder="Detailed product description with features, care instructions…" />
                 </Field>
                 {/* Flags */}
                 <div className="flex flex-wrap gap-5 pt-1">
@@ -323,32 +376,13 @@ function ProductFormModal({ product, categories, onClose, onSaved }) {
             {/* ── Pricing & Stock ── */}
             {tab === "pricing" && (
               <div className="space-y-4">
-                <div className="grid sm:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <Field label="Selling Price (₹)" required>
                     <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="29999" min="0" className={inputCls} />
-                  </Field>
-                  <Field label="MRP / Market Price (₹)" required>
-                    <input type="number" name="marketPrice" value={form.marketPrice} onChange={handleChange} placeholder="39999" min="0" className={inputCls} />
                   </Field>
                   <Field label="Stock Quantity" required>
                     <input type="number" name="stock" value={form.stock} onChange={handleChange} placeholder="50" min="0" className={inputCls} />
                   </Field>
-                </div>
-                {form.price && form.marketPrice && Number(form.marketPrice) > Number(form.price) && (
-                  <div className="bg-green-900/30 border border-green-800 rounded-xl px-4 py-3 text-green-400 text-xs font-medium">
-                    ✓ Discount: {Math.round(((form.marketPrice - form.price) / form.marketPrice) * 100)}% OFF
-                    · Customer saves ₹{(Number(form.marketPrice) - Number(form.price)).toLocaleString("en-IN")}
-                  </div>
-                )}
-                <div className="grid sm:grid-cols-3 gap-4">
-                  {[["dimensions.width","Width (cm)"],["dimensions.height","Height (cm)"],["dimensions.depth","Depth (cm)"]].map(([name, label]) => {
-                    const [, key] = name.split(".");
-                    return (
-                      <Field key={name} label={label}>
-                        <input type="number" value={form.dimensions?.[key] || ""} onChange={(e) => set("dimensions", { ...form.dimensions, [key]: e.target.value })} placeholder="0" min="0" className={inputCls} />
-                      </Field>
-                    );
-                  })}
                 </div>
               </div>
             )}
@@ -357,7 +391,15 @@ function ProductFormModal({ product, categories, onClose, onSaved }) {
             {tab === "images" && (
               <div className="space-y-4">
                 <div className="bg-gray-800/60 border border-gray-700 rounded-xl px-4 py-3 text-xs text-gray-400">
-                  <strong className="text-gray-300">Cloudinary Upload:</strong> Images are optimised and stored on Cloudinary CDN automatically. Ensure your <code className="text-[#C86A3B]">CLOUDINARY_*</code> keys are set in backend <code>.env</code>.
+                  <strong className="text-gray-200">📸 Product Gallery (3-4 Photos Recommended):</strong>
+                  {" "}Images Cloudinary CDN pe store hoti hain.
+                  <ul className="mt-2 space-y-1 text-[11px] text-gray-500 list-none">
+                    <li>📌 <strong className="text-gray-400">Photo 1:</strong> Front view (main image — product listing par dikhti hai)</li>
+                    <li>📌 <strong className="text-gray-400">Photo 2:</strong> Side / angle view</li>
+                    <li>📌 <strong className="text-gray-400">Photo 3:</strong> Close-up / fabric detail</li>
+                    <li>📌 <strong className="text-gray-400">Photo 4:</strong> Room setting / lifestyle shot</li>
+                  </ul>
+                  <p className="mt-2 text-[10px] text-gray-600">Ye saari photos product detail page par carousel mein dikhengi. ← → arrows se switch hoga.</p>
                 </div>
                 <ImageUploader images={form.images} onChange={(imgs) => set("images", imgs)} />
               </div>
@@ -775,7 +817,6 @@ export default function ProductManager() {
                     <td className="px-4 py-3 text-gray-400 hidden md:table-cell">{p.category?.name || "—"}</td>
                     <td className="px-4 py-3 text-right">
                       <p className="text-white font-semibold">₹{p.price.toLocaleString("en-IN")}</p>
-                      <p className="text-gray-600 text-[10px] line-through">₹{p.marketPrice.toLocaleString("en-IN")}</p>
                     </td>
                     <td className="px-4 py-3 text-center hidden sm:table-cell">
                       <Badge color={p.stock === 0 ? "red" : p.stock < 5 ? "amber" : "green"}>
