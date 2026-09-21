@@ -31,7 +31,7 @@ export default function ProductCard({ product }) {
 
   return (
     <div
-      className="group relative bg-white rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 md:p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between w-full"
+      className="group relative bg-white rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 md:p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between w-full overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -95,7 +95,7 @@ export default function ProductCard({ product }) {
       </Link>
 
       {/* Product Information */}
-      <div className="pt-2 sm:pt-3 px-0.5 sm:px-1 flex-1 flex flex-col justify-between w-full min-w-0">
+      <div className="pt-2 sm:pt-3 px-0.5 flex-1 flex flex-col justify-between w-full min-w-0 overflow-hidden">
         <div>
           {/* Subtitle & Material */}
           <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-brand-muted w-full">
