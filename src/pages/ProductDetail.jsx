@@ -39,6 +39,7 @@ function ProductDetailSkeleton() {
 // ─── Image Carousel Component ─────────────────────────────────────────────────
 function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, onToggleWishlist }) {
   const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
   const total = images.length;
 
   const prev = () => onIndexChange((activeIndex - 1 + total) % total);
@@ -54,33 +55,42 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
     return () => window.removeEventListener("keydown", handler);
   }, [activeIndex, total]);
 
-  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
   const handleTouchEnd = (e) => {
-    if (touchStartX.current === null) return;
-    const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const diffX = touchStartX.current - e.changedTouches[0].clientX;
+    const diffY = touchStartY.current - e.changedTouches[0].clientY;
+    
+    // Only trigger if horizontal swipe is greater than vertical scroll
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+      diffX > 0 ? next() : prev();
+    }
     touchStartX.current = null;
+    touchStartY.current = null;
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 select-none">
       {/* Main image with arrows */}
       <div
-        className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle select-none"
+        className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Animated image */}
+        {/* Active image */}
         <img
-          key={activeIndex}
+          key={`carousel-img-${activeIndex}-${images[activeIndex]?.url}`}
           src={images[activeIndex]?.url}
           alt={images[activeIndex]?.alt || product.name}
-          className="w-full h-full object-cover transition-opacity duration-400 animate-fadeIn"
-          style={{ animation: "carouselFadeIn 0.35s ease" }}
+          className="w-full h-full object-cover transition-opacity duration-300 pointer-events-none"
         />
 
         {/* Overlay badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+        <div className="absolute top-4 left-4 flex flex-col gap-2 z-10 pointer-events-none">
           {product.numReviews > 0 && (
             <span className="bg-brand-amber text-brand-charcoal text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-subtle uppercase tracking-wider">
               ★ {product.rating?.toFixed(1)} ({product.numReviews} reviews)
@@ -95,7 +105,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
           aria-label={inWish ? "Remove from wishlist" : "Add to wishlist"}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill={inWish ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0 0-7.78z" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
 
@@ -105,28 +115,28 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
             <button
               onClick={prev}
               aria-label="Previous image"
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-card text-brand-charcoal hover:bg-white hover:scale-110 transition-all flex items-center justify-center"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-card text-brand-charcoal hover:bg-white hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
             </button>
             <button
               onClick={next}
               aria-label="Next image"
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-card text-brand-charcoal hover:bg-white hover:scale-110 transition-all flex items-center justify-center"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-card text-brand-charcoal hover:bg-white hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
             </button>
 
             {/* Dot indicators */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10 p-1 bg-black/20 backdrop-blur-sm rounded-full">
               {images.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => onIndexChange(idx)}
                   aria-label={`Go to image ${idx + 1}`}
-                  className={`rounded-full transition-all duration-300 ${
+                  className={`rounded-full transition-all duration-300 p-0.5 ${
                     idx === activeIndex
-                      ? "w-5 h-2 bg-brand-terracotta"
+                      ? "w-6 h-2 bg-brand-terracotta"
                       : "w-2 h-2 bg-white/70 hover:bg-white"
                   }`}
                 />
@@ -134,7 +144,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
             </div>
 
             {/* Counter badge */}
-            <span className="absolute bottom-3 right-4 z-10 bg-black/50 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm">
+            <span className="absolute bottom-3 right-4 z-10 bg-black/50 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm pointer-events-none">
               {activeIndex + 1} / {total}
             </span>
           </>
@@ -143,30 +153,29 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
 
       {/* Thumbnail strip */}
       {total > 1 && (
-        <div className="flex gap-2.5 overflow-x-auto pb-1 snap-x">
+        <div className="flex gap-2 sm:gap-2.5 overflow-x-auto pb-1 no-scrollbar touch-pan-x">
           {images.map((img, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => onIndexChange(idx)}
-              className={`snap-start flex-shrink-0 w-[72px] h-[72px] rounded-2xl overflow-hidden border-2 transition-all duration-200 ${
+              onPointerDown={() => onIndexChange(idx)}
+              className={`flex-shrink-0 w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
                 activeIndex === idx
-                  ? "border-brand-terracotta ring-2 ring-brand-terracotta/25 scale-105 shadow-card"
-                  : "border-brand-sand opacity-65 hover:opacity-100 hover:border-brand-sandDark"
+                  ? "border-brand-terracotta ring-2 ring-brand-terracotta/25 scale-105 shadow-card opacity-100"
+                  : "border-brand-sand opacity-60 hover:opacity-100 hover:border-brand-sandDark"
               }`}
             >
-              <img src={img.url} alt={img.alt || `Photo ${idx + 1}`} className="w-full h-full object-cover" />
+              <img
+                src={img.url}
+                alt={img.alt || `Photo ${idx + 1}`}
+                className="w-full h-full object-cover pointer-events-none select-none"
+                loading="lazy"
+              />
             </button>
           ))}
         </div>
       )}
-
-      <style>{`
-        @keyframes carouselFadeIn {
-          from { opacity: 0; transform: scale(1.03); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </div>
   );
 }

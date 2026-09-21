@@ -195,7 +195,12 @@ function ImageUploader({ images, onChange }) {
             multiple
             accept="image/jpeg,image/png,image/webp"
             className="hidden"
-            onChange={(e) => uploadFiles(e.target.files)}
+            onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) {
+                uploadFiles(e.target.files);
+              }
+              e.target.value = "";
+            }}
           />
           {uploading ? (
             <div className="flex flex-col items-center gap-2">
