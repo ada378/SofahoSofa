@@ -41,9 +41,9 @@ export default function Header({ onOpenSearch }) {
             <span className="bg-brand-forest text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full uppercase tracking-wider flex-shrink-0 shadow-sm">
               ✓ Verified
             </span>
-            <div className="text-[#1F1A17] font-bold text-[10px] sm:text-xs truncate">
-              <span className="hidden md:inline">100% Solid Wood • </span>
-              <span>10-Yr Warranty • Free Delivery</span>
+            <div className="text-[#1F1A17] font-bold text-[10px] sm:text-xs">
+              <span className="hidden sm:inline">100% Solid Wood • </span>
+              <span>10-Year Warranty</span>
             </div>
           </div>
 
@@ -142,41 +142,6 @@ export default function Header({ onOpenSearch }) {
               </span>
             )}
           </Link>
-
-          {/* Organization Dropdown */}
-          <div className="relative group hidden sm:block">
-            <button
-              className="p-2 text-brand-charcoal hover:text-brand-terracotta hover:bg-brand-porcelain rounded-full transition-all min-h-[40px] min-w-[40px] flex items-center justify-center"
-              aria-label="Organization"
-              title="Admin & SEO Panel"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="9" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            
-            {/* Dropdown Menu */}
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-brand-sand rounded-2xl shadow-card opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-              <div className="p-2 space-y-1">
-                <a
-                  href="/admin/login"
-                  className="block px-4 py-2.5 text-sm font-semibold text-brand-charcoal hover:bg-brand-porcelain hover:text-brand-terracotta rounded-xl transition-colors flex items-center gap-2"
-                >
-                  <span>🔐</span>
-                  <span>Admin Panel</span>
-                </a>
-                <a
-                  href="/seo/login"
-                  className="block px-4 py-2.5 text-sm font-semibold text-brand-charcoal hover:bg-brand-porcelain hover:text-brand-terracotta rounded-xl transition-colors flex items-center gap-2"
-                >
-                  <span>📊</span>
-                  <span>SEO Panel</span>
-                </a>
-              </div>
-            </div>
-          </div>
 
           {/* User Account Link */}
           {customer ? (

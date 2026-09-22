@@ -412,7 +412,7 @@ export default function Checkout() {
               </div>
 
               <div className="bg-brand-forestLight p-3 rounded-xl border border-brand-forest/20 text-[11px] text-brand-forest font-bold text-center">
-                ✓ Free Delivery & Installation Included
+                ✓ Professional Installation Included
               </div>
             </div>
           </div>

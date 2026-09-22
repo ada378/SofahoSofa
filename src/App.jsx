@@ -14,6 +14,7 @@ import SeoPanel from "./pages/SeoPanel";
 import CartDrawer from "./components/CartDrawer";
 import SearchModal from "./components/SearchModal";
 import MobileBottomNav from "./components/MobileBottomNav";
+import FloatingContactButtons from "./components/FloatingContactButtons";
 
 // Store contexts
 import { CartProvider } from "./context/CartContext";
@@ -127,6 +128,7 @@ function StoreShell() {
           <CartDrawer />
           <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
           <MobileBottomNav onOpenSearch={() => setSearchOpen(true)} />
+          <FloatingContactButtons />
           <Footer />
         </div>
       </WishlistProvider>
