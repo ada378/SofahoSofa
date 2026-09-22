@@ -11,7 +11,8 @@ import {
   FiLogOut,
   FiExternalLink,
   FiMenu,
-  FiX
+  FiX,
+  FiUserPlus
 } from "react-icons/fi";
 
 const NAV = [
@@ -20,6 +21,7 @@ const NAV = [
   { to: "/admin/categories", icon: FiFolder, label: "Categories" },
   { to: "/admin/orders", icon: FiPackage, label: "Orders" },
   { to: "/admin/users", icon: FiUsers, label: "Users" },
+  { to: "/admin/leads", icon: FiUserPlus, label: "Leads" },
   { to: "/admin/seo", icon: FiSearch, label: "SEO Panel" },
 ];
 

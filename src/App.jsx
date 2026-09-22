@@ -15,6 +15,7 @@ import CartDrawer from "./components/CartDrawer";
 import SearchModal from "./components/SearchModal";
 import MobileBottomNav from "./components/MobileBottomNav";
 import FloatingContactButtons from "./components/FloatingContactButtons";
+import LeadPopup from "./components/LeadPopup";
 
 // Store contexts
 import { CartProvider } from "./context/CartContext";
@@ -34,6 +35,7 @@ import ProductManager from "./admin/ProductManager";
 import CategoryManager from "./admin/CategoryManager";
 import OrderManager from "./admin/OrderManager";
 import UserManager from "./admin/UserManager";
+import LeadManager from "./admin/LeadManager";
 
 // SEO auth & pages
 import SeoLogin from "./pages/SeoLogin";
@@ -129,6 +131,7 @@ function StoreShell() {
           <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
           <MobileBottomNav onOpenSearch={() => setSearchOpen(true)} />
           <FloatingContactButtons />
+          <LeadPopup />
           <Footer />
         </div>
       </WishlistProvider>
@@ -170,6 +173,7 @@ export default function App() {
           <Route path="categories" element={<CategoryManager />} />
           <Route path="orders" element={<OrderManager />} />
           <Route path="users" element={<UserManager />} />
+          <Route path="leads" element={<LeadManager />} />
           {/* SEO panel is embedded inside admin layout for Admin user */}
           <Route path="seo" element={<SeoPanel embedded />} />
         </Route>
