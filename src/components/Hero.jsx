@@ -15,9 +15,9 @@ const slides = [
   },
   {
     id: 3,
-    title: "Premium Sofa Design",
-    category: "Sofa",
-    image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789841569/sofa-hi-sofa/sofa/luxury_Sofa_from_Lucknow_Sofahosofa_67.png",
+    title: "Premium Furniture Collection",
+    category: "Featured",
+    image: "/hero.png",
   },
   {
     id: 4,
