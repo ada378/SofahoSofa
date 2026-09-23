@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../api/axios";
+import toast from "react-hot-toast";
 
 const STATUS_OPTIONS = ["Placed","Confirmed","Dispatched","OutForDelivery","Delivered","Cancelled","Returned"];
 
@@ -32,7 +33,7 @@ function OrderDetailModal({ order, onClose, onStatusUpdate }) {
       onStatusUpdate(data);
       onClose();
     } catch (err) {
-      alert(err.response?.data?.message || "Update failed");
+      toast.error(err.response?.data?.message || "Update failed");
     } finally { setSaving(false); }
   };
 

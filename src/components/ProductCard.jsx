@@ -34,12 +34,12 @@ export default function ProductCard({ product }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Top Image Container */}
-      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-brand-sand/40 w-full">
+      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-brand-sand/40 w-full flex items-center justify-center">
         <img
           src={isHovered ? secondaryImage : activeImage}
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
         />
 
 

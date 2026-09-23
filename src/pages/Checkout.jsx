@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import api from "../api/axios";
+import toast from "react-hot-toast";
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export default function Checkout() {
       setStep(2);
     } else if (step === 2) {
       if (!formData.fullName || !formData.phone || !formData.address || !formData.pincode) {
-        alert("Please fill in all required delivery fields.");
+        toast.error("Please fill in all required delivery fields.");
         return;
       }
       setStep(3);
@@ -104,7 +105,7 @@ export default function Checkout() {
 
         setStep(4);
       } catch (err) {
-        alert(err.response?.data?.message || "Order placement failed. Please try again.");
+        toast.error(err.response?.data?.message || "Order placement failed. Please try again.");
       } finally {
         setLoading(false);
       }

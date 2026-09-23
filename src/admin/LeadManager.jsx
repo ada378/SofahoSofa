@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../api/axios';
+import toast from 'react-hot-toast';
 
 export default function LeadManager() {
   const [leads, setLeads] = useState([]);
@@ -32,7 +33,7 @@ export default function LeadManager() {
       await api.put(`/leads/${leadId}`, { status: newStatus });
       fetchLeads();
     } catch (err) {
-      alert('Failed to update lead status');
+      toast.error('Failed to update lead status');
     }
   };
 
@@ -43,7 +44,7 @@ export default function LeadManager() {
       await api.delete(`/leads/${leadId}`);
       fetchLeads();
     } catch (err) {
-      alert('Failed to delete lead');
+      toast.error('Failed to delete lead');
     }
   };
 

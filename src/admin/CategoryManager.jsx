@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import api from "../api/axios";
+import toast from "react-hot-toast";
 
 const EMPTY = { name: "", description: "", order: 0, metaTitle: "", metaDescription: "", image: { url: "", alt: "" } };
 const inputCls = "w-full bg-gray-800 border border-gray-700 focus:border-[#C86A3B] focus:outline-none rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 transition-colors";
@@ -32,7 +33,7 @@ function CategoryImageUploader({ image, onChange }) {
       });
       onChange({ url: data.url, alt: data.alt });
     } catch (err) {
-      alert(err.response?.data?.message || "Upload failed. Check Cloudinary credentials.");
+      toast.error(err.response?.data?.message || "Upload failed. Check Cloudinary credentials.");
     } finally {
       setUploading(false);
     }

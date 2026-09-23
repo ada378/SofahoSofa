@@ -86,7 +86,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
           key={`carousel-img-${activeIndex}-${images[activeIndex]?.url}`}
           src={images[activeIndex]?.url}
           alt={images[activeIndex]?.alt || product.name}
-          className="w-full h-full object-cover transition-opacity duration-300 pointer-events-none"
+          className="w-full h-full object-contain transition-opacity duration-300 pointer-events-none"
         />
 
         {/* Overlay badges */}
@@ -169,7 +169,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
               <img
                 src={img.url}
                 alt={img.alt || `Photo ${idx + 1}`}
-                className="w-full h-full object-cover pointer-events-none select-none"
+                className="w-full h-full object-contain pointer-events-none select-none"
                 loading="lazy"
               />
             </button>
