@@ -9,6 +9,9 @@
     <meta name="google-site-verification" content="T1yYnaAGAxRwkMdANCOSgHxnibriI-iPTp8HSQthpIQ" />
     <meta name="theme-color" content="#FAF7F2" />
     <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/logo-2.png" as="image" type="image/png" />
     <link rel="icon" type="image/png" href="/logo-2.png" />
 
     <title>Sofa Hi Sofa | Handcrafted Luxury Sofas & Bespoke Living Furniture</title>
@@ -17,33 +20,65 @@
       content="Shop handcrafted luxury sofas, L-shape sectionals, motorized recliners, solid wood beds, and dining sets directly from our factory. 10-Year Warranty, 200+ custom fabrics, 0% EMI & Free Pan-India Delivery."
     />
     <meta name="keywords" content="buy sofa online, luxury sofa set India, L shape sectional sofa, motorized recliner, solid sheesham wood bed, modern dining table, custom fabric sofa, sofa hi sofa" />
-    <link rel="canonical" href="https://www.sofahisofa.com/" />
+    <link rel="canonical" href="https://www.thesofahisofa.com/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sofa Hi Sofa" />
     <meta property="og:title" content="Sofa Hi Sofa | Handcrafted Luxury Sofas & Living Furniture" />
     <meta property="og:description" content="Factory-direct solid wood sofas, recliners, beds, and dining sets. 10-Year Warranty & 200+ fabric choices." />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80" />
-    <meta property="og:url" content="https://www.sofahisofa.com/" />
+    <meta property="og:image" content="https://www.thesofahisofa.com/logo-2.png" />
+    <meta property="og:url" content="https://www.thesofahisofa.com/" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Sofa Hi Sofa | Handcrafted Luxury Sofas" />
     <meta name="twitter:description" content="India's leading D2C bespoke sofa and living furniture brand. 10-Year Warranty & Free Delivery." />
+    <meta name="twitter:image" content="https://www.thesofahisofa.com/logo-2.png" />
 
-    <!-- Fonts: Fraunces (Headings) + Plus Jakarta Sans & Outfit (Body & Nav) -->
+    <!-- Critical CSS inline for faster rendering -->
+    <style>
+      /* Critical above-the-fold styles */
+      body { 
+        margin: 0; 
+        font-family: system-ui, -apple-system, sans-serif; 
+        background-color: #FAF7F2; 
+        color: #2C3E50;
+        overflow-x: hidden;
+      }
+      #root { min-height: 100vh; }
+      /* Loading state */
+      .loading-spinner { 
+        position: fixed; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%); 
+        width: 40px; 
+        height: 40px; 
+        border: 3px solid #f3f3f3; 
+        border-top: 3px solid #D4AF37; 
+        border-radius: 50%; 
+        animation: spin 1s linear infinite; 
+      }
+      @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+    </style>
+
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://res.cloudinary.com" />
 
+    <!-- Load fonts with display=swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+
+    <!-- Schema.org structured data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "FurnitureStore",
         "name": "Sofa Hi Sofa",
-        "url": "https://www.sofahisofa.com",
-        "logo": "https://www.sofahisofa.com/logo.png",
+        "url": "https://www.thesofahisofa.com",
+        "logo": "https://www.thesofahisofa.com/logo-2.png",
         "description": "Handcrafted luxury sofas, L-shape sectionals, recliners, beds and dining furniture direct from factory.",
         "priceRange": "₹₹₹",
         "telephone": "+919810926762",
@@ -54,12 +89,29 @@
           "addressRegion": "Uttar Pradesh",
           "postalCode": "226501",
           "addressCountry": "IN"
-        }
+        },
+        "sameAs": [
+          "https://www.facebook.com/sofahisofa",
+          "https://www.instagram.com/sofahisofa"
+        ]
       }
     </script>
   </head>
   <body class="bg-brand-porcelain font-body text-brand-charcoal antialiased selection:bg-brand-amber/20 selection:text-brand-charcoal overflow-x-hidden">
+    <!-- Loading spinner for better UX -->
+    <div id="loading" class="loading-spinner"></div>
     <div id="root"></div>
+    
+    <!-- Load main script with defer for better performance -->
+    <script>
+      // Remove loading spinner when React app loads
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          const loading = document.getElementById('loading');
+          if (loading) loading.remove();
+        }, 1000);
+      });
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

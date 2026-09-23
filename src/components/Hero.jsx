@@ -84,6 +84,12 @@ export default function Hero() {
           <span className="bg-white/95 backdrop-blur-sm text-brand-charcoal px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg w-max">
             {slide.category}
           </span>
+          {/* SEO H1 - Hidden visually but readable by screen readers and search engines */}
+          {currentSlide === 0 && (
+            <h1 className="sr-only">
+              Handcrafted Luxury Sofas, Beds and Premium Furniture - Sofa Hi Sofa
+            </h1>
+          )}
         </div>
 
         {/* Slide Indicators */}

@@ -11,13 +11,36 @@ export default defineConfig({
     },
   },
   build: {
-    // Splitting vendor chunk helps first-load performance (Core Web Vitals / SEO)
+    // SEO & Performance optimizations
+    minify: 'terser',
+    cssMinify: true,
+    cssCodeSplit: true,
+    sourcemap: false,
     rollupOptions: {
       output: {
+        // Optimize chunking for better caching
         manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
+          vendor: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          icons: ["react-icons"],
+          utils: ["axios", "react-hot-toast", "react-helmet-async"],
         },
+        // Better file naming for caching
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
       },
     },
+    // Compression and optimization
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  },
+  // Performance optimizations
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 });
