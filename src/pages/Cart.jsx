@@ -265,14 +265,14 @@ export default function Cart() {
                   <div className="space-y-4">
                     {cartItems.map((item) => (
                       <div key={item.cartItemId} className="flex flex-col sm:flex-row gap-4 p-4 rounded-2xl bg-brand-porcelain border border-brand-sand/70 justify-between items-start sm:items-center">
-                        <div className="flex gap-4 items-center">
+                        <div className="flex gap-3 sm:gap-4 items-center min-w-0 flex-1 w-full sm:w-auto">
                           <img
                             src={item.product.images?.[0]?.url || item.product.image}
                             alt={item.product.name}
-                            className="w-20 h-20 rounded-2xl object-cover bg-brand-sand flex-shrink-0"
+                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover bg-brand-sand flex-shrink-0"
                           />
-                          <div>
-                            <Link to={`/product/${item.product.slug}`} className="font-semibold text-sm text-brand-charcoal hover:text-brand-terracotta line-clamp-1">
+                          <div className="min-w-0 flex-1">
+                            <Link to={`/product/${item.product.slug}`} className="font-semibold text-sm text-brand-charcoal hover:text-brand-terracotta line-clamp-1 break-words">
                               {item.product.name}
                             </Link>
                             <p className="text-xs text-brand-muted mt-0.5">{item.product.material}</p>

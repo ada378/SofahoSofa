@@ -107,7 +107,7 @@ function StoreShell() {
   return (
     <CartProvider>
       <WishlistProvider>
-        <div className="min-h-screen flex flex-col bg-brand-porcelain text-brand-charcoal font-body antialiased pb-16 lg:pb-0 w-full overflow-x-hidden">
+        <div className="min-h-screen flex flex-col bg-brand-porcelain text-brand-charcoal font-body antialiased pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] lg:pb-0 w-full overflow-x-hidden">
           <Header
             onOpenSearch={() => setSearchOpen(true)}
           />

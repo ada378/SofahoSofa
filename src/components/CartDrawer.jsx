@@ -194,7 +194,7 @@ export default function CartDrawer() {
 
           {/* Footer & Checkout Area */}
           {cartItems.length > 0 && (
-            <div className="border-t border-brand-sand bg-white p-5 space-y-4">
+            <div className="border-t border-brand-sand bg-white p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] space-y-4">
               {/* Coupon Form */}
               <div>
                 {couponDiscountPercent > 0 ? (

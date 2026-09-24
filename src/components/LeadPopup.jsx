@@ -73,8 +73,8 @@ export default function LeadPopup() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 relative animate-slide-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-5 sm:p-8 relative animate-slide-up max-h-[90dvh] overflow-y-auto">
         {/* Close button */}
         {!success && (
           <button

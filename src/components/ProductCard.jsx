@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
+// Trim white/transparent padding from Cloudinary PNG product shots
+function trimCloudinaryUrl(url) {
+  if (!url || typeof url !== "string") return url;
+  if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    return url.replace("/upload/", "/upload/e_trim/");
+  }
+  return url;
+}
+
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -34,12 +43,12 @@ export default function ProductCard({ product }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Top Image Container */}
-      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-brand-sand/40 w-full flex items-center justify-center">
+      <Link to={`/product/${product.slug}`} className="block relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-white w-full">
         <img
-          src={isHovered ? secondaryImage : activeImage}
+          src={trimCloudinaryUrl(isHovered ? secondaryImage : activeImage)}
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+          className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
         />
 
 

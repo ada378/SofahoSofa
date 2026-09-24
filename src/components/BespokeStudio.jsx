@@ -17,8 +17,8 @@ export default function BespokeStudio() {
                 ✨ Sofa Hi Sofa Bespoke Studio
               </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#1F1A17] font-bold leading-tight">
-                Design Your Dream Sofa, <br />
+              <h2 className="font-display text-2xl sm:text-3xl lg:text-5xl text-[#1F1A17] font-bold leading-tight">
+                Design Your Dream Sofa, <br className="hidden sm:block" />
                 <span className="text-brand-terracotta">Tailored to Your Living Room</span>
               </h2>
 
@@ -115,16 +115,16 @@ export default function BespokeStudio() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 flex flex-wrap items-center gap-3">
+              <div className="pt-4 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
                 <Link
                   to="/collections/sofa-sets"
-                  className="bg-brand-terracotta hover:bg-brand-terracottaDark text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle flex items-center gap-2"
+                  className="bg-brand-terracotta hover:bg-brand-terracottaDark text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle flex items-center justify-center gap-2"
                 >
                   <span>Shop Sofas</span>
                 </Link>
                 <Link
                   to="/collections/all"
-                  className="bg-white hover:bg-brand-porcelain text-[#1F1A17] border border-brand-sand px-6 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle"
+                  className="bg-white hover:bg-brand-porcelain text-[#1F1A17] border border-brand-sand px-6 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle text-center"
                 >
                   Browse All Collections
                 </Link>
@@ -146,25 +146,25 @@ export default function BespokeStudio() {
                 </div>
 
                 <div className="space-y-2 text-xs">
-                  <div className="flex justify-between py-1.5 border-b border-brand-sand">
-                    <span className="text-brand-muted font-semibold">Selected Frame</span>
-                    <span className="font-bold text-[#1F1A17]">{selectedFrame}</span>
+                  <div className="flex justify-between py-1.5 border-b border-brand-sand gap-2">
+                    <span className="text-brand-muted font-semibold flex-shrink-0">Selected Frame</span>
+                    <span className="font-bold text-[#1F1A17] text-right">{selectedFrame}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-brand-sand">
-                    <span className="text-brand-muted font-semibold">Fabric Option</span>
-                    <span className="font-bold text-[#1F1A17]">{selectedFabric}</span>
+                  <div className="flex justify-between py-1.5 border-b border-brand-sand gap-2">
+                    <span className="text-brand-muted font-semibold flex-shrink-0">Fabric Option</span>
+                    <span className="font-bold text-[#1F1A17] text-right">{selectedFabric}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-brand-sand">
-                    <span className="text-brand-muted font-semibold">Cushion Core</span>
-                    <span className="font-bold text-[#1F1A17]">{selectedFirmness}</span>
+                  <div className="flex justify-between py-1.5 border-b border-brand-sand gap-2">
+                    <span className="text-brand-muted font-semibold flex-shrink-0">Cushion Core</span>
+                    <span className="font-bold text-[#1F1A17] text-right">{selectedFirmness}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-brand-sand">
-                    <span className="text-brand-muted font-semibold">Wood Guarantee</span>
-                    <span className="font-bold text-brand-forest">100% Solid Sheesham (10-Yr Warranty)</span>
+                  <div className="flex justify-between py-1.5 border-b border-brand-sand gap-2">
+                    <span className="text-brand-muted font-semibold flex-shrink-0">Wood Guarantee</span>
+                    <span className="font-bold text-brand-forest text-right">100% Solid Sheesham (10-Yr Warranty)</span>
                   </div>
-                  <div className="flex justify-between py-1.5">
-                    <span className="text-brand-muted font-semibold">Estimated Factory Price</span>
-                    <span className="font-display text-lg font-bold text-brand-terracotta">₹28,990 - ₹34,990</span>
+                  <div className="flex justify-between py-1.5 gap-2">
+                    <span className="text-brand-muted font-semibold flex-shrink-0">Estimated Price</span>
+                    <span className="font-display text-base sm:text-lg font-bold text-brand-terracotta">₹28,990 - ₹34,990</span>
                   </div>
                 </div>
 

@@ -269,7 +269,7 @@ export default function Checkout() {
                   />
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[["City", "city"], ["State", "state"], ["Pincode", "pincode"]].map(([label, field]) => (
                     <div key={field}>
                       <label className="block text-[11px] font-bold text-brand-charcoal mb-1">{label} *</label>

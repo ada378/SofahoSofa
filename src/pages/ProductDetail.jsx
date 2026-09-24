@@ -36,6 +36,16 @@ function ProductDetailSkeleton() {
   );
 }
 
+// ─── Trim Cloudinary image whitespace (transparent/white padding in PNG files) ─
+function trimCloudinaryUrl(url) {
+  if (!url || typeof url !== "string") return url;
+  if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    // Add e_trim to remove transparent/white padding from PNG product shots
+    return url.replace("/upload/", "/upload/e_trim/");
+  }
+  return url;
+}
+
 // ─── Image Carousel Component ─────────────────────────────────────────────────
 function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, onToggleWishlist }) {
   const touchStartX = useRef(null);
@@ -77,17 +87,19 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
     <div className="space-y-3 select-none">
       {/* Main image with arrows */}
       <div
-        className="relative aspect-square rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle"
+        className="relative rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle w-full"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Active image */}
+        {/* Active image — whitespace auto-trimmed via Cloudinary e_trim */}
         <img
           key={`carousel-img-${activeIndex}-${images[activeIndex]?.url}`}
-          src={images[activeIndex]?.url}
+          src={trimCloudinaryUrl(images[activeIndex]?.url)}
           alt={images[activeIndex]?.alt || product.name}
-          className="w-full h-full object-contain transition-opacity duration-300 pointer-events-none block"
+          className="w-full h-auto block transition-opacity duration-300 pointer-events-none"
         />
+        {/* Overlay layer for absolute positioned elements */}
+        <div className="absolute inset-0 pointer-events-none" />
 
         {/* Overlay badges */}
         <div className="absolute top-4 left-4 flex flex-col gap-2 z-10 pointer-events-none">
@@ -167,7 +179,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
               }`}
             >
               <img
-                src={img.url}
+                src={trimCloudinaryUrl(img.url)}
                 alt={img.alt || `Photo ${idx + 1}`}
                 className="w-full h-full object-contain pointer-events-none select-none"
                 loading="lazy"
@@ -343,7 +355,7 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="bg-brand-porcelain min-h-screen py-4 sm:py-10 pb-32 lg:pb-10 w-full overflow-x-hidden">
+    <div className="bg-brand-porcelain min-h-screen py-4 sm:py-10 pb-36 lg:pb-10 w-full overflow-x-hidden">
       <SEO
         title={seoTitle}
         description={seoDesc}
@@ -352,7 +364,7 @@ export default function ProductDetail() {
         jsonLd={[productJsonLd, breadcrumbJsonLd]}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-xs text-brand-muted mb-6" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-brand-charcoal transition-colors">Home</Link>
@@ -366,9 +378,9 @@ export default function ProductDetail() {
         </nav>
 
         {/* Main Grid */}
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-12">
           {/* Left: Image Carousel */}
-          <div className="lg:col-span-7 space-y-4">
+          <div className="lg:col-span-7 space-y-4 w-full">
             <ImageCarousel
               images={images}
               activeIndex={activeImageIndex}
@@ -380,11 +392,11 @@ export default function ProductDetail() {
           </div>
 
           {/* Right: Product Configurator */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-brand-sand shadow-subtle space-y-6">
+          <div className="lg:col-span-5 space-y-4 sm:space-y-6">
+            <div className="bg-white rounded-3xl p-4 sm:p-6 md:p-8 border border-brand-sand shadow-subtle space-y-4 sm:space-y-6">
               <div>
                 <span className="text-brand-terracotta text-xs font-bold uppercase tracking-widest">{product.subCategory}</span>
-                <h1 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mt-1">{product.name}</h1>
+                <h1 className="font-display text-xl sm:text-2xl md:text-3xl text-brand-charcoal font-bold mt-1 leading-tight">{product.name}</h1>
                 <p className="text-brand-muted text-xs sm:text-sm mt-2 leading-relaxed">{product.shortDescription}</p>
               </div>
 
@@ -401,16 +413,16 @@ export default function ProductDetail() {
 
               {/* Quantity & Actions */}
               <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <div className="flex items-center border border-brand-sand rounded-2xl bg-brand-porcelain p-1">
                     <button onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-8 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold">−</button>
+                      className="w-9 h-9 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold text-lg">−</button>
                     <span className="w-10 text-center font-bold text-sm text-brand-charcoal">{quantity}</span>
                     <button onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold">+</button>
+                      className="w-9 h-9 flex items-center justify-center text-brand-charcoal hover:bg-white rounded-xl transition-colors font-bold text-lg">+</button>
                   </div>
                   <button onClick={handleAddToCart}
-                    className="flex-1 bg-brand-porcelain hover:bg-brand-sand/50 text-brand-charcoal border border-brand-sand hover:border-brand-charcoal py-3.5 rounded-2xl font-bold text-xs sm:text-sm transition-colors shadow-subtle flex items-center justify-center gap-2">
+                    className="flex-1 bg-brand-porcelain hover:bg-brand-sand/50 text-brand-charcoal border border-brand-sand hover:border-brand-charcoal py-3 sm:py-3.5 rounded-2xl font-bold text-xs sm:text-sm transition-colors shadow-subtle flex items-center justify-center gap-2">
                     + Add to Cart
                   </button>
                 </div>
@@ -451,11 +463,11 @@ export default function ProductDetail() {
               </div>
 
               {/* Trust Grid */}
-              <div className="pt-4 border-t border-brand-sand grid grid-cols-2 gap-3 text-xs text-brand-charcoal/80 font-medium">
-                <div className="flex items-center gap-2"><span className="text-lg">🛡️</span><span>10-Year Frame Warranty</span></div>
-                <div className="flex items-center gap-2"><span className="text-lg">🪵</span><span>Oak, Ash, Pine &amp; Tropical Woods</span></div>
-                <div className="flex items-center gap-2"><span className="text-lg">🚚</span><span>Free In-Room Placement</span></div>
-                <div className="flex items-center gap-2"><span className="text-lg">💳</span><span>0% No-Cost EMI Available</span></div>
+              <div className="pt-4 border-t border-brand-sand grid grid-cols-2 gap-2 sm:gap-3 text-[11px] sm:text-xs text-brand-charcoal/80 font-medium">
+                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🛡️</span><span>10-Year Frame Warranty</span></div>
+                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🪵</span><span>Oak, Ash, Pine &amp; Tropical Woods</span></div>
+                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🚚</span><span>Free In-Room Placement</span></div>
+                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">💳</span><span>0% No-Cost EMI Available</span></div>
               </div>
             </div>
           </div>
@@ -465,9 +477,9 @@ export default function ProductDetail() {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div className="mt-14 sm:mt-20">
-            <h2 className="font-display text-2xl sm:text-3xl text-brand-charcoal font-bold mb-6">You May Also Like</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
+          <div className="mt-10 sm:mt-14 md:mt-20">
+            <h2 className="font-display text-xl sm:text-2xl md:text-3xl text-brand-charcoal font-bold mb-4 sm:mb-6">You May Also Like</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
               {relatedProducts.map((p) => <ProductCard key={p._id} product={p} />)}
             </div>
           </div>
