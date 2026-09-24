@@ -77,7 +77,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
     <div className="space-y-3 select-none">
       {/* Main image with arrows */}
       <div
-        className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle"
+        className="relative aspect-square rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -86,7 +86,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
           key={`carousel-img-${activeIndex}-${images[activeIndex]?.url}`}
           src={images[activeIndex]?.url}
           alt={images[activeIndex]?.alt || product.name}
-          className="w-full h-full object-contain transition-opacity duration-300 pointer-events-none"
+          className="w-full h-full object-contain transition-opacity duration-300 pointer-events-none block"
         />
 
         {/* Overlay badges */}
@@ -317,7 +317,7 @@ export default function ProductDetail() {
       priceCurrency: "INR",
       price: product.price,
       availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      url: `https://www.sofahisofa.com/product/${product.slug}`,
+      url: `https://www.thesofahisofa.com/product/${product.slug}`,
       seller: { "@type": "Organization", name: "Sofa Hi Sofa.Com" },
       priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     },
@@ -336,9 +336,9 @@ export default function ProductDetail() {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sofahisofa.com/" },
-      { "@type": "ListItem", position: 2, name: product.category?.name || "Collections", item: `https://www.sofahisofa.com/collections/${product.category?.slug || "all"}` },
-      { "@type": "ListItem", position: 3, name: product.name, item: `https://www.sofahisofa.com/product/${product.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.thesofahisofa.com/" },
+      { "@type": "ListItem", position: 2, name: product.category?.name || "Collections", item: `https://www.thesofahisofa.com/collections/${product.category?.slug || "all"}` },
+      { "@type": "ListItem", position: 3, name: product.name, item: `https://www.thesofahisofa.com/product/${product.slug}` },
     ],
   };
 
@@ -347,7 +347,7 @@ export default function ProductDetail() {
       <SEO
         title={seoTitle}
         description={seoDesc}
-        canonical={`https://www.sofahisofa.com/product/${product.slug}`}
+        canonical={`https://www.thesofahisofa.com/product/${product.slug}`}
         image={images[0]?.url}
         jsonLd={[productJsonLd, breadcrumbJsonLd]}
       />

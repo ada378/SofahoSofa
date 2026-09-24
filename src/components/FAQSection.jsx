@@ -8,18 +8,38 @@ export default function FAQSection() {
     setOpenIndex(openIndex === index ? -1 : index);
   };
 
+  // FAQ JSON-LD schema for Google rich results
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a,
+      },
+    })),
+  };
+
   return (
-    <section className="py-14 sm:py-20 bg-brand-porcelain">
+    <section className="py-14 sm:py-20 bg-brand-porcelain" aria-label="Frequently Asked Questions about sofas, beds, and furniture">
+      {/* FAQ JSON-LD — helps Google show FAQ rich snippets in search results */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10 sm:mb-12">
           <span className="text-brand-terracotta text-xs font-bold uppercase tracking-widest">
-            Clear Answers
+            Sofa · Beds · Dining · Recliners
           </span>
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-brand-charcoal mt-1">
-            Frequently Asked Questions
+            Buy Luxury Furniture Direct From Factory
           </h2>
           <p className="text-brand-muted text-xs sm:text-sm mt-2">
-            Everything you need to know about custom sizing, warranties, deliveries, and fabric care.
+            Custom sofas, solid wood beds, dining sets & motorized recliners — 10-Year Warranty, Free Pan-India Delivery.
           </p>
         </div>
 
@@ -35,19 +55,24 @@ export default function FAQSection() {
                   onClick={() => toggleFAQ(idx)}
                   className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 font-semibold text-xs sm:text-sm text-brand-charcoal hover:text-brand-terracotta transition-colors"
                   aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${idx}`}
                 >
                   <span>{faq.q}</span>
                   <span
                     className={`w-7 h-7 rounded-full bg-brand-porcelain flex items-center justify-center text-xs flex-shrink-0 transition-transform duration-300 ${
                       isOpen ? "rotate-180 bg-brand-terracotta text-white" : "text-brand-charcoal"
                     }`}
+                    aria-hidden="true"
                   >
                     ▼
                   </span>
                 </button>
 
                 {isOpen && (
-                  <div className="px-4 pb-5 sm:px-5 text-xs sm:text-sm text-brand-muted leading-relaxed border-t border-brand-sand/40 pt-3 animate-fade-in">
+                  <div
+                    id={`faq-answer-${idx}`}
+                    className="px-4 pb-5 sm:px-5 text-xs sm:text-sm text-brand-muted leading-relaxed border-t border-brand-sand/40 pt-3 animate-fade-in"
+                  >
                     {faq.a}
                   </div>
                 )}

@@ -79,17 +79,18 @@ export default function Hero() {
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-        {/* Category & Title Badge */}
-        <div className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 flex flex-col gap-1 max-w-[70%]">
+        {/* Category & Title Badge — centered */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 gap-2">
           <span className="bg-white/95 backdrop-blur-sm text-brand-charcoal px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg w-max">
             {slide.category}
           </span>
-          {/* SEO H1 - Hidden visually but readable by screen readers and search engines */}
-          {currentSlide === 0 && (
-            <h1 className="sr-only">
-              Handcrafted Luxury Sofas, Beds and Premium Furniture - Sofa Hi Sofa
-            </h1>
-          )}
+          {/* SEO H1 — visible, keyword-rich */}
+          <h1 className="text-white font-display font-bold text-lg sm:text-3xl lg:text-4xl leading-tight drop-shadow-lg max-w-2xl">
+            Discover Stylish & Comfortable Sofa Sets in Lucknow
+          </h1>
+          <p className="text-white/90 text-xs sm:text-base font-medium drop-shadow leading-snug max-w-xl">
+            Crafted to add elegance and comfort to your living space — The Sofa Hi Sofa
+          </p>
         </div>
 
         {/* Slide Indicators */}

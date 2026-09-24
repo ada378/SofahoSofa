@@ -11,7 +11,7 @@ export default function Wishlist() {
       <SEO
         title="My Wishlist & Saved Furniture | Sofa Hi Sofa"
         description="View your saved handcrafted sofas, modular sectionals, motorized recliners, and beds."
-        canonical="https://www.sofahisofa.com/wishlist"
+        canonical="https://www.thesofahisofa.com/wishlist"
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">

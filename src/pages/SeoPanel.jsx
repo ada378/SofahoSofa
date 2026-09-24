@@ -262,7 +262,7 @@ function GlobalTab({ showToast }) {
         <InputField label="Default Meta Description" name="description" value={form.description} onChange={handleChange} textarea maxLength={160}
           hint="Shown in Google search snippets. Keep under 160 chars." />
         <InputField label="Canonical URL" name="canonicalUrl" value={form.canonicalUrl} onChange={handleChange}
-          hint="e.g. https://www.sofahisofa.com/" />
+          hint="e.g. https://www.thesofahisofa.com/" />
         <InputField label="Default OG Image URL" name="ogImage" value={form.ogImage} onChange={handleChange}
           hint="Shared on social media when no product/category image is specified. 1200×630px recommended." />
         <InputField label="Focus Keywords (comma separated)" name="keywords" value={form.keywords} onChange={handleChange}
@@ -480,7 +480,7 @@ function ProductsTab({ showToast }) {
                 {editing.metaTitle || editing.name} | Sofa Hi Sofa
               </p>
               <p className="text-green-700 text-[11px]">
-                https://www.sofahisofa.com/product/{editing.slug}
+                https://www.thesofahisofa.com/product/{editing.slug}
               </p>
               <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                 {editing.metaDescription || "No meta description set. Google will pick a snippet from the page content."}
@@ -618,7 +618,7 @@ function CategoriesTab({ showToast }) {
                 {editing.metaTitle || editing.name} | Sofa Hi Sofa
               </p>
               <p className="text-green-700 text-[11px]">
-                https://www.sofahisofa.com/collections/{editing.slug}
+                https://www.thesofahisofa.com/collections/{editing.slug}
               </p>
               <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                 {editing.metaDescription || "No meta description set."}
@@ -677,7 +677,7 @@ function SitemapTab({ showToast }) {
 
   if (loading) return <Spinner />;
 
-  const siteUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "https://www.sofahisofa.com";
+  const siteUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "https://www.thesofahisofa.com";
 
   return (
     <div className="space-y-6 max-w-2xl">

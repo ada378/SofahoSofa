@@ -146,7 +146,7 @@ export default function Cart() {
       <SEO
         title="Your Shopping Cart & Checkout | Sofa Hi Sofa"
         description="Review your handcrafted furniture order, select customized fabrics, apply coupons, and enjoy free white-glove pan-India delivery."
-        canonical="https://www.sofahisofa.com/cart"
+        canonical="https://www.thesofahisofa.com/cart"
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">

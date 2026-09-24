@@ -440,7 +440,7 @@ function ProductFormModal({ product, categories, onClose, onSaved }) {
                     {form.metaTitle || form.name || "Product Title"} | Sofa Hi Sofa.Com
                   </p>
                   <p className="text-green-700 text-xs">
-                    https://www.sofahisofa.com/product/{form.slug || "product-slug"}
+                    https://www.thesofahisofa.com/product/{form.slug || "product-slug"}
                   </p>
                   <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                     {form.metaDescription || form.shortDescription || "No meta description set."}

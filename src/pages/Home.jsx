@@ -8,7 +8,6 @@ import BespokeStudio from "../components/BespokeStudio";
 import Craftsmanship from "../components/Craftsmanship";
 import RoomLookbook from "../components/RoomLookbook";
 import TrustBadges from "../components/TrustBadges";
-import Testimonials from "../components/Testimonials";
 import FAQSection from "../components/FAQSection";
 import api from "../api/axios";
 import cache from "../api/cache";
@@ -37,7 +36,7 @@ export default function Home() {
       <SEO
         title={seoData?.title || "Handcrafted Luxury Sofas & Bespoke Living Furniture"}
         description={seoData?.description || "India's leading D2C sofa brand. Shop 3-seater sofas, L-shape sectionals, motorized recliners, solid wood beds, and dining sets direct from factory. 10-Year Warranty & Free Pan-India Delivery."}
-        canonical={seoData?.canonicalUrl || "https://www.sofahisofa.com/"}
+        canonical={seoData?.canonicalUrl || "https://www.thesofahisofa.com/"}
         image={seoData?.ogImage}
       />
 
@@ -65,10 +64,7 @@ export default function Home() {
       {/* 7. 6-Pillar Trust Grid */}
       <TrustBadges />
 
-      {/* 8. Verified Customer Reviews & Home Photos */}
-      <Testimonials />
-
-      {/* 9. Interactive FAQs Accordion */}
+      {/* 8. Interactive FAQs Accordion */}
       <FAQSection />
     </div>
   );

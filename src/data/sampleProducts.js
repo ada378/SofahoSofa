@@ -709,28 +709,28 @@ export const verifiedReviews = [
 
 export const faqs = [
   {
-    q: "How does your Direct-From-Factory pricing work?",
-    a: "Unlike traditional furniture retailers who add distributor markups (often 40% to 60%), we design and manufacture all sofas, beds, and dining sets in our own 1,00,000 sq.ft facility. We ship straight to your doorstep, passing total cost savings directly to you.",
+    q: "Where can I buy luxury sofas online in India at factory price?",
+    a: "Sofa Hi Sofa is India's leading D2C furniture brand. We manufacture handcrafted sofas, L-shape sectionals, and recliners in our own 1,00,000 sq.ft factory and ship directly to your home — cutting out distributor markups of 40–60%. Shop online at thesofahisofa.com with free pan-India delivery.",
   },
   {
-    q: "Can I customize the sofa dimensions or fabric?",
-    a: "Yes! Every Sofa Hi Sofa piece can be customized in over 200+ fabrics (Bouclé, Stain-Resistant Linen, Velvet, and Nappa Leatherette). You can also order custom length modifications or switch L-shape chaise orientation (Left or Right) during checkout or by requesting our free Fabric Swatch Box.",
+    q: "Can I customize my sofa size, fabric, or L-shape orientation?",
+    a: "Yes! Every sofa, sectional, and recliner can be customized in 200+ premium fabrics — Bouclé, Stain-Resistant Linen, Velvet, and Nappa Leatherette. You can also request custom dimensions or switch your L-shape chaise from Left to Right. Order a free Fabric Swatch Box before purchasing.",
   },
   {
-    q: "What is covered under the 10-Year Warranty?",
-    a: "Our 10-Year Warranty covers the internal solid hardwood frame structure, anti-sag spring mechanisms, joints, and includes lifetime anti-termite wood treatment. If any structural defect occurs, our technician repairs or replaces it free of charge.",
+    q: "What solid wood is used in Sofa Hi Sofa's beds and frames?",
+    a: "We use kiln-dried Sheesham (Indian Rosewood), Teak, and Hardwood for all bed frames and sofa structures. Every piece includes lifetime anti-termite treatment. Our solid wood beds come with a 15-Year Warranty — no MDF, no particle board.",
   },
   {
-    q: "How does White-Glove Delivery and Assembly work?",
-    a: "We deliver across 19,000+ pincodes in India. Our dedicated logistics team brings the furniture directly inside your living room, completes assembly, tests all recliner mechanisms, and cleans up all packaging materials at zero extra cost.",
+    q: "How does the 10-Year Warranty and free delivery work?",
+    a: "Our 10-Year Frame Warranty covers the solid hardwood structure, anti-sag spring mechanisms, and all joints. Free White-Glove Delivery means our team brings the furniture inside your room, assembles it completely, tests all recliner motors, and removes all packaging — across 19,000+ pincodes in India.",
   },
   {
-    q: "Can I try before I buy at an Experience Center?",
-    a: "Yes! We have flagship touch-and-feel Experience Centers in Bengaluru (Indiranagar, HSR Layout), Mumbai (Bandra, Andheri), Delhi-NCR (Gurgaon, Noida), Hyderabad (Jubilee Hills), and Pune (Koregaon Park). You can also book a free 1-on-1 video consultation with our interior design architects.",
+    q: "What is the price range for sofas, beds, and dining sets?",
+    a: "Our 3-seater sofas start from ₹18,999, L-shape sectionals from ₹32,999, motorized recliners from ₹24,999, solid wood king beds from ₹28,999, and 6-seater dining sets from ₹35,999. All prices are factory-direct, inclusive of GST, with 0% No-Cost EMI available up to 12 months.",
   },
   {
-    q: "What payment options and EMI plans are available?",
-    a: "We support UPI (Google Pay, PhonePe, Paytm), All Major Credit/Debit Cards, Net Banking, Cash on Delivery (COD), and 0% No-Cost EMI plans for up to 12 months with leading banks.",
+    q: "Can I try the furniture before buying? Where are your showrooms?",
+    a: "Yes! Visit our Experience Centers in Lucknow (Kisan Path Flagship), Bengaluru (Indiranagar, HSR Layout), Mumbai (Bandra, Andheri), Delhi-NCR (Gurgaon, Noida), Hyderabad (Jubilee Hills), and Pune (Koregaon Park). You can also book a free video consultation with our design team.",
   },
 ];
 
