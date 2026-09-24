@@ -40,8 +40,8 @@ function ProductDetailSkeleton() {
 function trimCloudinaryUrl(url) {
   if (!url || typeof url !== "string") return url;
   if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
-    // Add e_trim to remove transparent/white padding from PNG product shots
-    return url.replace("/upload/", "/upload/e_trim/");
+    // Add e_trim to remove transparent/white padding, with auto-format and high quality
+    return url.replace("/upload/", "/upload/e_trim,f_auto,q_auto/");
   }
   return url;
 }
@@ -85,9 +85,9 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
 
   return (
     <div className="space-y-3 select-none">
-      {/* Main image with arrows */}
+      {/* Main image with arrows — full width on mobile so photo looks big and clear */}
       <div
-        className="relative rounded-3xl overflow-hidden bg-white border border-brand-sand shadow-subtle w-full"
+        className="relative -mx-3 sm:mx-0 w-[calc(100%+1.5rem)] sm:w-full rounded-none sm:rounded-3xl overflow-hidden bg-white border-y sm:border border-brand-sand shadow-subtle min-h-[240px] sm:min-h-0 flex items-center justify-center"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -96,7 +96,7 @@ function ImageCarousel({ images, activeIndex, onIndexChange, product, inWish, on
           key={`carousel-img-${activeIndex}-${images[activeIndex]?.url}`}
           src={trimCloudinaryUrl(images[activeIndex]?.url)}
           alt={images[activeIndex]?.alt || product.name}
-          className="w-full h-auto block transition-opacity duration-300 pointer-events-none"
+          className="w-full h-auto block transition-opacity duration-300 pointer-events-none max-h-[70vh] sm:max-h-[80vh] object-contain scale-[1.02] sm:scale-100"
         />
         {/* Overlay layer for absolute positioned elements */}
         <div className="absolute inset-0 pointer-events-none" />

@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
-// Trim white/transparent padding from Cloudinary PNG product shots
+// Trim white/transparent padding from Cloudinary PNG product shots with high quality
 function trimCloudinaryUrl(url) {
   if (!url || typeof url !== "string") return url;
   if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
-    return url.replace("/upload/", "/upload/e_trim/");
+    return url.replace("/upload/", "/upload/e_trim,f_auto,q_auto/");
   }
   return url;
 }
@@ -38,17 +38,17 @@ export default function ProductCard({ product }) {
 
   return (
     <div
-      className="group relative bg-white rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 md:p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between w-full overflow-hidden"
+      className="group relative bg-white rounded-2xl sm:rounded-3xl p-1.5 sm:p-2.5 md:p-3 border border-brand-sand/80 hover:border-brand-sandDark shadow-subtle hover:shadow-cardHover transition-all duration-300 flex flex-col justify-between w-full overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Top Image Container */}
-      <Link to={`/product/${product.slug}`} className="block relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-white w-full">
+      {/* Top Image Container — aspect-[4/3] on mobile so wide sofas look big and prominent */}
+      <Link to={`/product/${product.slug}`} className="block relative aspect-[4/3] sm:aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-white w-full">
         <img
           src={trimCloudinaryUrl(isHovered ? secondaryImage : activeImage)}
           alt={product.name}
           loading="lazy"
-          className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+          className="absolute inset-0 w-full h-full object-contain scale-[1.06] sm:scale-100 group-hover:scale-110 transition-transform duration-500 ease-out"
         />
 
 
