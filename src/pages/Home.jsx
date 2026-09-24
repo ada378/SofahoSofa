@@ -35,7 +35,7 @@ export default function Home() {
     <div>
       <SEO
         title={seoData?.title || "Handcrafted Luxury Sofas & Bespoke Living Furniture"}
-        description={seoData?.description || "India's leading D2C sofa brand. Shop 3-seater sofas, L-shape sectionals, motorized recliners, solid wood beds, and dining sets direct from factory. 10-Year Warranty & Free Pan-India Delivery."}
+        description={seoData?.description || "India's leading D2C sofa brand. Shop 3-seater sofas, L-shape sectionals, motorized recliners, solid wood beds, and dining sets direct from factory. 10-Year Frame Warranty & Free Delivery in All Over India."}
         canonical={seoData?.canonicalUrl || "https://www.thesofahisofa.com/"}
         image={seoData?.ogImage}
       />

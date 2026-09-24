@@ -160,7 +160,7 @@ export default function BespokeStudio() {
                   </div>
                   <div className="flex justify-between py-1.5 border-b border-brand-sand gap-2">
                     <span className="text-brand-muted font-semibold flex-shrink-0">Wood Guarantee</span>
-                    <span className="font-bold text-brand-forest text-right">100% Solid Sheesham (10-Yr Warranty)</span>
+                    <span className="font-bold text-brand-forest text-right">100% Solid Sheesham (10-Yr Frame Warranty)</span>
                   </div>
                   <div className="flex justify-between py-1.5 gap-2">
                     <span className="text-brand-muted font-semibold flex-shrink-0">Estimated Price</span>

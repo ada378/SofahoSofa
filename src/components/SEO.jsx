@@ -14,7 +14,7 @@ import { Helmet } from "react-helmet-async";
 export default function SEO({ title, description, canonical, image, noIndex = false, jsonLd }) {
   const SITE_NAME = "Sofa Hi Sofa.Com";
   const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80";
-  const DEFAULT_DESC = "Shop handcrafted luxury sofas, recliners, beds & dining sets direct from factory. 10-Year Warranty, 200+ custom fabrics & Free Pan-India Delivery.";
+  const DEFAULT_DESC = "Shop handcrafted luxury sofas, recliners, beds & dining sets direct from factory. 10-Year Frame Warranty, 200+ custom fabrics & Free Delivery in All Over India.";
 
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | Buy Premium Sofas Online India`;
   const metaDesc = description || DEFAULT_DESC;

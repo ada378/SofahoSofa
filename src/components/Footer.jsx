@@ -50,10 +50,6 @@ export default function Footer() {
               <FiMail className="text-brand-terracotta mt-0.5 text-sm flex-shrink-0" />
               <span className="font-bold flex-shrink-0">Support Email:</span>
               <span className="flex flex-wrap gap-x-2 gap-y-1">
-                <a href="mailto:info@sofahisofa.com" className="text-brand-terracotta font-semibold hover:underline">
-                  info@sofahisofa.com
-                </a>
-                <span className="text-brand-muted">•</span>
                 <a href="mailto:gautam76@mail.ru" className="text-brand-terracotta font-semibold hover:underline">
                   gautam76@mail.ru
                 </a>
@@ -128,7 +124,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <FiTruck className="text-brand-terracotta text-sm" />
-              <span>Free Pan-India Installation</span>
+              <span>Free Delivery in All Over India</span>
             </li>
             <li className="flex items-center gap-2">
               <FiCreditCard className="text-brand-terracotta text-sm" />
@@ -144,6 +140,8 @@ export default function Footer() {
           <p>© 2026 Sofa Hi Sofa.Com. All Rights Reserved | Web Tech Illusion</p>
 
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
+            <span className="font-bold text-brand-forest text-[11px] w-full sm:w-auto">🚚 Free Delivery in All Over India</span>
+            <span className="text-brand-muted hidden sm:inline">•</span>
             <span className="font-semibold text-brand-charcoal text-[11px] w-full sm:w-auto">🔒 100% Safe Checkout:</span>
             <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">UPI</span>
             <span className="bg-white px-2 py-0.5 rounded border border-brand-sand text-brand-charcoal font-semibold text-[10px]">Cards</span>

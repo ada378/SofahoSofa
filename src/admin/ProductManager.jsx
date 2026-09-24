@@ -490,7 +490,7 @@ function BulkImportModal({ categories, onClose, onImported }) {
         description: "Handcrafted luxury velvet sofa with 100% solid sheesham wood frame.",
         shortDescription: "Luxury 3-Seater Velvet Sofa",
         material: "Sheesham Wood & Velvet",
-        warranty: "10 Year Warranty",
+        warranty: "10 Year Frame Warranty",
         isBestSeller: true,
         images: [{ url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc", alt: "Velvet 3 Seater Sofa" }]
       }

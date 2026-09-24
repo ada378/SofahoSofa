@@ -39,7 +39,7 @@ export default function FAQSection() {
             Buy Luxury Furniture Direct From Factory
           </h2>
           <p className="text-brand-muted text-xs sm:text-sm mt-2">
-            Custom sofas, solid wood beds, dining sets & motorized recliners — 10-Year Warranty, Free Pan-India Delivery.
+            Custom sofas, solid wood beds, dining sets & motorized recliners — 10-Year Frame Warranty, Free Delivery in All Over India.
           </p>
         </div>
 

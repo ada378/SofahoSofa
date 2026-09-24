@@ -635,7 +635,7 @@ export const trustPillars = [
     icon: "factory",
   },
   {
-    title: "10-Year Warranty & Termite Shield",
+    title: "10-Year Frame Warranty & Termite Shield",
     desc: "Complete structural coverage and lifetime anti-termite guarantee for total peace of mind.",
     icon: "shield",
   },
@@ -645,8 +645,8 @@ export const trustPillars = [
     icon: "swatch",
   },
   {
-    title: "Free White-Glove Installation",
-    desc: "Pan-India delivery with certified technicians handling unboxing, setup, and trash removal.",
+    title: "Free Delivery in All Over India",
+    desc: "Pan-India free delivery with certified technicians handling unboxing, setup, and trash removal.",
     icon: "truck",
   },
   {
@@ -721,7 +721,7 @@ export const faqs = [
     a: "We use kiln-dried Sheesham (Indian Rosewood), Teak, and Hardwood for all bed frames and sofa structures. Every piece includes lifetime anti-termite treatment. Our solid wood beds come with a 15-Year Warranty — no MDF, no particle board.",
   },
   {
-    q: "How does the 10-Year Warranty and free delivery work?",
+    q: "How does the 10-Year Frame Warranty and free delivery work?",
     a: "Our 10-Year Frame Warranty covers the solid hardwood structure, anti-sag spring mechanisms, and all joints. Free White-Glove Delivery means our team brings the furniture inside your room, assembles it completely, tests all recliner motors, and removes all packaging — across 19,000+ pincodes in India.",
   },
   {

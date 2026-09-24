@@ -67,7 +67,7 @@ export default function ProductListing() {
         slug: "all",
         description: "Explore handcrafted solid wood sofas, recliners, beds, and dining sets.",
         metaTitle: "All Furniture Collections | Buy Online | Sofa Hi Sofa",
-        metaDescription: "Shop our full range of handcrafted luxury furniture. 10-Year Warranty, 200+ fabrics & Free Pan-India Delivery.",
+        metaDescription: "Shop our full range of handcrafted luxury furniture. 10-Year Frame Warranty, 200+ fabrics & Free Delivery in All Over India.",
       });
       return;
     }
@@ -162,7 +162,7 @@ export default function ProductListing() {
   const seoTitle = currentCategory?.metaTitle
     || `${currentCategory?.name || "Collections"} | Buy Online | Sofa Hi Sofa`;
   const seoDesc = currentCategory?.metaDescription
-    || `Explore our luxury collection of ${currentCategory?.name || "furniture"}. Solid wood frame, 200+ bespoke fabric swatches, 10-Year Warranty & Free Pan-India Delivery.`;
+    || `Explore our luxury collection of ${currentCategory?.name || "furniture"}. Solid wood frame, 200+ bespoke fabric swatches, 10-Year Frame Warranty & Free Delivery in All Over India.`;
   const seoCanonical = `https://www.thesofahisofa.com/collections/${isAll ? "all" : slug}`;
 
   const breadcrumbJsonLd = {
@@ -216,8 +216,8 @@ export default function ProductListing() {
           <div className="flex items-center gap-3 bg-brand-cream/80 p-3 rounded-2xl border border-brand-sand text-xs text-brand-charcoal">
             <span className="text-2xl">🛡️</span>
             <div>
-              <p className="font-bold">10-Year Warranty</p>
-              <p className="text-brand-muted text-[11px]">Free White-Glove Installation</p>
+              <p className="font-bold">10-Year Frame Warranty</p>
+              <p className="text-brand-muted text-[11px]">Free Delivery in All Over India</p>
             </div>
           </div>
         </div>

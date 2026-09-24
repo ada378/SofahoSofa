@@ -314,7 +314,7 @@ export default function ProductDetail() {
   // ── SEO — use product's own metaTitle/metaDescription if set, else auto-generate ──
   const seoTitle = product.metaTitle || `${product.name} | Buy Online India | Sofa Hi Sofa`;
   const seoDesc = product.metaDescription || product.shortDescription
-    || `Buy ${product.name} online in India. Solid wood frame, ${product.warranty || "3-Year Warranty"}, free pan-India delivery & 200+ fabric choices.`;
+    || `Buy ${product.name} online in India. Solid wood frame, ${product.warranty || "10-Year Frame Warranty"}, free delivery in all over India & 200+ fabric choices.`;
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -407,7 +407,7 @@ export default function ProductDetail() {
                   </span>
                 </div>
                 <p className="text-[11px] text-brand-forest font-semibold mt-1">
-                  ✓ Free White-Glove Pan-India Installation · GST Included
+                  ✓ Free Delivery in All Over India · Free Installation · GST Included
                 </p>
               </div>
 

@@ -39,11 +39,11 @@ export default function Header({ onOpenSearch }) {
           {/* Left Info Message */}
           <div className="flex items-center gap-1.5 min-w-0 flex-1 truncate">
             <span className="bg-brand-forest text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full uppercase tracking-wider flex-shrink-0 shadow-sm">
-              ✓ Verified
+              🚚 Free Delivery in All Over India
             </span>
             <div className="text-[#1F1A17] font-bold text-[10px] sm:text-xs">
               <span className="hidden sm:inline">100% Solid Wood • </span>
-              <span>10-Year Warranty</span>
+              <span>10-Year Frame Warranty</span>
             </div>
           </div>
 
