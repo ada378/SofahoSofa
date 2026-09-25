@@ -5,6 +5,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useCustomerAuth } from "../context/CustomerAuthContext";
 import api from "../api/axios";
 import cache from "../api/cache";
+import { FiPhoneCall } from "react-icons/fi";
 
 export default function Header({ onOpenSearch }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -258,6 +259,9 @@ export default function Header({ onOpenSearch }) {
               <span className="w-2 h-2 rounded-full bg-brand-forest animate-pulse" />
               10-Year Solid Hardwood Warranty
             </span>
+            <Link to="/contact" className="text-brand-terracotta hover:underline font-bold text-xs flex items-center gap-1">
+              <FiPhoneCall className="text-sm" /> Contact Us
+            </Link>
           </div>
         </div>
       </div>
@@ -297,6 +301,13 @@ export default function Header({ onOpenSearch }) {
             >
               <span>📞 Helpline: +91 7800001198</span>
             </a>
+            <Link
+              to="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full p-2.5 text-center text-xs font-bold text-brand-terracotta flex items-center justify-center gap-2 bg-brand-terracotta/10 rounded-xl border border-brand-terracotta/20"
+            >
+              <span>📍 Contact Us & Showroom</span>
+            </Link>
           </div>
         </div>
       )}

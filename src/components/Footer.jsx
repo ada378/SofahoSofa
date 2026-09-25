@@ -82,7 +82,7 @@ export default function Footer() {
         {/* Col 4: Bespoke Services */}
         <div className="space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-widest text-brand-charcoal border-b border-brand-sand pb-1.5">
-            Collections
+            Quick Links
           </h4>
           <ul className="space-y-2 text-xs text-brand-charcoal/80 font-medium">
             <li>
@@ -103,6 +103,11 @@ export default function Footer() {
             <li>
               <Link to="/collections/dining-sets" className="hover:text-brand-terracotta transition-colors">
                 Dining Sets
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-brand-terracotta transition-colors font-semibold text-brand-terracotta">
+                📍 Contact Us & Showroom
               </Link>
             </li>
           </ul>
@@ -134,10 +139,29 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Map CTA Strip */}
+      <div className="border-t border-brand-sand bg-brand-sand/30 py-4 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-xs text-brand-charcoal/80">
+            <FiMapPin className="text-brand-terracotta flex-shrink-0" />
+            <span>Khasra 491-492, Kisan Path, Churahya, Lucknow, UP — 226501</span>
+          </div>
+          <a
+            href="https://maps.google.com/?q=The+Sofa+hi+Sofa+com+Lucknow"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-brand-terracotta text-white text-xs font-bold px-5 py-2 rounded-full hover:bg-brand-terracottaDark transition-colors whitespace-nowrap"
+          >
+            <FiMapPin className="flex-shrink-0" />
+            Get Directions
+          </a>
+        </div>
+      </div>
+
       {/* Bottom Legal & Secure Payment Bar */}
       <div className="border-t border-brand-sand/80 bg-brand-sand/50 py-5 text-brand-charcoal/70 text-[11px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <p>© 2026 Sofa Hi Sofa.Com. All Rights Reserved | Web Tech Illusion</p>
+          <p>© 2026 Sofa Hi Sofa.Com. All Rights Reserved. | Web Tech Illusion</p>
 
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
             <span className="font-bold text-brand-forest text-[11px] w-full sm:w-auto">🚚 Free Delivery in All Over India</span>

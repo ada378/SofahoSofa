@@ -395,7 +395,6 @@ export default function ProductDetail() {
           <div className="lg:col-span-5 space-y-4 sm:space-y-6">
             <div className="bg-white rounded-3xl p-4 sm:p-6 md:p-8 border border-brand-sand shadow-subtle space-y-4 sm:space-y-6">
               <div>
-                <span className="text-brand-terracotta text-xs font-bold uppercase tracking-widest">{product.subCategory}</span>
                 <h1 className="font-display text-xl sm:text-2xl md:text-3xl text-brand-charcoal font-bold mt-1 leading-tight">{product.name}</h1>
                 <p className="text-brand-muted text-xs sm:text-sm mt-2 leading-relaxed">{product.shortDescription}</p>
               </div>

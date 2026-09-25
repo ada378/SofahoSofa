@@ -22,6 +22,8 @@ import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { UnifiedAuthProvider, useAdminAuth, useSeoAuth, useAuth } from "./context/UnifiedAuthContext";
 
+import Contact from "./pages/Contact";
+
 // Customer auth pages
 import CustomerLogin from "./pages/CustomerLogin";
 import CustomerRegister from "./pages/CustomerRegister";
@@ -124,6 +126,7 @@ function StoreShell() {
               <Route path="/register" element={<CustomerRegister />} />
               <Route path="/account" element={<RequireCustomer><CustomerAccount /></RequireCustomer>} />
               <Route path="/my-orders" element={<RequireCustomer><CustomerAccount /></RequireCustomer>} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </main>

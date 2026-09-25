@@ -320,7 +320,7 @@ export default function ProductListing() {
 
             {/* Loading Skeletons */}
             {loading && !error && (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 w-full">
                 {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
               </div>
             )}
@@ -342,7 +342,7 @@ export default function ProductListing() {
 
             {/* Product Grid */}
             {!loading && !error && products.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 w-full">
                 {products.map((product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}
@@ -390,7 +390,7 @@ export default function ProductListing() {
                   <h3 className="font-display text-2xl text-brand-charcoal mt-1">Recently Imported</h3>
                   <p className="text-brand-muted text-xs sm:text-sm mt-1">Latest handcrafted furniture added to our collection</p>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 w-full">
                   {recentProducts.map((product) => (
                     <ProductCard key={product._id} product={product} />
                   ))}
