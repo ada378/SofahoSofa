@@ -18,12 +18,12 @@ export default function BespokeStudio() {
               </div>
 
               <h2 className="font-display text-2xl sm:text-3xl lg:text-5xl text-[#1F1A17] font-bold leading-tight">
-                Design Your Dream Sofa, <br className="hidden sm:block" />
-                <span className="text-brand-terracotta">Tailored to Your Living Room</span>
+                Design Your Dream Sofa — <br className="hidden sm:block" />
+                <span className="text-brand-terracotta">Discover Luxury Sofa Sets in Uttar Pradesh</span>
               </h2>
 
               <p className="text-[#3B302A] text-xs sm:text-sm leading-relaxed max-w-lg font-medium">
-                Why settle for standard showroom sizes? Pick your frame silhouette, select your fabric, and customize cushion softness. Delivered direct from our factory in 7-10 days.
+                Engineered with solid seasoned hardwood frames, multi-density cushioning, and stain-resistant designer fabrics, our sofas offer exceptional comfort, durability, and elegant design. As a trusted sofa showroom in UP, we bring premium-quality sofas that are perfect for modern homes, offices, and stylish living spaces.
               </p>
 
               {/* 4 Interactive Configurator Steps */}

@@ -1,7 +1,52 @@
+import { useState } from "react";
 import SEO from "../components/SEO";
-import { FiMapPin, FiPhoneCall, FiMail, FiClock, FiPhone, FiHome } from "react-icons/fi";
+import api from "../api/axios";
+import { FiMapPin, FiPhoneCall, FiMail, FiClock, FiPhone, FiHome, FiUser, FiChevronDown, FiCheckCircle } from "react-icons/fi";
+
+const REQUIREMENTS = [
+  "Sofa Set",
+  "L-Shape Sofa",
+  "Recliner",
+  "Solid Wood Bed",
+  "Dining Table Set",
+  "Accent Chair",
+  "Center Table",
+  "Other",
+];
 
 export default function Contact() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [requirement, setRequirement] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!name.trim()) return setError("Please enter your name");
+    if (!/^[6-9]\d{9}$/.test(phone)) return setError("Please enter a valid 10-digit mobile number");
+    if (!requirement) return setError("Please select your requirement");
+
+    setLoading(true);
+    try {
+      await api.post("/leads", {
+        name: name.trim(),
+        phone: phone.trim(),
+        requirement,
+        source: "contact-form",
+      });
+      setSuccess(true);
+      setName(""); setPhone(""); setRequirement("");
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to submit. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <SEO
@@ -26,7 +71,7 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* Contact Cards + Map Grid */}
+          {/* Main Grid */}
           <div className="grid lg:grid-cols-2 gap-6">
 
             {/* Left — Contact Info */}
@@ -64,16 +109,13 @@ export default function Contact() {
                   <h2 className="font-bold text-brand-charcoal text-sm">Call / WhatsApp</h2>
                   <div className="mt-1 space-y-1.5">
                     <a href="tel:+919810926762" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
-                      <FiPhone className="text-brand-terracotta flex-shrink-0" />
-                      +91 98109 26762
+                      <FiPhone className="flex-shrink-0" /> +91 98109 26762
                     </a>
                     <a href="tel:+917800001200" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
-                      <FiPhone className="text-brand-terracotta flex-shrink-0" />
-                      +91 78000 01200
+                      <FiPhone className="flex-shrink-0" /> +91 78000 01200
                     </a>
                     <a href="tel:+917800001198" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
-                      <FiPhone className="text-brand-terracotta flex-shrink-0" />
-                      +91 78000 01198
+                      <FiPhone className="flex-shrink-0" /> +91 78000 01198
                     </a>
                   </div>
                   <a
@@ -115,36 +157,142 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Right — Google Map */}
-            <div className="rounded-2xl overflow-hidden border border-brand-sand shadow-subtle h-[400px] lg:h-auto min-h-[400px]">
-              <iframe
-                title="Sofa Hi Sofa Factory Showroom Location Lucknow"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3384.686801633626!2d81.06504867522065!3d26.812077376707308!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399be34148721e81%3A0x1e3563abab93adb!2sThe%20Sofa%20hi%20Sofa%20com!5e1!3m2!1sen!2sin!4v1790349717525!5m2!1sen!2sin"
-                width="100%"
-                height="100%"
-                style={{ border: 0, minHeight: "400px" }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
+            {/* Right — Enquiry Form + Map */}
+            <div className="space-y-4">
+
+              {/* Enquiry Form */}
+              <div className="bg-white rounded-2xl border border-brand-sand p-6 sm:p-8 shadow-subtle">
+                <h2 className="font-display text-xl font-bold text-brand-charcoal mb-1">Send an Enquiry</h2>
+                <p className="text-brand-muted text-xs mb-5">Fill the form — we'll call you back within 30 minutes.</p>
+
+                {success ? (
+                  <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
+                    <FiCheckCircle className="text-green-500 text-5xl" />
+                    <h3 className="font-display text-xl font-bold text-brand-charcoal">Thank You!</h3>
+                    <p className="text-brand-muted text-sm">We've received your enquiry and will contact you shortly.</p>
+                    <button
+                      onClick={() => setSuccess(false)}
+                      className="mt-2 text-xs font-semibold text-brand-terracotta hover:underline"
+                    >
+                      Submit another enquiry
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {error && (
+                      <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-xs font-semibold">
+                        {error}
+                      </div>
+                    )}
+
+                    {/* Name */}
+                    <div>
+                      <label className="block text-xs font-bold text-brand-charcoal mb-1.5">
+                        Your Name <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted text-sm" />
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="Enter your full name"
+                          className="w-full pl-9 pr-4 py-3 border border-brand-sand rounded-xl text-sm text-brand-charcoal focus:border-brand-terracotta focus:outline-none focus:ring-1 focus:ring-brand-terracotta transition-all"
+                          disabled={loading}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <label className="block text-xs font-bold text-brand-charcoal mb-1.5">
+                        Mobile Number <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted text-sm" />
+                        <input
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                          placeholder="10-digit mobile number"
+                          maxLength="10"
+                          className="w-full pl-9 pr-4 py-3 border border-brand-sand rounded-xl text-sm text-brand-charcoal focus:border-brand-terracotta focus:outline-none focus:ring-1 focus:ring-brand-terracotta transition-all"
+                          disabled={loading}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Requirement Dropdown */}
+                    <div>
+                      <label className="block text-xs font-bold text-brand-charcoal mb-1.5">
+                        What are you looking for? <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted text-sm pointer-events-none" />
+                        <select
+                          value={requirement}
+                          onChange={(e) => setRequirement(e.target.value)}
+                          className="w-full appearance-none px-4 py-3 border border-brand-sand rounded-xl text-sm text-brand-charcoal focus:border-brand-terracotta focus:outline-none focus:ring-1 focus:ring-brand-terracotta transition-all bg-white cursor-pointer"
+                          disabled={loading}
+                        >
+                          <option value="">— Select your requirement —</option>
+                          {REQUIREMENTS.map((r) => (
+                            <option key={r} value={r}>{r}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white font-bold py-3.5 rounded-xl text-sm transition-all disabled:opacity-50 shadow-floating"
+                    >
+                      {loading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Submitting...
+                        </span>
+                      ) : "Send Enquiry →"}
+                    </button>
+
+                    <p className="text-[11px] text-center text-brand-muted">
+                      By submitting, you agree to receive updates via WhatsApp & SMS
+                    </p>
+                  </form>
+                )}
+              </div>
+
+              {/* Google Map */}
+              <div className="rounded-2xl overflow-hidden border border-brand-sand shadow-subtle h-[300px]">
+                <iframe
+                  title="Sofa Hi Sofa Factory Showroom Location Lucknow"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3384.686801633626!2d81.06504867522065!3d26.812077376707308!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399be34148721e81%3A0x1e3563abab93adb!2sThe%20Sofa%20hi%20Sofa%20com!5e1!3m2!1sen!2sin!4v1790349717525!5m2!1sen!2sin"
+                  width="100%" height="100%"
+                  style={{ border: 0, display: "block" }}
+                  allowFullScreen="" loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Quick Message CTA */}
+          {/* WhatsApp CTA */}
           <div className="bg-brand-charcoal rounded-3xl p-6 sm:p-10 text-center text-white">
             <h2 className="font-display text-2xl sm:text-3xl font-bold">Ready to Order or Have a Question?</h2>
             <p className="text-white/70 text-sm mt-2">WhatsApp is the fastest way to reach us — we respond in minutes.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
               <a
                 href="https://wa.me/919810926762?text=Hi! I want to know more about your sofas and furniture."
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_blank" rel="noopener noreferrer"
                 className="bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-8 py-3 rounded-full text-sm transition-colors flex items-center justify-center gap-2"
               >
                 💬 WhatsApp Us Now
               </a>
-              <a
-                href="tel:+919810926762"
+              <a href="tel:+919810926762"
                 className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3 rounded-full text-sm transition-colors"
               >
                 📞 Call +91 98109 26762

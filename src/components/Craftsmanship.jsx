@@ -34,10 +34,10 @@ export default function Craftsmanship() {
             Engineering Excellence
           </span>
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-brand-charcoal mt-1">
-            Built for Generations, Not Just Seasons
+            Premium Furniture in Lucknow for Timeless Comfort.
           </h2>
           <p className="text-brand-muted text-xs sm:text-sm mt-2">
-            Peek under the upholstery. Here is why our sofas outlive standard showroom furniture by 3X.
+            Discover why we're the best sofa showroom in Lucknow, built for lasting comfort and quality.
           </p>
         </div>
 

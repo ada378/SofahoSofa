@@ -89,7 +89,7 @@ export default function Hero() {
             Discover Stylish & Comfortable Sofa Sets in Lucknow
           </h1>
           <p className="text-white/90 text-xs sm:text-base font-medium drop-shadow leading-snug max-w-xl">
-            Crafted to add elegance and comfort to your living space — The Sofa Hi Sofa
+            Crafted to add elegance and comfort to your living space — The Sofa Hi Sofa, your trusted sofa showroom in Lucknow.
           </p>
         </div>
 

@@ -118,6 +118,9 @@ export default function LeadManager() {
                   Source
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
+                  Requirement
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-4 text-right text-xs font-semibold text-gray-300 uppercase tracking-wider">
@@ -128,7 +131,7 @@ export default function LeadManager() {
             <tbody className="divide-y divide-gray-800">
               {leads.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-12 text-center text-gray-400">
+                  <td colSpan="7" className="px-6 py-12 text-center text-gray-400">
                     No leads found
                   </td>
                 </tr>
@@ -153,6 +156,15 @@ export default function LeadManager() {
                       <span className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded-full">
                         {lead.source}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {lead.requirement ? (
+                        <span className="text-xs px-2 py-1 bg-[#C86A3B]/20 text-[#C86A3B] rounded-full font-semibold">
+                          {lead.requirement}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-gray-500">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <select

@@ -36,7 +36,7 @@ export default function FAQSection() {
             Sofa · Beds · Dining · Recliners
           </span>
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-brand-charcoal mt-1">
-            Buy Luxury Furniture Direct From Factory
+            Discover premium L Shape Sofa in Kanpur, crafted for style and comfort
           </h2>
           <p className="text-brand-muted text-xs sm:text-sm mt-2">
             Custom sofas, solid wood beds, dining sets & motorized recliners — 10-Year Frame Warranty, Free Delivery in All Over India.
