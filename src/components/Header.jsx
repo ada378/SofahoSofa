@@ -262,6 +262,9 @@ export default function Header({ onOpenSearch }) {
             <Link to="/contact" className="text-brand-terracotta hover:underline font-bold text-xs flex items-center gap-1">
               <FiPhoneCall className="text-sm" /> Contact Us
             </Link>
+            <Link to="/blog" className="text-brand-charcoal hover:text-brand-terracotta font-bold text-xs flex items-center gap-1">
+              Blog
+            </Link>
           </div>
         </div>
       </div>

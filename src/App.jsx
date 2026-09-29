@@ -24,6 +24,8 @@ import { UnifiedAuthProvider, useAdminAuth, useSeoAuth, useAuth } from "./contex
 
 import Contact from "./pages/Contact";
 
+import BlogManager from "./admin/BlogManager";
+
 // Customer auth pages
 import CustomerLogin from "./pages/CustomerLogin";
 import CustomerRegister from "./pages/CustomerRegister";
@@ -38,6 +40,9 @@ import CategoryManager from "./admin/CategoryManager";
 import OrderManager from "./admin/OrderManager";
 import UserManager from "./admin/UserManager";
 import LeadManager from "./admin/LeadManager";
+
+import BlogListing from "./pages/BlogListing";
+import BlogDetail from "./pages/BlogDetail";
 
 // SEO auth & pages
 import SeoLogin from "./pages/SeoLogin";
@@ -127,6 +132,8 @@ function StoreShell() {
               <Route path="/account" element={<RequireCustomer><CustomerAccount /></RequireCustomer>} />
               <Route path="/my-orders" element={<RequireCustomer><CustomerAccount /></RequireCustomer>} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/blog" element={<BlogListing />} />
+              <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </main>
@@ -177,6 +184,7 @@ export default function App() {
           <Route path="orders" element={<OrderManager />} />
           <Route path="users" element={<UserManager />} />
           <Route path="leads" element={<LeadManager />} />
+          <Route path="blogs" element={<BlogManager />} />
           {/* SEO panel is embedded inside admin layout for Admin user */}
           <Route path="seo" element={<SeoPanel embedded />} />
         </Route>

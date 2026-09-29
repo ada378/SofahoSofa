@@ -110,6 +110,11 @@ export default function Footer() {
                 📍 Contact Us & Showroom
               </Link>
             </li>
+            <li>
+              <Link to="/blog" className="hover:text-brand-terracotta transition-colors">
+                📝 Blog & Guides
+              </Link>
+            </li>
           </ul>
         </div>
 
