@@ -275,7 +275,7 @@ export default function Cart() {
                             <Link to={`/product/${item.product.slug}`} className="font-semibold text-sm text-brand-charcoal hover:text-brand-terracotta line-clamp-1 break-words">
                               {item.product.name}
                             </Link>
-                            <p className="text-xs text-brand-muted mt-0.5">{item.product.material}</p>
+                            <p className="text-xs text-brand-muted mt-0.5">{item.product.shortDescription || item.product.material}</p>
                             <div className="flex gap-1.5 mt-1 text-[11px] text-brand-muted">
                               <span className="bg-white px-2 py-0.5 rounded-md border border-brand-sand font-medium">Color: {item.selectedFabric}</span>
                               <span className="bg-white px-2 py-0.5 rounded-md border border-brand-sand font-medium">Size: {item.selectedSize}</span>

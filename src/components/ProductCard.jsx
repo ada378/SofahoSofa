@@ -43,7 +43,7 @@ export default function ProductCard({ product }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Top Image Container — aspect-square on all sizes, bigger on mobile */}
-      <Link to={`/product/${product.slug}`} className="block relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-white w-full min-h-[260px] sm:min-h-0">
+      <Link to={`/product/${product.slug}`} className="block relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-white w-full min-h-[420px] sm:min-h-0">
         <img
           src={trimCloudinaryUrl(isHovered ? secondaryImage : activeImage)}
           alt={product.name}
@@ -111,7 +111,7 @@ export default function ProductCard({ product }) {
             </h3>
           </Link>
           <p className="text-[11px] sm:text-xs text-brand-muted line-clamp-1 mt-0.5 hidden sm:block w-full">
-            {product.material}
+            {product.shortDescription || product.material}
           </p>
         </div>
 
