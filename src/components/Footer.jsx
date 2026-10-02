@@ -106,13 +106,13 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-brand-terracotta transition-colors font-semibold text-brand-terracotta">
-                📍 Contact Us & Showroom
+              <Link to="/contact" className="hover:text-brand-terracotta transition-colors font-semibold text-brand-terracotta flex items-center gap-1.5">
+                <FiMapPin className="text-brand-terracotta" /> Contact Us & Showroom
               </Link>
             </li>
             <li>
-              <Link to="/blog" className="hover:text-brand-terracotta transition-colors">
-                📝 Blog & Guides
+              <Link to="/blog" className="hover:text-brand-terracotta transition-colors flex items-center gap-1.5">
+                <FiMail /> Blog & Guides
               </Link>
             </li>
           </ul>

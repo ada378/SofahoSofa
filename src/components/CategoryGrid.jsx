@@ -2,40 +2,33 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
 import cache from "../api/cache";
-import { 
-  FiHome, 
-  FiSquare, 
-  FiBox, 
-  FiClock, 
-  FiGrid,
-  FiLayers,
-  FiCircle
-} from "react-icons/fi";
 
-const CATEGORY_ICONS = {
-  "sofa":            <FiHome />,
-  "sofa-sets":       <FiHome />,
-  "l-shape-sofas":   <FiLayers />,
-  "bed":             <FiSquare />,
-  "solid-wood-beds": <FiSquare />,
-  "recliner":        <FiBox />,
-  "recliners":       <FiBox />,
-  "dining-table":    <FiGrid />,
-  "dining-sets":     <FiGrid />,
-  "chair":           <FiCircle />,
-  "accent-chairs":   <FiCircle />,
-  "center-table":    <FiGrid />,
-  "side-table":      <FiGrid />,
-  "wall-clock":      <FiClock />,
-  "mirror":          <FiSquare />,
+const CATEGORY_IMAGES = {
+  "sofa":            "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=150&q=80",
+  "sofa-sets":       "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=150&q=80",
+  "l-shape-sofas":   "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=150&q=80",
+  "bed":             "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=150&q=80",
+  "solid-wood-beds": "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=150&q=80",
+  "recliner":        "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=150&q=80",
+  "recliners":       "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=150&q=80",
+  "dining":          "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=150&q=80",
+  "dining-table":    "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=150&q=80",
+  "dining-sets":     "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=150&q=80",
+  "chair":           "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=150&q=80",
+  "accent-chairs":   "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=150&q=80",
+  "center-table":    "https://images.unsplash.com/photo-1532372320572-cda25653a26d?auto=format&fit=crop&w=150&q=80",
+  "side-table":      "https://images.unsplash.com/photo-1532372320572-cda25653a26d?auto=format&fit=crop&w=150&q=80",
+  "wall-clock":      "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=150&q=80",
+  "watches-and-clocks": "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=150&q=80",
+  "mirror":          "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=150&q=80",
 };
 
-const DEFAULT_ICON = <FiHome />;
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=150&q=80";
 
 function SkeletonCard() {
   return (
     <div className="bg-white rounded-2xl p-3 border border-brand-sand animate-pulse flex flex-col items-center gap-2">
-      <div className="w-14 h-14 rounded-xl bg-brand-sand" />
+      <div className="w-14 h-14 rounded-full bg-brand-sand" />
       <div className="h-3 bg-brand-sand rounded w-3/4" />
     </div>
   );
@@ -83,27 +76,21 @@ export default function CategoryGrid() {
           {loading
             ? Array.from({ length: 9 }).map((_, i) => <SkeletonCard key={i} />)
             : categories.map((c) => {
-                const icon = CATEGORY_ICONS[c.slug] || DEFAULT_ICON;
+                const imageUrl = c.image?.url || CATEGORY_IMAGES[c.slug] || DEFAULT_IMAGE;
                 return (
                   <Link
                     key={c.slug}
                     to={`/collections/${c.slug}`}
                     className="group flex flex-col items-center text-center bg-white rounded-2xl p-3 sm:p-4 border border-brand-sand/80 hover:border-brand-terracotta shadow-subtle hover:shadow-cardHover transition-all duration-300"
                   >
-                    {c.image?.url ? (
-                      <div className="w-full aspect-square rounded-xl overflow-hidden bg-brand-sand/40 mb-2">
-                        <img
-                          src={c.image.url}
-                          alt={c.image.alt || c.name}
-                          loading="lazy"
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-brand-porcelain group-hover:bg-brand-cream flex items-center justify-center mb-2 transition-colors text-brand-terracotta text-3xl sm:text-4xl">
-                        {icon}
-                      </div>
-                    )}
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-brand-sand/40 mb-2 border border-brand-sand group-hover:border-brand-terracotta transition-colors">
+                      <img
+                        src={imageUrl}
+                        alt={c.image?.alt || c.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
                     <h3 className="font-semibold text-[11px] sm:text-xs text-brand-charcoal group-hover:text-brand-terracotta transition-colors leading-tight">
                       {c.name}
                     </h3>
