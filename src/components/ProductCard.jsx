@@ -151,7 +151,9 @@ export default function ProductCard({ product }) {
                 ₹{product.price.toLocaleString("en-IN")}
               </span>
             </div>
-            <p className="text-[9px] sm:text-[10px] text-brand-forest font-semibold leading-tight truncate">10-Yr Frame Warranty</p>
+            <p className="text-[9px] sm:text-[10px] text-brand-forest font-semibold leading-tight truncate">
+              {product.category?.slug !== 'dining' && product.category?.slug !== 'dining-table' && product.category?.slug !== 'chair' && product.category?.slug !== 'accent-chairs' ? '10-Yr Frame Warranty' : ''}
+            </p>
           </div>
 
           {/* Mobile Quick Add Button */}

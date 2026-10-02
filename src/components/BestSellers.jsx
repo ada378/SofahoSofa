@@ -58,7 +58,7 @@ export default function BestSellers() {
           <span className="text-brand-terracotta text-xs font-bold uppercase tracking-widest">Loved by 25,000+ Indian Homes</span>
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-brand-charcoal mt-1">Curated Bestsellers</h2>
           <p className="text-brand-muted text-xs sm:text-sm mt-2">
-            Latest handcrafted designs, premium quality — your trusted sofa manufacturer in Kanpur.
+            Latest handcrafted designs, premium quality — your trusted sofa manufacturer in Lucknow.
           </p>
         </div>
 

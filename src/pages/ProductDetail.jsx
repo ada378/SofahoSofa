@@ -462,12 +462,18 @@ export default function ProductDetail() {
               </div>
 
               {/* Trust Grid */}
-              <div className="pt-4 border-t border-brand-sand grid grid-cols-2 gap-2 sm:gap-3 text-[11px] sm:text-xs text-brand-charcoal/80 font-medium">
-                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🛡️</span><span>10-Year Frame Warranty</span></div>
-                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🪵</span><span>Oak, Ash, Pine &amp; Tropical Woods</span></div>
-                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🚚</span><span>Free In-Room Placement</span></div>
-                <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">💳</span><span>0% No-Cost EMI Available</span></div>
-              </div>
+              {(() => {
+                const catSlug = product.category?.slug || '';
+                const isDiningOrChair = catSlug.includes('dining') || catSlug.includes('chair') || catSlug.includes('accent');
+                return (
+                  <div className="pt-4 border-t border-brand-sand grid grid-cols-2 gap-2 sm:gap-3 text-[11px] sm:text-xs text-brand-charcoal/80 font-medium">
+                    {!isDiningOrChair && <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🛡️</span><span>10-Year Frame Warranty</span></div>}
+                    <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🪵</span><span>Oak, Ash, Pine &amp; Tropical Woods</span></div>
+                    <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">🚚</span><span>Free In-Room Placement</span></div>
+                    <div className="flex items-center gap-1.5 sm:gap-2"><span className="text-base sm:text-lg">💳</span><span>0% No-Cost EMI Available</span></div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>
