@@ -134,6 +134,16 @@ function StoreShell() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/blog" element={<BlogListing />} />
               <Route path="/blog/:slug" element={<BlogDetail />} />
+
+              {/* ── 301 equivalent redirects for old URLs ── */}
+              <Route path="/collections/sofa-sets" element={<Navigate to="/collections/sofa" replace />} />
+              <Route path="/collections/beds" element={<Navigate to="/collections/bed" replace />} />
+              <Route path="/collections/accent-chairs" element={<Navigate to="/collections/chair" replace />} />
+              <Route path="/collections/dining-sets" element={<Navigate to="/collections/dining-table" replace />} />
+              <Route path="/collections/dining" element={<Navigate to="/collections/dining-table" replace />} />
+              <Route path="/collections/l-shape-sofas" element={<Navigate to="/collections/sofa" replace />} />
+              <Route path="/collections/recliners" element={<Navigate to="/collections/sofa" replace />} />
+              <Route path="/collections/all" element={<Navigate to="/collections" replace />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </main>

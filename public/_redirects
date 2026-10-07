@@ -1,1 +1,12 @@
+# ── 301 Permanent Redirects — Old URLs → Current URLs ────────────────────────
+/collections/sofa-sets          /collections/sofa           301
+/collections/beds               /collections/bed            301
+/collections/accent-chairs      /collections/chair          301
+/collections/dining-sets        /collections/dining-table   301
+/collections/dining             /collections/dining-table   301
+/collections/l-shape-sofas      /collections/sofa           301
+/collections/recliners          /collections/sofa           301
+/collections/all                /collections                301
+
+# ── SPA Fallback ──────────────────────────────────────────────────────────────
 /*    /index.html   200

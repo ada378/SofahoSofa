@@ -2,7 +2,7 @@ export const categories = [
   {
     id: "sofas",
     name: "Sofa Sets",
-    slug: "sofa-sets",
+    slug: "sofa",
     tagline: "3-Seater, 2-Seater & Modular Sofas",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881841/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_61.png",
     itemCount: "42+ Designs",
@@ -10,7 +10,7 @@ export const categories = [
   {
     id: "l-shape",
     name: "L-Shape Sofas",
-    slug: "l-shape-sofas",
+    slug: "sofa",
     tagline: "Spacious Sectionals with Chaise",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881848/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_65.png",
     itemCount: "28+ Designs",
@@ -26,7 +26,7 @@ export const categories = [
   {
     id: "beds",
     name: "Solid Wood Beds",
-    slug: "beds",
+    slug: "bed",
     tagline: "Sheesham & Teak King/Queen Beds",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789882024/sofa-hi-sofa/bed/luxury_beds_from_lucknow_Sofahisofa_1.png",
     itemCount: "24+ Designs",
@@ -42,7 +42,7 @@ export const categories = [
   {
     id: "accent-chairs",
     name: "Accent Chairs",
-    slug: "accent-chairs",
+    slug: "chair",
     tagline: "Lounge Chairs, Ottomans & Benches",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881786/sofa-hi-sofa/sofa/Chair_Lucknow_Furniture_Sofahisofa_74.png",
     itemCount: "30+ Designs",

@@ -2,10 +2,26 @@ Options -MultiViews
 RewriteEngine On
 RewriteBase /
 
-# Serve existing files & directories directly (JS, CSS, images, etc.)
+# ── 301 Permanent Redirects — Old URLs to Current URLs ────────────────────────
+
+# Old category slugs → current slugs
+RewriteRule ^collections/sofa-sets/?$        /collections/sofa           [R=301,L]
+RewriteRule ^collections/beds/?$             /collections/bed            [R=301,L]
+RewriteRule ^collections/accent-chairs/?$    /collections/chair          [R=301,L]
+RewriteRule ^collections/dining-sets/?$      /collections/dining-table   [R=301,L]
+RewriteRule ^collections/dining/?$           /collections/dining-table   [R=301,L]
+RewriteRule ^collections/l-shape-sofas/?$    /collections/sofa           [R=301,L]
+RewriteRule ^collections/recliners/?$        /collections/sofa           [R=301,L]
+
+# /collections/all → /collections (show all products)
+RewriteRule ^collections/all/?$             /collections                 [R=301,L]
+
+# /wishlist stays — no redirect
+
+# ── Serve existing files & directories directly ───────────────────────────────
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Send ALL other requests to index.html (React Router handles routing)
+# ── Send ALL other requests to index.html (React Router) ─────────────────────
 RewriteRule ^ /index.html [L]

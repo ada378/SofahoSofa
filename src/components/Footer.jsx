@@ -101,7 +101,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/collections/dining-table-table" className="hover:text-brand-terracotta transition-colors">
+              <Link to="/collections/dining-table" className="hover:text-brand-terracotta transition-colors">
                 Dining Sets
               </Link>
             </li>
