@@ -83,7 +83,7 @@ export default function BestSellers() {
               : (
                 <div className="col-span-full text-center py-10 text-brand-muted text-sm">
                   <p>No bestsellers found in this category yet.</p>
-                  <Link to="/collections/all" className="text-brand-terracotta font-semibold hover:underline mt-2 inline-block">
+                  <Link to="/collections" className="text-brand-terracotta font-semibold hover:underline mt-2 inline-block">
                     Browse All Collections →
                   </Link>
                 </div>
@@ -92,7 +92,7 @@ export default function BestSellers() {
         </div>
 
         <div className="text-center mt-10">
-          <Link to={activeTab === "all" ? "/collections/all" : `/collections/${activeTab}`}
+          <Link to={activeTab === "all" ? "/collections" : `/collections/${activeTab}`}
             className="inline-flex items-center gap-2 bg-brand-porcelain border border-brand-sand hover:border-brand-terracotta hover:text-brand-terracotta text-brand-charcoal px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold transition-all shadow-subtle group">
             <span>Explore All {TABS.find((t) => t.id === activeTab)?.label}</span>
             <span className="group-hover:translate-x-1 transition-transform">→</span>

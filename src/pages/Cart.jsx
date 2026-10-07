@@ -223,7 +223,7 @@ export default function Cart() {
               Discover our handcrafted solid wood sofas, modular L-shape sectionals, motorized recliners, and beds.
             </p>
             <Link
-              to="/collections/all"
+              to="/collections"
               className="inline-block bg-brand-charcoal text-white px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold hover:bg-brand-terracotta transition-colors shadow-subtle"
             >
               Browse Handcrafted Furniture

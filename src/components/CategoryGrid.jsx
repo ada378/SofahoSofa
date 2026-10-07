@@ -65,7 +65,7 @@ export default function CategoryGrid() {
             <span className="text-brand-terracotta text-xs font-bold uppercase tracking-widest">Explore Our Range</span>
             <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-brand-charcoal mt-1">Shop by Category</h2>
           </div>
-          <Link to="/collections/all"
+          <Link to="/collections"
             className="mt-2 sm:mt-0 text-xs sm:text-sm font-semibold text-brand-terracotta hover:text-brand-charcoal transition-colors inline-flex items-center gap-1 group">
             <span>View All</span>
             <span className="group-hover:translate-x-1 transition-transform">→</span>

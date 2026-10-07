@@ -296,7 +296,7 @@ export default function ProductDetail() {
           <div className="w-16 h-16 bg-brand-sand rounded-full flex items-center justify-center mx-auto text-3xl">🔍</div>
           <h2 className="font-display text-2xl text-brand-charcoal">Product Not Found</h2>
           <p className="text-brand-muted text-sm">{error}</p>
-          <button onClick={() => navigate("/collections/all")}
+          <button onClick={() => navigate("/collections")}
             className="bg-brand-charcoal text-white px-6 py-2.5 rounded-full text-xs font-semibold hover:bg-brand-terracotta transition-colors">
             Browse All Collections
           </button>

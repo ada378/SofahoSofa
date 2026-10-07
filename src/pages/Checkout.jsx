@@ -30,7 +30,7 @@ export default function Checkout() {
           <h2 className="font-display text-2xl text-brand-charcoal">No Product Selected</h2>
           <p className="text-brand-muted text-sm">Please select a product first.</p>
           <button
-            onClick={() => navigate("/collections/all")}
+            onClick={() => navigate("/collections")}
             className="bg-brand-charcoal text-white px-6 py-2.5 rounded-full text-xs font-semibold hover:bg-brand-terracotta transition-colors"
           >
             Browse Products

@@ -12,6 +12,7 @@ export default function Wishlist() {
         title="My Wishlist & Saved Furniture | Sofa Hi Sofa"
         description="View your saved handcrafted sofas, modular sectionals, motorized recliners, and beds."
         canonical="https://www.thesofahisofa.com/wishlist"
+        noIndex={true}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -23,7 +24,7 @@ export default function Wishlist() {
             </p>
           </div>
           <Link
-            to="/collections/all"
+            to="/collections"
             className="text-xs sm:text-sm font-semibold text-brand-terracotta hover:underline"
           >
             Continue Browsing Collections →
@@ -40,7 +41,7 @@ export default function Wishlist() {
               Tap the heart icon on any sofa or furniture piece to save it here for later.
             </p>
             <Link
-              to="/collections/sofa-sets"
+              to="/collections/sofa"
               className="inline-block bg-brand-charcoal text-white px-6 py-2.5 rounded-full text-xs font-semibold hover:bg-brand-terracotta transition-colors shadow-subtle"
             >
               Explore Sofas &amp; Furniture

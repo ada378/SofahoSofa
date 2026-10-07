@@ -627,7 +627,7 @@ function CategoriesTab({ showToast }) {
 
             <InputField label="URL Slug" name="slug" value={editing.slug}
               onChange={(e) => setEditing((ed) => ({ ...ed, slug: e.target.value }))}
-              hint="URL path format: /collections/sofa-sets" />
+              hint="URL path format: /collections/sofa" />
             <InputField label="Meta Title" name="metaTitle" value={editing.metaTitle}
               onChange={(e) => setEditing((ed) => ({ ...ed, metaTitle: e.target.value }))} maxLength={60} />
             <InputField label="Meta Description" name="metaDescription" value={editing.metaDescription}

@@ -6,28 +6,28 @@ const rooms = [
     title: "Warm Minimalist Living Room",
     subtitle: "Neutral Bouclé Sofas + Solid Walnut Accents",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881841/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_61.png",
-    link: "/collections/sofa-sets",
+    link: "/collections/sofa",
     tag: "Shop Living Room",
   },
   {
     title: "Spacious Family Entertainment Lounge",
     subtitle: "L-Shape Modular Sectionals + Swivel Recliners",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881848/sofa-hi-sofa/sofa/Chair_Lucknow_Sofa_65.png",
-    link: "/collections/l-shape-sofas",
+    link: "/collections/sofa",
     tag: "Shop Sectionals",
   },
   {
     title: "Sanctuary Master Bedroom",
     subtitle: "Fluted Solid Sheesham King Beds + Storage Benches",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789882024/sofa-hi-sofa/bed/luxury_beds_from_lucknow_Sofahisofa_1.png",
-    link: "/collections/beds",
+    link: "/collections/bed",
     tag: "Shop Bedroom",
   },
   {
     title: "Contemporary Dining & Hosting",
     subtitle: "6-Seater Solid Teak Tables + Cushioned Spindle Chairs",
     image: "https://res.cloudinary.com/dgoe6emli/image/upload/v1789881861/sofa-hi-sofa/dining-table/Dining_set_with_Chair_Lucknow_Sofahisofa_11.png",
-    link: "/collections/dining",
+    link: "/collections/dining-table",
     tag: "Shop Dining",
   },
 ];
@@ -48,7 +48,7 @@ export default function RoomLookbook() {
             </h2>
           </div>
           <Link
-            to="/collections/all"
+            to="/collections"
             className="mt-2 sm:mt-0 text-xs sm:text-sm font-semibold text-brand-terracotta hover:text-brand-charcoal transition-colors inline-flex items-center gap-1 group"
           >
             <span>Explore Complete Lookbook</span>

@@ -117,13 +117,13 @@ export default function BespokeStudio() {
               {/* Action Buttons */}
               <div className="pt-4 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
                 <Link
-                  to="/collections/sofa-sets"
+                  to="/collections/sofa"
                   className="bg-brand-terracotta hover:bg-brand-terracottaDark text-white px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle flex items-center justify-center gap-2"
                 >
                   <span>Shop Sofas</span>
                 </Link>
                 <Link
-                  to="/collections/all"
+                  to="/collections"
                   className="bg-white hover:bg-brand-porcelain text-[#1F1A17] border border-brand-sand px-6 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-subtle text-center"
                 >
                   Browse All Collections

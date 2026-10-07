@@ -65,7 +65,7 @@ export default function Footer() {
           </h4>
           <ul className="space-y-2 text-xs text-brand-charcoal/80 font-medium">
             <li>
-              <Link to="/collections/all" className="hover:text-brand-terracotta text-brand-terracotta font-bold transition-colors">
+              <Link to="/collections" className="hover:text-brand-terracotta text-brand-terracotta font-bold transition-colors">
                 ✨ All Furniture
               </Link>
             </li>
@@ -86,22 +86,22 @@ export default function Footer() {
           </h4>
           <ul className="space-y-2 text-xs text-brand-charcoal/80 font-medium">
             <li>
-              <Link to="/collections/l-shape-sofas" className="hover:text-brand-terracotta transition-colors">
+              <Link to="/collections/sofa" className="hover:text-brand-terracotta transition-colors">
                 L-Shape Sectionals
               </Link>
             </li>
             <li>
-              <Link to="/collections/recliners" className="hover:text-brand-terracotta transition-colors">
+              <Link to="/collections/recliner" className="hover:text-brand-terracotta transition-colors">
                 Motorised Recliners
               </Link>
             </li>
             <li>
-              <Link to="/collections/beds" className="hover:text-brand-terracotta transition-colors">
+              <Link to="/collections/bed" className="hover:text-brand-terracotta transition-colors">
                 Solid Wood Beds
               </Link>
             </li>
             <li>
-              <Link to="/collections/dining-sets" className="hover:text-brand-terracotta transition-colors">
+              <Link to="/collections/dining-table-table" className="hover:text-brand-terracotta transition-colors">
                 Dining Sets
               </Link>
             </li>

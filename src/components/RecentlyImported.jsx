@@ -76,7 +76,7 @@ export default function RecentlyImported() {
         {products.length > 0 && (
           <div className="text-center mt-10">
             <Link
-              to="/collections/all"
+              to="/collections"
               className="inline-flex items-center gap-2 bg-brand-charcoal hover:bg-brand-terracotta text-white px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold transition-all shadow-subtle group"
             >
               <span>View All New Arrivals</span>

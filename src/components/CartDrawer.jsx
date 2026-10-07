@@ -104,7 +104,7 @@ export default function CartDrawer() {
                 <button
                   onClick={() => {
                     closeDrawer();
-                    navigate("/collections/sofa-sets");
+                    navigate("/collections/sofa");
                   }}
                   className="bg-brand-charcoal text-brand-porcelain px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-brand-terracotta transition-colors shadow-subtle"
                 >

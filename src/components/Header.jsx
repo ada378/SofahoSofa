@@ -193,9 +193,9 @@ export default function Header({ onOpenSearch }) {
       {/* Mobile Quick Category Scroll Strip */}
       <div className="lg:hidden border-t border-brand-sand bg-brand-porcelain/90 px-3 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar text-xs font-semibold">
         <Link
-          to="/collections/all"
+          to="/collections"
           className={`px-3 py-1 rounded-full whitespace-nowrap transition-colors ${
-            location.pathname === "/collections/all"
+            location.pathname === "/collections"
               ? "bg-brand-terracotta text-white font-bold"
               : "bg-white text-brand-charcoal border border-brand-sand"
           }`}
@@ -226,9 +226,9 @@ export default function Header({ onOpenSearch }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <nav className="flex items-center gap-7 py-2 text-xs font-semibold tracking-wide">
             <Link
-              to="/collections/all"
+              to="/collections"
               className={`transition-colors py-1 ${
-                location.pathname === "/collections/all"
+                location.pathname === "/collections"
                   ? "text-brand-terracotta font-extrabold border-b-2 border-brand-terracotta"
                   : "text-brand-charcoal hover:text-brand-terracotta font-semibold"
               }`}
@@ -278,7 +278,7 @@ export default function Header({ onOpenSearch }) {
             </p>
             <div className="grid grid-cols-2 gap-2">
               <Link
-                to="/collections/all"
+                to="/collections"
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-2.5 bg-brand-porcelain border border-brand-sand rounded-xl text-xs font-bold text-brand-terracotta flex items-center gap-2"
               >

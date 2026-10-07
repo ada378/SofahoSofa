@@ -163,14 +163,14 @@ export default function ProductListing() {
     || `${currentCategory?.name || "Collections"} | Buy Online | Sofa Hi Sofa`;
   const seoDesc = currentCategory?.metaDescription
     || `Explore our luxury collection of ${currentCategory?.name || "furniture"}. Solid wood frame, 200+ bespoke fabric swatches, 10-Year Frame Warranty & Free Delivery in All Over India.`;
-  const seoCanonical = `https://www.thesofahisofa.com/collections/${isAll ? "all" : slug}`;
+  const seoCanonical = `https://www.thesofahisofa.com/collections/${isAll ? "" : slug}`;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://www.thesofahisofa.com/" },
-      { "@type": "ListItem", position: 2, name: "Collections", item: "https://www.thesofahisofa.com/collections/all" },
+      { "@type": "ListItem", position: 2, name: "Collections", item: "https://www.thesofahisofa.com/collections" },
       ...(currentCategory && !isAll
         ? [{ "@type": "ListItem", position: 3, name: currentCategory.name, item: seoCanonical }]
         : []),
@@ -191,7 +191,7 @@ export default function ProductListing() {
         <nav className="flex items-center gap-2 text-xs text-brand-muted mb-4" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-brand-charcoal transition-colors">Home</Link>
           <span aria-hidden>/</span>
-          <Link to="/collections/all" className="hover:text-brand-charcoal transition-colors">Collections</Link>
+          <Link to="/collections" className="hover:text-brand-charcoal transition-colors">Collections</Link>
           {currentCategory && !isAll && (
             <>
               <span aria-hidden>/</span>

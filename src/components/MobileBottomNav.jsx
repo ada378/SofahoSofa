@@ -27,7 +27,7 @@ export default function MobileBottomNav({ onOpenSearch }) {
 
       {/* Collections */}
       <Link
-        to="/collections/all"
+        to="/collections"
         className={`flex flex-col items-center justify-center min-w-[50px] py-1 px-1 rounded-xl transition-all ${
           isCollections ? "text-brand-terracotta font-bold" : "text-brand-charcoal/70 hover:text-brand-charcoal"
         }`}

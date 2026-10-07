@@ -45,7 +45,7 @@ export default function NotFound() {
           </Link>
           
           <Link 
-            to="/collections/all"
+            to="/collections"
             className="bg-brand-porcelain border border-brand-sand hover:border-brand-terracotta text-brand-charcoal px-8 py-3.5 rounded-full text-sm font-semibold hover:text-brand-terracotta transition-all shadow-subtle inline-flex items-center gap-2 group"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

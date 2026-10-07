@@ -1,4 +1,13 @@
 {
+  "redirects": [
+    { "source": "/collections/sofa-sets", "destination": "/collections/sofa", "permanent": true },
+    { "source": "/collections/beds", "destination": "/collections/bed", "permanent": true },
+    { "source": "/collections/accent-chairs", "destination": "/collections/chair", "permanent": true },
+    { "source": "/collections/l-shape-sofas", "destination": "/collections/sofa", "permanent": true },
+    { "source": "/collections/dining-sets", "destination": "/collections/dining-table", "permanent": true },
+    { "source": "/collections/dining", "destination": "/collections/dining-table", "permanent": true },
+    { "source": "/collections/all", "destination": "/collections", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
