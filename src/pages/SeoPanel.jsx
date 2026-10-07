@@ -42,7 +42,7 @@ function InputField({ label, name, value, onChange, textarea = false, maxLength,
           value={value || ""}
           onChange={onChange}
           rows={3}
-          className={`w-full border rounded-xl px-3 py-2 text-xs font-medium resize-none focus:outline-none transition-colors ${
+          className={`w-full border rounded-xl px-3 py-2 text-xs font-medium text-gray-900 resize-none focus:outline-none transition-colors ${
             over ? "border-red-400 focus:border-red-500" : "border-gray-200 focus:border-[#C86A3B]"
           } bg-gray-50`}
         />
@@ -52,7 +52,7 @@ function InputField({ label, name, value, onChange, textarea = false, maxLength,
           name={name}
           value={value || ""}
           onChange={onChange}
-          className="w-full border border-gray-200 focus:border-[#C86A3B] focus:outline-none rounded-xl px-3 py-2 text-xs font-medium bg-gray-50 transition-colors"
+          className="w-full border border-gray-200 focus:border-[#C86A3B] focus:outline-none rounded-xl px-3 py-2 text-xs font-medium text-gray-900 bg-gray-50 transition-colors"
         />
       )}
       {hint && <p className="text-[10px] text-gray-400 mt-1">{hint}</p>}
@@ -270,7 +270,7 @@ function GlobalTab({ showToast }) {
         <div>
           <label className="text-[11px] font-bold text-gray-700 uppercase tracking-wider block mb-1">Robots Meta</label>
           <select name="robotsMeta" value={form.robotsMeta} onChange={handleChange}
-            className="border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium bg-gray-50 focus:outline-none focus:border-[#C86A3B]">
+            className="border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-900 bg-gray-50 focus:outline-none focus:border-[#C86A3B]">
             <option value="index, follow">index, follow (Default — Google indexes all pages)</option>
             <option value="noindex, follow">noindex, follow</option>
             <option value="index, nofollow">index, nofollow</option>
@@ -394,7 +394,7 @@ function ProductsTab({ showToast }) {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <input type="text" placeholder="Search product name…" value={search} onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-200 rounded-xl px-4 py-2 text-xs font-medium bg-white focus:outline-none focus:border-[#C86A3B] w-64" />
+          className="border border-gray-200 rounded-xl px-4 py-2 text-xs font-medium text-gray-900 bg-white focus:outline-none focus:border-[#C86A3B] w-64" />
         <span className="text-xs text-gray-500 font-medium">{filtered.length} products on this page</span>
       </div>
 
@@ -714,7 +714,7 @@ function SitemapTab({ showToast }) {
           onChange={(e) => setForm((f) => ({ ...f, robotsTxtCustom: e.target.value }))}
           rows={8}
           placeholder={`User-agent: *\nAllow: /\nDisallow: /cart\nDisallow: /admin\nDisallow: /api\n\nSitemap: ${siteUrl}/sitemap.xml`}
-          className="w-full border border-gray-200 focus:border-[#C86A3B] focus:outline-none rounded-xl px-3 py-2 text-xs font-mono bg-gray-50 resize-none"
+          className="w-full border border-gray-200 focus:border-[#C86A3B] focus:outline-none rounded-xl px-3 py-2 text-xs font-mono text-gray-900 bg-gray-50 resize-none"
         />
         <div className="flex items-center gap-3">
           <code className="text-xs bg-gray-100 px-3 py-2 rounded-lg font-mono flex-1 border border-gray-200">

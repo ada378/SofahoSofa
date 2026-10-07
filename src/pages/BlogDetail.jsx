@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../api/axios";
 import SEO from "../components/SEO";
+import "react-quill/dist/quill.core.css";
 
 export default function BlogDetail() {
   const { slug } = useParams();
@@ -121,7 +122,7 @@ export default function BlogDetail() {
               prose-a:text-brand-terracotta prose-a:no-underline hover:prose-a:underline
               prose-blockquote:border-brand-terracotta prose-blockquote:text-brand-muted
               prose-img:rounded-xl prose-img:border prose-img:border-brand-sand
-              prose-strong:text-brand-charcoal prose-li:text-brand-charcoal"
+              prose-strong:text-brand-charcoal prose-li:text-brand-charcoal ql-editor"
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
 

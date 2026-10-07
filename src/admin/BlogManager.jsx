@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
-import Placeholder from '@tiptap/extension-placeholder';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import { FiPlus, FiEdit2, FiTrash2, FiEye, FiX } from 'react-icons/fi';
@@ -16,33 +13,17 @@ const EMPTY_FORM = {
   featuredImage: { url: '', alt: '' }, metaTitle: '', metaDescription: '',
 };
 
-function EditorToolbar({ editor }) {
-  if (!editor) return null;
-  const btn = (action, label, active) => (
-    <button type="button" onClick={action}
-      className={`px-2 py-1 text-xs rounded font-semibold transition-colors ${active ? 'bg-[#C86A3B] text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
-      {label}
-    </button>
-  );
-  return (
-    <div className="flex flex-wrap gap-1 p-2 bg-gray-800 border-b border-gray-700 rounded-t-lg">
-      {btn(() => editor.chain().focus().toggleBold().run(), 'B', editor.isActive('bold'))}
-      {btn(() => editor.chain().focus().toggleItalic().run(), 'I', editor.isActive('italic'))}
-      {btn(() => editor.chain().focus().toggleHeading({ level: 2 }).run(), 'H2', editor.isActive('heading', { level: 2 }))}
-      {btn(() => editor.chain().focus().toggleHeading({ level: 3 }).run(), 'H3', editor.isActive('heading', { level: 3 }))}
-      {btn(() => editor.chain().focus().toggleBulletList().run(), '• List', editor.isActive('bulletList'))}
-      {btn(() => editor.chain().focus().toggleOrderedList().run(), '1. List', editor.isActive('orderedList'))}
-      {btn(() => editor.chain().focus().toggleBlockquote().run(), '" Quote', editor.isActive('blockquote'))}
-      {btn(() => editor.chain().focus().setHorizontalRule().run(), '─ HR', false)}
-      <button type="button" onClick={() => { const url = window.prompt('Image URL'); if (url) editor.chain().focus().setImage({ src: url }).run(); }}
-        className="px-2 py-1 text-xs rounded bg-gray-700 text-gray-300 hover:bg-gray-600 font-semibold">🖼 Img</button>
-      <button type="button" onClick={() => { const url = window.prompt('Link URL'); if (url) editor.chain().focus().setLink({ href: url }).run(); }}
-        className="px-2 py-1 text-xs rounded bg-gray-700 text-gray-300 hover:bg-gray-600 font-semibold">🔗 Link</button>
-      {btn(() => editor.chain().focus().undo().run(), '↩', false)}
-      {btn(() => editor.chain().focus().redo().run(), '↪', false)}
-    </div>
-  );
-}
+const modules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    [{ 'size': ['small', false, 'large', 'huge'] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'color': [] }, { 'background': [] }],
+    ['link', 'image', 'video'],
+    ['clean']
+  ],
+};
 
 export default function BlogManager() {
   const [blogs, setBlogs] = useState([]);
@@ -56,11 +37,7 @@ export default function BlogManager() {
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
 
-  const editor = useEditor({
-    extensions: [StarterKit, Image, Link.configure({ openOnClick: false }), Placeholder.configure({ placeholder: 'Write your blog content here...' })],
-    content: '',
-    onUpdate: ({ editor }) => setForm(f => ({ ...f, content: editor.getHTML() })),
-  });
+
 
   const fetchBlogs = async () => {
     try {
@@ -88,23 +65,23 @@ export default function BlogManager() {
   const removeFaq = (i) => setForm(f => ({ ...f, faqs: f.faqs.filter((_, idx) => idx !== i) }));
   const updateFaq = (i, field, val) => setForm(f => ({ ...f, faqs: f.faqs.map((faq, idx) => idx === i ? { ...faq, [field]: val } : faq) }));
 
-  const openCreate = () => { setEditing(null); setForm(EMPTY_FORM); editor?.commands.setContent(''); setShowForm(true); };
+  const openCreate = () => { setEditing(null); setForm(EMPTY_FORM); setShowForm(true); };
 
   const openEdit = async (blog) => {
     try {
       const { data } = await api.get(`/blogs/admin/id/${blog._id}`);
       setForm({ title: data.title || '', slug: data.slug || '', category: data.category || 'General', author: data.author || '', tags: data.tags || [], excerpt: data.excerpt || '', content: data.content || '', faqs: data.faqs || [], status: data.status || 'draft', featuredImage: data.featuredImage || { url: '', alt: '' }, metaTitle: data.metaTitle || '', metaDescription: data.metaDescription || '' });
-      setEditing(data); editor?.commands.setContent(data.content || ''); setShowForm(true);
+      setEditing(data); setShowForm(true);
     } catch { toast.error('Failed to load blog'); }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim()) return toast.error('Title is required');
-    if (!editor?.getText().trim()) return toast.error('Content is required');
+    if (!form.content || form.content === '<p><br></p>') return toast.error('Content is required');
     setSaving(true);
     try {
-      const payload = { ...form, content: editor.getHTML() };
+      const payload = { ...form };
       if (editing) { await api.put(`/blogs/${editing._id}`, payload); toast.success('Blog updated!'); }
       else { await api.post('/blogs', payload); toast.success('Blog published!'); }
       setShowForm(false); fetchBlogs();
@@ -118,7 +95,7 @@ export default function BlogManager() {
     catch { toast.error('Failed to delete'); }
   };
 
-  const wordCount = editor?.getText().split(/\s+/).filter(Boolean).length || 0;
+  const wordCount = form.content ? form.content.replace(/<[^>]*>?/gm, '').split(/\s+/).filter(Boolean).length : 0;
 
   // ── Form View ────────────────────────────────────────────────────────────────
   if (showForm) return (
@@ -190,10 +167,8 @@ export default function BlogManager() {
 
         <div>
           <label className="block text-xs font-semibold text-gray-300 mb-1">Full Content *</label>
-          <div className="border border-gray-700 rounded-lg overflow-hidden">
-            <EditorToolbar editor={editor} />
-            <EditorContent editor={editor}
-              className="prose prose-invert max-w-none min-h-[300px] bg-gray-900 text-white p-4 text-sm [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[280px]" />
+          <div className="border border-gray-700 rounded-lg overflow-hidden bg-gray-900 text-white blog-quill">
+            <ReactQuill theme="snow" value={form.content} onChange={(content) => setForm(f => ({ ...f, content }))} modules={modules} className="min-h-[300px]" />
           </div>
           <p className="text-xs text-gray-500 mt-1">{wordCount} words</p>
         </div>
