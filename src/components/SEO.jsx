@@ -19,6 +19,9 @@ export default function SEO({ title, description, canonical, image, noIndex = fa
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | Buy Premium Sofas Online India`;
   const metaDesc = description || DEFAULT_DESC;
   const ogImage = image || DEFAULT_IMAGE;
+  const siteUrl = "https://www.thesofahisofa.com";
+  const currentCanonical = canonical || (typeof window !== "undefined" ? `${siteUrl}${window.location.pathname}` : siteUrl);
+  const sitemapUrl = `${siteUrl}/sitemap.xml`;
 
   // Support both a single jsonLd object and an array of them
   const jsonLdArray = jsonLd
@@ -30,7 +33,8 @@ export default function SEO({ title, description, canonical, image, noIndex = fa
       {/* ─── Core ─────────────────────────────────────────────── */}
       <title>{fullTitle}</title>
       <meta name="description" content={metaDesc} />
-      {canonical && <link rel="canonical" href={canonical} />}
+      <link rel="sitemap" type="application/xml" title="Sitemap" href={sitemapUrl} />
+      <link rel="canonical" href={currentCanonical} />
       {noIndex
         ? <meta name="robots" content="noindex, nofollow" />
         : <meta name="robots" content="index, follow" />
@@ -42,7 +46,7 @@ export default function SEO({ title, description, canonical, image, noIndex = fa
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={metaDesc} />
       <meta property="og:image" content={ogImage} />
-      {canonical && <meta property="og:url" content={canonical} />}
+      <meta property="og:url" content={currentCanonical} />
 
       {/* ─── Twitter Card ─────────────────────────────────────── */}
       <meta name="twitter:card" content="summary_large_image" />

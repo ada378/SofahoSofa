@@ -54,6 +54,14 @@ function ScrollToTop() {
   return null;
 }
 
+// ── Redirect subpath sitemap requests to root sitemap.xml ─────────────────────
+function SitemapRedirect() {
+  useEffect(() => {
+    window.location.href = "/sitemap.xml";
+  }, []);
+  return null;
+}
+
 // ── Admin auth guard ────────────────────────────────────────────────────────────
 function RequireAdmin({ children }) {
   const { admin, checking } = useAdminAuth();
@@ -134,6 +142,11 @@ function StoreShell() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/blog" element={<BlogListing />} />
               <Route path="/blog/:slug" element={<BlogDetail />} />
+
+              {/* ── Sitemap redirects for root and subpaths ── */}
+              <Route path="/sitemap.xml" element={<SitemapRedirect />} />
+              <Route path="/collections/:slug/sitemap.xml" element={<SitemapRedirect />} />
+              <Route path="/product/:slug/sitemap.xml" element={<SitemapRedirect />} />
 
               {/* ── 301 equivalent redirects for old URLs ── */}
               <Route path="/collections/sofa-sets" element={<Navigate to="/collections/sofa" replace />} />

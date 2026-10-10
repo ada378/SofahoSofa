@@ -8,6 +8,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": "http://localhost:5000",
+      "/sitemap.xml": "http://localhost:5000",
+      "/robots.txt": "http://localhost:5000",
     },
   },
   build: {
