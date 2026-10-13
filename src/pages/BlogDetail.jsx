@@ -61,6 +61,27 @@ export default function BlogDetail() {
     description: blog.excerpt,
   };
 
+  // Helper to decode escaped HTML entities and normalize headings
+  const formatBlogContent = (rawContent) => {
+    if (!rawContent) return "";
+    let html = rawContent;
+
+    // Decode HTML entities if escaped tags were saved
+    if (/&lt;(?:h[1-6]|p|div|span|ul|ol|li|strong|b|em|i|a|table|blockquote|img)\b/i.test(html)) {
+      html = html
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, "&");
+    }
+
+    // Convert any leading <h1> to <h2> for single-h1 SEO standard
+    html = html.replace(/<h1(\b[^>]*)>/gi, "<h2$1>").replace(/<\/h1>/gi, "</h2>");
+
+    return html;
+  };
+
   return (
     <>
       <SEO
@@ -110,20 +131,15 @@ export default function BlogDetail() {
 
           {/* Featured Image */}
           {blog.featuredImage?.url && (
-            <div className="rounded-2xl overflow-hidden mb-8 border border-brand-sand aspect-[16/9] bg-brand-sand/30">
+            <div className="rounded-2xl overflow-hidden mb-8 border border-brand-sand aspect-[16/9] bg-brand-sand/30 shadow-subtle">
               <img src={blog.featuredImage.url} alt={blog.featuredImage.alt || blog.title} className="w-full h-full object-cover" />
             </div>
           )}
 
           {/* Content */}
           <div
-            className="prose prose-sm sm:prose max-w-none text-brand-charcoal
-              prose-headings:font-display prose-headings:text-brand-charcoal
-              prose-a:text-brand-terracotta prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:border-brand-terracotta prose-blockquote:text-brand-muted
-              prose-img:rounded-xl prose-img:border prose-img:border-brand-sand
-              prose-strong:text-brand-charcoal prose-li:text-brand-charcoal ql-editor"
-            dangerouslySetInnerHTML={{ __html: blog.content }}
+            className="blog-article-content"
+            dangerouslySetInnerHTML={{ __html: formatBlogContent(blog.content) }}
           />
 
           {/* FAQs */}

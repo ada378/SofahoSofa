@@ -25,12 +25,26 @@ const modules = {
   ],
 };
 
+const decodeHtmlEntities = (html) => {
+  if (!html) return '';
+  if (/&lt;(?:h[1-6]|p|div|span|ul|ol|li|strong|b|em|i|a|table|blockquote|img)\b/i.test(html)) {
+    return html
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&');
+  }
+  return html;
+};
+
 export default function BlogManager() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [editorMode, setEditorMode] = useState('visual'); // 'visual' | 'html'
   const [tagInput, setTagInput] = useState('');
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -91,7 +105,12 @@ export default function BlogManager() {
   const removeFaq = (i) => setForm(f => ({ ...f, faqs: f.faqs.filter((_, idx) => idx !== i) }));
   const updateFaq = (i, field, val) => setForm(f => ({ ...f, faqs: f.faqs.map((faq, idx) => idx === i ? { ...faq, [field]: val } : faq) }));
 
-  const openCreate = () => { setEditing(null); setForm(EMPTY_FORM); setShowForm(true); };
+  const openCreate = () => {
+    setEditing(null);
+    setForm(EMPTY_FORM);
+    setEditorMode('visual');
+    setShowForm(true);
+  };
 
   const openEdit = async (blog) => {
     try {
@@ -103,14 +122,16 @@ export default function BlogManager() {
         author: data.author || '',
         tags: data.tags || [],
         excerpt: data.excerpt || data.metaDescription || '',
-        content: data.content || '',
+        content: decodeHtmlEntities(data.content) || '',
         faqs: data.faqs || [],
         status: data.status || 'draft',
         featuredImage: data.featuredImage || { url: '', alt: '' },
         metaTitle: data.metaTitle || data.title || '',
         metaDescription: data.metaDescription || data.excerpt || '',
       });
-      setEditing(data); setShowForm(true);
+      setEditing(data);
+      setEditorMode('visual');
+      setShowForm(true);
     } catch { toast.error('Failed to load blog'); }
   };
 
@@ -119,12 +140,17 @@ export default function BlogManager() {
     const postTitle = (form.metaTitle || form.title || '').trim();
     if (!postTitle) return toast.error('Meta Title is required');
     if (!form.content || form.content === '<p><br></p>') return toast.error('Content is required');
+    
+    // Automatically decode any accidentally entity-encoded HTML tags
+    const cleanContent = decodeHtmlEntities(form.content);
+
     setSaving(true);
     try {
       const payload = {
         ...form,
         title: postTitle,
         metaTitle: postTitle,
+        content: cleanContent,
         excerpt: form.metaDescription || form.excerpt || '',
         metaDescription: form.metaDescription || form.excerpt || '',
       };
@@ -300,10 +326,69 @@ export default function BlogManager() {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-gray-300 mb-1">Full Content *</label>
-          <div className="border border-gray-700 rounded-lg overflow-hidden bg-gray-900 text-white blog-quill">
-            <ReactQuill theme="snow" value={form.content} onChange={(content) => setForm(f => ({ ...f, content }))} modules={modules} className="min-h-[300px]" />
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-xs font-semibold text-gray-300">
+              Full Content * {editorMode === 'html' ? <span className="text-amber-400 font-normal">(Raw HTML Code Mode)</span> : <span className="text-gray-400 font-normal">(Visual Rich Text Mode)</span>}
+            </label>
+            <div className="flex items-center gap-2">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-0.5 flex">
+                <button
+                  type="button"
+                  onClick={() => {
+                    // When switching from HTML to Visual, ensure any escaped entities are decoded
+                    setForm(f => ({ ...f, content: decodeHtmlEntities(f.content) }));
+                    setEditorMode('visual');
+                  }}
+                  className={`px-3 py-1 text-xs rounded-md font-medium transition-all ${editorMode === 'visual' ? 'bg-[#C86A3B] text-white shadow-sm' : 'text-gray-400 hover:text-white'}`}
+                >
+                  📝 Visual Editor
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditorMode('html')}
+                  className={`px-3 py-1 text-xs rounded-md font-medium transition-all ${editorMode === 'html' ? 'bg-[#C86A3B] text-white shadow-sm' : 'text-gray-400 hover:text-white'}`}
+                >
+                  &lt;/&gt; HTML Code View
+                </button>
+              </div>
+            </div>
           </div>
+
+          {editorMode === 'visual' ? (
+            <div className="border border-gray-700 rounded-lg overflow-hidden bg-gray-900 text-white blog-quill">
+              <ReactQuill
+                theme="snow"
+                value={form.content}
+                onChange={(content) => setForm(f => ({ ...f, content }))}
+                modules={modules}
+                className="min-h-[300px]"
+              />
+            </div>
+          ) : (
+            <div className="border border-gray-700 rounded-lg overflow-hidden bg-gray-950">
+              <textarea
+                value={form.content}
+                onChange={(e) => setForm(f => ({ ...f, content: e.target.value }))}
+                placeholder="Paste raw HTML here (e.g. <h1>Title</h1><p>Paragraph...</p>)"
+                rows={16}
+                className="w-full bg-gray-950 text-emerald-400 font-mono text-xs p-4 outline-none focus:ring-1 focus:ring-[#C86A3B] leading-relaxed resize-y"
+                spellCheck="false"
+              />
+              <div className="bg-gray-900 border-t border-gray-800 px-3 py-2 text-[11px] text-gray-400 flex items-center justify-between">
+                <span>💡 Tip: Paste your raw HTML here, then click <strong>Visual Editor</strong> above to preview &amp; format!</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForm(f => ({ ...f, content: decodeHtmlEntities(f.content) }));
+                    toast.success('Cleaned HTML entities');
+                  }}
+                  className="text-xs text-amber-400 hover:text-amber-300 underline font-medium"
+                >
+                  Clean / Decode Entities
+                </button>
+              </div>
+            </div>
+          )}
           <p className="text-xs text-gray-500 mt-1">{wordCount} words</p>
         </div>
 
