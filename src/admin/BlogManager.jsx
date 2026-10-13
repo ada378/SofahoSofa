@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
-import { FiPlus, FiEdit2, FiTrash2, FiEye, FiX } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiEye, FiX, FiUploadCloud } from 'react-icons/fi';
 
 const BLOG_CATEGORIES = ['General', 'Sofa Tips', 'Interior Design', 'Product Guide', 'Home Decor', 'News & Updates'];
 
@@ -33,11 +33,11 @@ export default function BlogManager() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [tagInput, setTagInput] = useState('');
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-
-
 
   const fetchBlogs = async () => {
     try {
@@ -51,6 +51,32 @@ export default function BlogManager() {
   useEffect(() => { fetchBlogs(); }, [page]);
 
   const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const { data } = await api.post('/upload/blog-image', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setForm(f => ({
+        ...f,
+        featuredImage: {
+          url: data.url,
+          alt: f.featuredImage.alt || data.alt || '',
+        },
+      }));
+      toast.success('Image uploaded successfully!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Image upload failed');
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const handleTagKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ',') {
@@ -70,18 +96,38 @@ export default function BlogManager() {
   const openEdit = async (blog) => {
     try {
       const { data } = await api.get(`/blogs/admin/id/${blog._id}`);
-      setForm({ title: data.title || '', slug: data.slug || '', category: data.category || 'General', author: data.author || '', tags: data.tags || [], excerpt: data.excerpt || '', content: data.content || '', faqs: data.faqs || [], status: data.status || 'draft', featuredImage: data.featuredImage || { url: '', alt: '' }, metaTitle: data.metaTitle || '', metaDescription: data.metaDescription || '' });
+      setForm({
+        title: data.title || data.metaTitle || '',
+        slug: data.slug || '',
+        category: data.category || 'General',
+        author: data.author || '',
+        tags: data.tags || [],
+        excerpt: data.excerpt || data.metaDescription || '',
+        content: data.content || '',
+        faqs: data.faqs || [],
+        status: data.status || 'draft',
+        featuredImage: data.featuredImage || { url: '', alt: '' },
+        metaTitle: data.metaTitle || data.title || '',
+        metaDescription: data.metaDescription || data.excerpt || '',
+      });
       setEditing(data); setShowForm(true);
     } catch { toast.error('Failed to load blog'); }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim()) return toast.error('Title is required');
+    const postTitle = (form.metaTitle || form.title || '').trim();
+    if (!postTitle) return toast.error('Meta Title is required');
     if (!form.content || form.content === '<p><br></p>') return toast.error('Content is required');
     setSaving(true);
     try {
-      const payload = { ...form };
+      const payload = {
+        ...form,
+        title: postTitle,
+        metaTitle: postTitle,
+        excerpt: form.metaDescription || form.excerpt || '',
+        metaDescription: form.metaDescription || form.excerpt || '',
+      };
       if (editing) { await api.put(`/blogs/${editing._id}`, payload); toast.success('Blog updated!'); }
       else { await api.post('/blogs', payload); toast.success('Blog published!'); }
       setShowForm(false); fetchBlogs();
@@ -105,14 +151,44 @@ export default function BlogManager() {
         <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-white"><FiX className="w-6 h-6" /></button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-5">
-        <p className="text-xs text-gray-400">Fill in the details to publish a new blog.</p>
+        <p className="text-xs text-gray-400">Fill in the details to publish or edit a blog.</p>
 
         <div className="grid sm:grid-cols-2 gap-4">
+          {/* 1. Meta Title (At the top) */}
           <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-gray-300 mb-1">Blog Title *</label>
-            <input name="title" value={form.title} onChange={handleChange} placeholder="e.g. Best Sofas for Small Living Rooms"
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none" />
+            <label className="block text-xs font-semibold text-gray-300 mb-1">
+              Meta Title * <span className="text-gray-500 font-normal">(Post title &amp; SEO title)</span>
+            </label>
+            <input
+              name="metaTitle"
+              value={form.metaTitle}
+              onChange={(e) => {
+                handleChange(e);
+                setForm(f => ({ ...f, title: e.target.value }));
+              }}
+              placeholder="e.g. 10 Best Luxury Sofas for Indian Living Rooms"
+              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none"
+            />
           </div>
+
+          {/* 2. Meta Description (At the top) */}
+          <div className="sm:col-span-2">
+            <label className="block text-xs font-semibold text-gray-300 mb-1">
+              Meta Description <span className="text-gray-500 font-normal">(Short summary for Google and social previews)</span>
+            </label>
+            <textarea
+              name="metaDescription"
+              value={form.metaDescription}
+              onChange={(e) => {
+                handleChange(e);
+                setForm(f => ({ ...f, excerpt: e.target.value }));
+              }}
+              rows={2}
+              placeholder="A concise summary of the blog post for SEO and search engines..."
+              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none resize-none"
+            />
+          </div>
+
           <div>
             <label className="block text-xs font-semibold text-gray-300 mb-1">Custom URL (Slug)</label>
             <input name="slug" value={form.slug} onChange={handleChange} placeholder="Leave empty to auto-generate from title"
@@ -127,7 +203,7 @@ export default function BlogManager() {
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-300 mb-1">Author</label>
-            <input name="author" value={form.author} onChange={handleChange} placeholder="e.g. John Doe"
+            <input name="author" value={form.author} onChange={handleChange} placeholder="e.g. Sofa Hi Sofa Team"
               className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none" />
           </div>
           <div>
@@ -150,18 +226,76 @@ export default function BlogManager() {
                 placeholder="Type tag..." className="flex-1 min-w-[100px] bg-transparent text-white text-sm outline-none placeholder-gray-500" />
             </div>
           </div>
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-gray-300 mb-1">Featured Image URL</label>
-            <input value={form.featuredImage.url} onChange={e => setForm(f => ({ ...f, featuredImage: { ...f.featuredImage, url: e.target.value } }))}
-              placeholder="https://res.cloudinary.com/..."
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none" />
-            {form.featuredImage.url && <img src={form.featuredImage.url} alt="preview" className="mt-2 h-32 object-cover rounded-lg border border-gray-700" />}
-          </div>
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-gray-300 mb-1">Short Excerpt</label>
-            <textarea name="excerpt" value={form.excerpt} onChange={handleChange} rows={2}
-              placeholder="A short description for the blog listing page..."
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none resize-none" />
+
+          {/* Featured Image: Direct File Upload + URL Option */}
+          <div className="sm:col-span-2 bg-gray-800/60 border border-gray-700 rounded-xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-semibold text-gray-200">Featured Image</label>
+              <span className="text-[11px] text-gray-400">Direct Upload or Paste URL</span>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 items-start">
+              {/* Upload from device */}
+              <div>
+                <label className="block text-[11px] text-gray-400 mb-1.5 font-medium">1. Upload Image from Device</label>
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`border-2 border-dashed border-gray-700 hover:border-[#C86A3B] rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-all bg-gray-900/60 hover:bg-gray-900 ${uploadingImage ? 'opacity-50 pointer-events-none' : ''}`}
+                >
+                  {uploadingImage ? (
+                    <div className="flex items-center gap-2 text-xs text-[#C86A3B] py-2">
+                      <div className="w-4 h-4 border-2 border-gray-600 border-t-[#C86A3B] rounded-full animate-spin" />
+                      Uploading to Cloudinary...
+                    </div>
+                  ) : (
+                    <>
+                      <FiUploadCloud className="text-2xl text-[#C86A3B]" />
+                      <span className="text-xs font-semibold text-gray-300">Click to Choose Photo</span>
+                      <span className="text-[10px] text-gray-500">JPG, PNG, WEBP (Max 8MB)</span>
+                    </>
+                  )}
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </div>
+
+              {/* URL Input */}
+              <div className="space-y-2">
+                <label className="block text-[11px] text-gray-400 font-medium">2. Or Paste Image URL</label>
+                <input
+                  value={form.featuredImage.url}
+                  onChange={e => setForm(f => ({ ...f, featuredImage: { ...f.featuredImage, url: e.target.value } }))}
+                  placeholder="https://res.cloudinary.com/..."
+                  className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg px-3 py-2 text-xs focus:border-[#C86A3B] focus:outline-none"
+                />
+                <input
+                  value={form.featuredImage.alt}
+                  onChange={e => setForm(f => ({ ...f, featuredImage: { ...f.featuredImage, alt: e.target.value } }))}
+                  placeholder="Alt text for SEO (e.g. Modern Teak Wood Sofa)"
+                  className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg px-3 py-2 text-xs focus:border-[#C86A3B] focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Image Preview */}
+            {form.featuredImage.url && (
+              <div className="relative mt-2 rounded-xl overflow-hidden border border-gray-700 max-w-sm">
+                <img src={form.featuredImage.url} alt={form.featuredImage.alt || 'preview'} className="h-40 w-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => setForm(f => ({ ...f, featuredImage: { url: '', alt: '' } }))}
+                  className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded-lg text-xs"
+                  title="Remove image"
+                >
+                  <FiX className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -193,20 +327,6 @@ export default function BlogManager() {
                   className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm focus:border-[#C86A3B] focus:outline-none resize-none" />
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="grid sm:grid-cols-2 gap-4 border-t border-gray-800 pt-4">
-          <div><p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 sm:col-span-2">SEO Settings</p></div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-300 mb-1">Meta Title</label>
-            <input name="metaTitle" value={form.metaTitle} onChange={handleChange} placeholder="Auto-generated if empty"
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none" />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-300 mb-1">Meta Description</label>
-            <input name="metaDescription" value={form.metaDescription} onChange={handleChange} placeholder="Auto-generated if empty"
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2.5 text-sm focus:border-[#C86A3B] focus:outline-none" />
           </div>
         </div>
 

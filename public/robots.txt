@@ -1,15 +1,14 @@
 User-agent: *
 Allow: /
 
-# Block admin, SEO panel, and checkout from crawlers
+# Private and non-public areas
 Disallow: /admin/
 Disallow: /seo/
 Disallow: /checkout
 Disallow: /account
 Disallow: /my-orders
 Disallow: /cart
-
-# Block common bot traps
 Disallow: /api/
 
+# XML sitemap
 Sitemap: https://www.thesofahisofa.com/sitemap.xml
