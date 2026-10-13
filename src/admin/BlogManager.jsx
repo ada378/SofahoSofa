@@ -251,7 +251,7 @@ export default function BlogManager() {
                     <>
                       <FiUploadCloud className="text-2xl text-[#C86A3B]" />
                       <span className="text-xs font-semibold text-gray-300">Click to Choose Photo</span>
-                      <span className="text-[10px] text-gray-500">JPG, PNG, WEBP (Max 8MB)</span>
+                      <span className="text-[10px] text-gray-500">JPG, PNG, WEBP (Max 8MB · 16:9 ratio)</span>
                     </>
                   )}
                 </div>
@@ -284,8 +284,8 @@ export default function BlogManager() {
 
             {/* Image Preview */}
             {form.featuredImage.url && (
-              <div className="relative mt-2 rounded-xl overflow-hidden border border-gray-700 max-w-sm">
-                <img src={form.featuredImage.url} alt={form.featuredImage.alt || 'preview'} className="h-40 w-full object-cover" />
+              <div className="relative mt-2 rounded-xl overflow-hidden border border-gray-700 max-w-sm aspect-[16/9] bg-gray-900">
+                <img src={form.featuredImage.url} alt={form.featuredImage.alt || 'preview'} className="w-full h-full object-cover" />
                 <button
                   type="button"
                   onClick={() => setForm(f => ({ ...f, featuredImage: { url: '', alt: '' } }))}

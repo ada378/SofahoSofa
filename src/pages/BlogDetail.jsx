@@ -27,7 +27,7 @@ export default function BlogDetail() {
       <div className="max-w-3xl mx-auto animate-pulse space-y-4">
         <div className="h-6 bg-brand-sand rounded w-1/3" />
         <div className="h-10 bg-brand-sand rounded w-3/4" />
-        <div className="h-64 bg-brand-sand rounded-2xl" />
+        <div className="w-full aspect-[16/9] bg-brand-sand rounded-2xl" />
         <div className="space-y-3">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-3 bg-brand-sand rounded" />)}</div>
       </div>
     </div>
@@ -110,8 +110,8 @@ export default function BlogDetail() {
 
           {/* Featured Image */}
           {blog.featuredImage?.url && (
-            <div className="rounded-2xl overflow-hidden mb-8 border border-brand-sand">
-              <img src={blog.featuredImage.url} alt={blog.featuredImage.alt || blog.title} className="w-full h-64 sm:h-80 object-cover" />
+            <div className="rounded-2xl overflow-hidden mb-8 border border-brand-sand aspect-[16/9] bg-brand-sand/30">
+              <img src={blog.featuredImage.url} alt={blog.featuredImage.alt || blog.title} className="w-full h-full object-cover" />
             </div>
           )}
 
