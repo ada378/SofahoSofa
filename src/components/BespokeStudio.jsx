@@ -19,11 +19,11 @@ export default function BespokeStudio() {
 
               <h2 className="font-display text-2xl sm:text-3xl lg:text-5xl text-[#1F1A17] font-bold leading-tight">
                 Design Your Dream Sofa — <br className="hidden sm:block" />
-                <span className="text-brand-terracotta">Discover Luxury Sofa Sets in Uttar Pradesh</span>
+                <span className="text-brand-terracotta">Discover Luxury Sofa Sets in Lucknow</span>
               </h2>
 
               <p className="text-[#3B302A] text-xs sm:text-sm leading-relaxed max-w-lg font-medium">
-                Engineered with solid seasoned hardwood frames, multi-density cushioning, and stain-resistant designer fabrics, our sofas offer exceptional comfort, durability, and elegant design. As a trusted sofa showroom in UP, we bring premium-quality sofas that are perfect for modern homes, offices, and stylish living spaces.
+                Engineered with solid seasoned hardwood frames, multi-density cushioning, and stain-resistant designer fabrics, our sofas offer exceptional comfort, durability, and elegant design. As a trusted sofa showroom in Lucknow, we bring premium-quality sofas that are perfect for modern homes, offices, and stylish living spaces.
               </p>
 
               {/* 4 Interactive Configurator Steps */}

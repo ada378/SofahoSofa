@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
-const EMPTY = { name: "", description: "", order: 0, metaTitle: "", metaDescription: "", image: { url: "", alt: "" } };
+const EMPTY = { name: "", description: "", heading: "", order: 0, metaTitle: "", metaDescription: "", image: { url: "", alt: "" } };
 const inputCls = "w-full bg-gray-800 border border-gray-700 focus:border-[#C86A3B] focus:outline-none rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 transition-colors";
 
 function Field({ label, required, children, hint }) {
@@ -141,6 +141,10 @@ function CategoryModal({ category, onClose, onSaved }) {
             <textarea name="description" value={form.description} onChange={handleChange} rows={2}
               placeholder="Short description of this category…"
               className="w-full bg-gray-800 border border-gray-700 focus:border-[#C86A3B] focus:outline-none rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 resize-none" />
+          </Field>
+
+          <Field label="H1 Page Heading" hint="Custom H1 heading shown on collection banner (leave blank to use Category Name)">
+            <input name="heading" value={form.heading || ""} onChange={handleChange} placeholder={form.name ? `e.g. Best ${form.name} In Lucknow` : "Custom H1"} className={inputCls} />
           </Field>
 
           <div className="border-t border-gray-800 pt-4 space-y-3">

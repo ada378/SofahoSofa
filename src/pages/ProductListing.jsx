@@ -35,6 +35,14 @@ const SORT_OPTIONS = [
   { value: "rating", label: "Highest Customer Rating" },
 ];
 
+const DEFAULT_CATEGORY_HEADINGS = {
+  sofa: "Best Sofa In Lucknow",
+  bed: "Best Bed In Lucknow",
+  "dining-table": "Best Dining Table In Lucknow",
+  chair: "Best Chair In Lucknow",
+  "center-table": "Best Center Table In Lucknow",
+};
+
 export default function ProductListing() {
   const { slug } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -207,7 +215,7 @@ export default function ProductListing() {
               100% Solid Wood · Direct Factory
             </span>
             <h1 className="font-display text-3xl sm:text-4xl text-brand-charcoal mt-2">
-              {currentCategory?.name || "Collections"}
+              {currentCategory?.heading || DEFAULT_CATEGORY_HEADINGS[slug] || currentCategory?.name || "Collections"}
             </h1>
             <p className="text-brand-muted text-xs sm:text-sm mt-2 leading-relaxed">
               {currentCategory?.description || "Handcrafted direct from our 1,00,000 sq.ft manufacturing facility."}
