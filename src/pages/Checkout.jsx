@@ -101,7 +101,7 @@ export default function Checkout() {
             `📍 *Delivery:*\n${formData.address}, ${formData.city}, ${formData.state} – ${formData.pincode}\n\n` +
             `💰 *Total:* ₹${total.toLocaleString("en-IN")}\n💳 *Payment:* ${formData.paymentMethod === "cod" ? "Cash on Delivery (COD)" : "Online"}\n\n✅ Please confirm this order.`
         );
-        window.open(`https://wa.me/919810926762?text=${waMsg}`, "_blank");
+        window.open(`https://wa.me/917800001198?text=${waMsg}`, "_blank");
 
         setStep(4);
       } catch (err) {

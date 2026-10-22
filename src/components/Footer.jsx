@@ -33,14 +33,6 @@ export default function Footer() {
               <FiPhoneCall className="text-brand-terracotta mt-0.5 text-sm flex-shrink-0" />
               <span className="font-bold flex-shrink-0">Helpline:</span>
               <span className="flex flex-wrap gap-x-2 gap-y-1">
-                <a href="tel:+919810926762" className="text-brand-terracotta font-semibold hover:underline">
-                  +91 9810926762
-                </a>
-                <span className="text-brand-muted">•</span>
-                <a href="tel:+917800001200" className="text-brand-terracotta font-semibold hover:underline">
-                  +91 7800001200
-                </a>
-                <span className="text-brand-muted">•</span>
                 <a href="tel:+917800001198" className="text-brand-terracotta font-semibold hover:underline">
                   +91 7800001198
                 </a>

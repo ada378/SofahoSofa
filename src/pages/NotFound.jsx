@@ -60,7 +60,7 @@ export default function NotFound() {
           <h2 className="font-display text-lg text-brand-charcoal font-semibold">Need Help?</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
             <a 
-              href="https://wa.me/919810926762?text=Hi! I need help navigating the website"
+              href="https://wa.me/917800001198?text=Hi! I need help navigating the website"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#25D366] hover:bg-[#20BA5A] text-white px-6 py-3 rounded-full font-semibold transition-all shadow-subtle inline-flex items-center justify-center gap-2"
@@ -72,7 +72,7 @@ export default function NotFound() {
             </a>
             
             <a 
-              href="tel:+919810926762"
+              href="tel:+917800001198"
               className="bg-brand-charcoal hover:bg-brand-terracotta text-white px-6 py-3 rounded-full font-semibold transition-all shadow-subtle inline-flex items-center justify-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

@@ -108,18 +108,12 @@ export default function Contact() {
                 <div>
                   <h2 className="font-bold text-brand-charcoal text-sm">Call / WhatsApp</h2>
                   <div className="mt-1 space-y-1.5">
-                    <a href="tel:+919810926762" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
-                      <FiPhone className="flex-shrink-0" /> +91 98109 26762
-                    </a>
-                    <a href="tel:+917800001200" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
-                      <FiPhone className="flex-shrink-0" /> +91 78000 01200
-                    </a>
                     <a href="tel:+917800001198" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
                       <FiPhone className="flex-shrink-0" /> +91 78000 01198
                     </a>
                   </div>
                   <a
-                    href="https://wa.me/919810926762"
+                    href="https://wa.me/917800001198"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 mt-3 bg-[#25D366] text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-[#1ebe5d] transition-colors"
@@ -286,16 +280,16 @@ export default function Contact() {
             <p className="text-white/70 text-sm mt-2">WhatsApp is the fastest way to reach us — we respond in minutes.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
               <a
-                href="https://wa.me/919810926762?text=Hi! I want to know more about your sofas and furniture."
+                href="https://wa.me/917800001198?text=Hi! I want to know more about your sofas and furniture."
                 target="_blank" rel="noopener noreferrer"
                 className="bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-8 py-3 rounded-full text-sm transition-colors flex items-center justify-center gap-2"
               >
                 💬 WhatsApp Us Now
               </a>
-              <a href="tel:+919810926762"
+              <a href="tel:+917800001198"
                 className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3 rounded-full text-sm transition-colors"
               >
-                📞 Call +91 98109 26762
+                📞 Call +91 78000 01198
               </a>
             </div>
           </div>

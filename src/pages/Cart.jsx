@@ -5,7 +5,7 @@ import { useCart } from "../context/CartContext";
 import api from "../api/axios";
 
 // WhatsApp number (business number — change if needed)
-const WHATSAPP_NUMBER = "919810926762";
+const WHATSAPP_NUMBER = "917800001198";
 
 function buildWhatsAppMessage(orderId, formData, cartItems, finalTotal) {
   const itemLines = cartItems

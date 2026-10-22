@@ -433,7 +433,7 @@ export default function ProductDetail() {
                 </button>
                 {/* Book on WhatsApp */}
                 <a
-                  href={`https://wa.me/919810926762?text=${encodeURIComponent(`Hi! I'm interested in ordering: ${product.name}\nPrice: ₹${product.price.toLocaleString("en-IN")}\nLink: ${window.location.href}`)}`}
+                  href={`https://wa.me/917800001198?text=${encodeURIComponent(`Hi! I'm interested in ordering: ${product.name}\nPrice: ₹${product.price.toLocaleString("en-IN")}\nLink: ${window.location.href}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white py-2.5 rounded-2xl font-bold text-xs transition-colors"
