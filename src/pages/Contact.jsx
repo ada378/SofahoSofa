@@ -111,6 +111,9 @@ export default function Contact() {
                     <a href="tel:+917800001198" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
                       <FiPhone className="flex-shrink-0" /> +91 78000 01198
                     </a>
+                    <a href="tel:+917800001200" className="flex items-center gap-2 text-xs font-semibold text-brand-terracotta hover:underline">
+                      <FiPhone className="flex-shrink-0" /> +91 78000 01200
+                    </a>
                   </div>
                   <a
                     href="https://wa.me/917800001198"

@@ -36,6 +36,10 @@ export default function Footer() {
                 <a href="tel:+917800001198" className="text-brand-terracotta font-semibold hover:underline">
                   +91 7800001198
                 </a>
+                <span className="text-brand-muted">•</span>
+                <a href="tel:+917800001200" className="text-brand-terracotta font-semibold hover:underline">
+                  +91 7800001200
+                </a>
               </span>
             </p>
             <p className="flex items-start gap-2">
