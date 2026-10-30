@@ -162,9 +162,20 @@ export default function Footer() {
       {/* Bottom Legal & Secure Payment Bar */}
       <div className="border-t border-brand-sand/80 bg-brand-sand/50 py-5 text-brand-charcoal/70 text-[11px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <p>
-            © 2026 Sofa Hi Sofa.Com. All Rights Reserved. | Web Tech Illusion
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-2">
+            <p>
+              © 2026 Sofa Hi Sofa.Com. All Rights Reserved. | Web Tech Illusion
+            </p>
+            <div className="flex items-center gap-2 text-[11px]">
+              <Link to="/terms-and-conditions" className="hover:text-brand-terracotta transition-colors">
+                Terms & Conditions
+              </Link>
+              <span className="text-brand-muted">|</span>
+              <Link to="/privacy-policy" className="hover:text-brand-terracotta transition-colors">
+                Privacy Policy
+              </Link>
+            </div>
+          </div>
 
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
             <span className="font-bold text-brand-forest text-[11px] w-full sm:w-auto">🚚 Free Delivery in All Over India</span>

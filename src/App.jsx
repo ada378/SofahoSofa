@@ -43,6 +43,8 @@ import LeadManager from "./admin/LeadManager";
 
 import BlogListing from "./pages/BlogListing";
 import BlogDetail from "./pages/BlogDetail";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // SEO auth & pages
 import SeoLogin from "./pages/SeoLogin";
@@ -142,6 +144,8 @@ function StoreShell() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/blog" element={<BlogListing />} />
               <Route path="/blog/:slug" element={<BlogDetail />} />
+              <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
               {/* ── Sitemap redirects for root and subpaths ── */}
               <Route path="/sitemap.xml" element={<SitemapRedirect />} />
