@@ -48,8 +48,27 @@ export default function Header({ onOpenSearch }) {
             </div>
           </div>
 
-          {/* Helpline */}
-          <div className="flex items-center justify-end flex-shrink-0 text-[10px] sm:text-xs">
+          {/* Right Side Links */}
+          <div className="flex items-center justify-end gap-2 sm:gap-4 flex-shrink-0 text-[10px] sm:text-xs">
+            {/* Privacy & Terms Links */}
+            <div className="hidden md:flex items-center gap-2">
+              <Link
+                to="/privacy-policy"
+                className="text-[#1F1A17] hover:text-brand-terracotta font-semibold transition-colors whitespace-nowrap"
+              >
+                Privacy Policy
+              </Link>
+              <span className="text-[#1F1A17]/40">|</span>
+              <Link
+                to="/terms-and-conditions"
+                className="text-[#1F1A17] hover:text-brand-terracotta font-semibold transition-colors whitespace-nowrap"
+              >
+                Terms & Conditions
+              </Link>
+              <span className="text-[#1F1A17]/40 hidden lg:inline">|</span>
+            </div>
+
+            {/* Helpline */}
             <a
               href="tel:+917800001198"
               className="text-[#1F1A17] hover:text-brand-terracotta font-bold flex items-center gap-1 transition-colors text-[10px] sm:text-xs whitespace-nowrap"
